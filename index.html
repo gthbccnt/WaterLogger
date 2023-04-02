@@ -227,7 +227,7 @@ window.addEventListener('beforeunload', () => {
     data.push(rowData);
   });
   const fileManager = FileManager.iCloud();
-  const logsPath = fileManager.joinPath(fileManager.documentsDirectory(), 'waterLogs.json');
+  const logsPath = fileManager.joinPath(fileManager.documentsDirectory(), '/_waterLogs.json');
   fileManager.writeString(logsPath, JSON.stringify(data));
 });
 // ====
