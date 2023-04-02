@@ -149,7 +149,7 @@
 
 function addRow(loggedAmount) {
   const newRow = [date, time, loggedAmount];
-  const newTableRow = tbody.insertRow(0);
+  const newTableRow = table.tBodies[0].insertRow(0);
 
   newRow.forEach((cell, cellIndex) => {
     const td = newTableRow.insertCell(cellIndex);
@@ -159,7 +159,7 @@ function addRow(loggedAmount) {
   });
 
   let updatedAmount = 0;
-  const rows = document.querySelectorAll("tbody tr");
+  const rows = table.tBodies[0].rows;
   rows.forEach((row) => {
     const cells = row.cells;
     if (cells[0].textContent === date) {
@@ -168,7 +168,6 @@ function addRow(loggedAmount) {
   });
   document.getElementById("currentAmount").textContent = updatedAmount;
 }
-
 
 window.addEventListener('load', () => {
   // Delay execution by 50 milliseconds
@@ -219,7 +218,6 @@ window.addEventListener('beforeunload', () => {
   localStorage.setItem('waterLog', JSON.stringify(data));
 });
 
-
 function addCsvToTable(csvData) {
   const rows = csvData.split('\n').map(row => row.split(';'));
   rows.slice(0, 30).forEach((row, rowIndex) => {
@@ -241,7 +239,6 @@ function addCsvToTable(csvData) {
   // Store the CSV data in a global variable for later use
   window.csvWaterLog = csvData;
 }
-
 
 function openCsvFile() {
   const fileInput = document.createElement('input');
@@ -292,14 +289,12 @@ btn500.addEventListener("click", () => {
   const value = btn500.value;
   addRow(value);
 });
-
-      const body = document.querySelector('body');
-
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        body.classList.add('dark-theme');
-      } else {
-        body.classList.remove('dark-theme');
-      }
+const body = document.querySelector('body');
+  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+     body.classList.add('dark-theme');
+  } else {
+     body.classList.remove('dark-theme');
+  }
     </script>
   </body>
 </html>
