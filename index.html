@@ -147,6 +147,7 @@
   const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
   const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
 
+
 function addRow(loggedAmount) {
   const newRow = [date, time, loggedAmount];
   const newTableRow = table.tBodies[0].insertRow(0);
@@ -158,15 +159,17 @@ function addRow(loggedAmount) {
     td.classList.add("added-cell");
   });
 
-  let updatedAmount = 0;
-  const rows = table.tBodies[0].rows;
-  rows.forEach((row) => {
-    const cells = row.cells;
-    if (cells[0].textContent === date) {
-      updatedAmount += Number(cells[2].textContent);
-    }
-  });
-  document.getElementById("currentAmount").textContent = updatedAmount;
+let updatedAmount = 0;
+const rowsU = document.querySelectorAll("tbody tr");
+rowsU.forEach((line) => {
+  const cellsU = line.cells;
+  const rowDate = cellsU[0].textContent;
+  const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+  if (rowDate === date && rowTime >= 2) {
+    updatedAmount += Number(cellsU[2].textContent);
+  }
+});
+document.getElementById("currentAmount").textContent = updatedAmount;
 }
 
 window.addEventListener('load', () => {
@@ -191,15 +194,17 @@ window.addEventListener('load', () => {
         tableBody.insertBefore(tableRow, tableBody.firstChild);
       }
     }
-  let updatedAmount = 0;
-  const rowsU = document.querySelectorAll("tbody tr");
-  rowsU.forEach((line) => {
-    const cellsU = line.cells;
-    if (cellsU[0].textContent === date) {
-      updatedAmount += Number(cellsU[2].textContent);
-    }
-  });
-  document.getElementById("currentAmount").textContent = updatedAmount;
+let updatedAmount = 0;
+const rowsU = document.querySelectorAll("tbody tr");
+rowsU.forEach((line) => {
+  const cellsU = line.cells;
+  const rowDate = cellsU[0].textContent;
+  const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+  if (rowDate === date && rowTime >= 2) {
+    updatedAmount += Number(cellsU[2].textContent);
+  }
+});
+document.getElementById("currentAmount").textContent = updatedAmount;
   }, 50);
 });
 
@@ -227,16 +232,19 @@ function addCsvToTable(csvData) {
       td.textContent = cell;
     });
   });
-    let updatedAmount = 0;
-  const rowsU = document.querySelectorAll("tbody tr");
-  rowsU.forEach((line) => {
-    const cellsU = line.cells;
-    if (cellsU[0].textContent === date) {
-      updatedAmount += Number(cellsU[2].textContent);
-    }
-  });
-  document.getElementById("currentAmount").textContent = updatedAmount;
-  // Store the CSV data in a global variable for later use
+let updatedAmount = 0;
+const rowsU = document.querySelectorAll("tbody tr");
+rowsU.forEach((line) => {
+  const cellsU = line.cells;
+  const rowDate = cellsU[0].textContent;
+  const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+  if (rowDate === date && rowTime >= 2) {
+    updatedAmount += Number(cellsU[2].textContent);
+  }
+});
+document.getElementById("currentAmount").textContent = updatedAmount;
+ 
+ // Store the CSV data in a global variable for later use
   window.csvWaterLog = csvData;
 }
 
