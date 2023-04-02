@@ -226,7 +226,7 @@ window.addEventListener('beforeunload', () => {
     };
     data.push(rowData);
   });
-  const fileURL = 'file:///private/var/mobile/Documents/waterLog.json';
+  const fileURL = 'file:///private/var/Mobile%20Documents/Documents/waterLog.json';
   const fileData = JSON.stringify(data);
   const request = new XMLHttpRequest();
   request.open('PUT', fileURL);
