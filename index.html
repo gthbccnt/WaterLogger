@@ -173,45 +173,50 @@ document.getElementById("currentAmount").textContent = updatedAmount;
 }
 // ===================================
 window.addEventListener('load', () => {
-  const fileURL = 'file:///private/var/mobile/Documents/waterLog.json';
-  const request = new XMLHttpRequest();
-  request.open('GET', fileURL);
-  request.setRequestHeader('Content-Type', 'application/json');
-  request.onreadystatechange = function() {
-    if (this.readyState === 4 && this.status === 200) {
-      const data = JSON.parse(this.responseText);
-      if (data) {
-        const tableBody = document.querySelector('table tbody');
-        for (let i = data.length - 1; i >= 0; i--) {
-          const row = data[i];
-          const tableRow = document.createElement('tr');
-          const dateCell = document.createElement('td');
-          dateCell.textContent = row.date;
-          const timeCell = document.createElement('td');
-          timeCell.textContent = row.time;
-          const amountCell = document.createElement('td');
-          amountCell.textContent = row.amount;
-          tableRow.appendChild(dateCell);
-          tableRow.appendChild(timeCell);
-          tableRow.appendChild(amountCell);
-          tableBody.insertBefore(tableRow, tableBody.firstChild);
-        }
-      }
-      let updatedAmount = 0;
-      const rowsU = document.querySelectorAll("tbody tr");
-      rowsU.forEach((line) => {
-        const cellsU = line.cells;
-        const rowDate = cellsU[0].textContent;
-        const rowTime = Number(cellsU[1].textContent.split(":")[0]);
-        if (rowDate === date && rowTime >= 2) {
-          updatedAmount += Number(cellsU[2].textContent);
-        }
+  if ('fileSystem' in window) {
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+      fs.root.getFile('waterLog.json', {}, function (fileEntry) {
+        fileEntry.file(function (file) {
+          var reader = new FileReader();
+          reader.onloadend = function() {
+            const data = JSON.parse(this.result);
+            if (data) {
+              const tableBody = document.querySelector('table tbody');
+              for (let i = data.length - 1; i >= 0; i--) {
+                const row = data[i];
+                const tableRow = document.createElement('tr');
+                const dateCell = document.createElement('td');
+                dateCell.textContent = row.date;
+                const timeCell = document.createElement('td');
+                timeCell.textContent = row.time;
+                const amountCell = document.createElement('td');
+                amountCell.textContent = row.amount;
+                tableRow.appendChild(dateCell);
+                tableRow.appendChild(timeCell);
+                tableRow.appendChild(amountCell);
+                tableBody.insertBefore(tableRow, tableBody.firstChild);
+              }
+            }
+            let updatedAmount = 0;
+            const rowsU = document.querySelectorAll("tbody tr");
+            rowsU.forEach((line) => {
+              const cellsU = line.cells;
+              const rowDate = cellsU[0].textContent;
+              const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+              if (rowDate === date && rowTime >= 2) {
+                updatedAmount += Number(cellsU[2].textContent);
+              }
+            });
+            document.getElementById("currentAmount").textContent = updatedAmount;
+          };
+          reader.readAsText(file);
+        });
       });
-      document.getElementById("currentAmount").textContent = updatedAmount;
-    }
-  };
-  request.send();
+    });
+  }
 });
+
+	  
 window.addEventListener('beforeunload', () => {
   const rows = document.querySelectorAll("tbody tr");
   const data = [];
@@ -224,14 +229,24 @@ window.addEventListener('beforeunload', () => {
     };
     data.push(rowData);
   });
-  const fileURL = 'file:///private/var/mobile/Documents/waterLog.json';
-  const fileData = JSON.stringify(data);
-  const request = new XMLHttpRequest();
-  request.open('PUT', fileURL);
-  request.setRequestHeader('Content-Type', 'application/json');
-  request.send(fileData);
+  
+  if ('fileSystem' in window) {
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function (fs) {
+      fs.root.getFile('waterLog.json', { create: true }, function (fileEntry) {
+        fileEntry.createWriter(function (fileWriter) {
+          fileWriter.onwriteend = function () {
+            console.log('File saved.');
+          };
+          fileWriter.onerror = function (e) {
+            console.error('Failed to save file:', e);
+          };
+          const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+          fileWriter.write(blob);
+        });
+      });
+    });
+  }
 });
-
 // ===================================
 function addCsvToTable(csvData) {
   const rows = csvData.split('\n').map(row => row.split(';'));
