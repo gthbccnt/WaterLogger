@@ -226,9 +226,12 @@ window.addEventListener('beforeunload', () => {
     };
     data.push(rowData);
   });
-  const fileManager = FileManager.iCloud();
-  const logsPath = fileManager.joinPath(fileManager.documentsDirectory(), '/_waterLogs.json');
-  fileManager.writeString(logsPath, JSON.stringify(data));
+  const fileURL = 'file:///private/var/mobile/Documents/waterLog.json';
+  const fileData = JSON.stringify(data);
+  const request = new XMLHttpRequest();
+  request.open('PUT', fileURL);
+  request.setRequestHeader('Content-Type', 'application/json');
+  request.send(fileData);
 });
 // ====
 function addCsvToTable(csvData) {
