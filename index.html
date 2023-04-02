@@ -171,12 +171,18 @@ rowsU.forEach((line) => {
 });
 document.getElementById("currentAmount").textContent = updatedAmount;
 }
-
+// ====
 window.addEventListener('load', () => {
   // Delay execution by 50 milliseconds
   window.setTimeout(() => {
-    const data = JSON.parse(localStorage.getItem('waterLog'));
-    if (data) {
+    let data = [];
+    const fileManager = FileManager.iCloud();
+    const logsPath = fileManager.joinPath(fileManager.documentsDirectory(), 'waterLogs.json');
+    if (fileManager.fileExists(logsPath)) {
+      const logsData = fileManager.readString(logsPath);
+      data = JSON.parse(logsData);
+    }
+    if (data.length > 0) {
       const tableBody = document.querySelector('table tbody');
       // iterate through the data array from end to beginning
       for (let i = data.length - 1; i >= 0; i--) {
@@ -194,17 +200,17 @@ window.addEventListener('load', () => {
         tableBody.insertBefore(tableRow, tableBody.firstChild);
       }
     }
-let updatedAmount = 0;
-const rowsU = document.querySelectorAll("tbody tr");
-rowsU.forEach((line) => {
-  const cellsU = line.cells;
-  const rowDate = cellsU[0].textContent;
-  const rowTime = Number(cellsU[1].textContent.split(":")[0]);
-  if (rowDate === date && rowTime >= 2) {
-    updatedAmount += Number(cellsU[2].textContent);
-  }
-});
-document.getElementById("currentAmount").textContent = updatedAmount;
+    let updatedAmount = 0;
+    const rowsU = document.querySelectorAll("tbody tr");
+    rowsU.forEach((line) => {
+      const cellsU = line.cells;
+      const rowDate = cellsU[0].textContent;
+      const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+      if (rowDate === date && rowTime >= 2) {
+        updatedAmount += Number(cellsU[2].textContent);
+      }
+    });
+    document.getElementById("currentAmount").textContent = updatedAmount;
   }, 50);
 });
 
@@ -220,9 +226,11 @@ window.addEventListener('beforeunload', () => {
     };
     data.push(rowData);
   });
-  localStorage.setItem('waterLog', JSON.stringify(data));
+  const fileManager = FileManager.iCloud();
+  const logsPath = fileManager.joinPath(fileManager.documentsDirectory(), 'waterLogs.json');
+  fileManager.writeString(logsPath, JSON.stringify(data));
 });
-
+// ====
 function addCsvToTable(csvData) {
   const rows = csvData.split('\n').map(row => row.split(';'));
   rows.slice(0, 30).forEach((row, rowIndex) => {
