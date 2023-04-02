@@ -7,7 +7,7 @@
     <form>
       <label for="amount">Amount:</label>
       <input type="number" id="amount" name="amount">
-      <button type="button" id="btn">Add</button>
+      <button type="button" onclick=addRow() id="btn">Add</button>
     </form>
     <br>
     <table id="myTable">
@@ -35,9 +35,9 @@
         timeCell.innerHTML = time;
         }
         
-    btn.addEventListener("click", () => {
-        addRow()
-        });
+   // btn.addEventListener("click", () => {
+     //   addRow()
+     //   });
     </script>
   </body>
 </html>
