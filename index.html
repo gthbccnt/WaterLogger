@@ -99,8 +99,9 @@
         z-index: 999;
         height: 10vw;
         width: 10vw;
-        font-size: 12pt;
+        font-size: 36pt;
         padding:0;
+        margin-right: 3vw;
       }
       tbody tr:nth-child(even) {background-color: #c5c5c580;}
       tbody tr:nth-child(odd) {background-color: #ffffff50;}
@@ -139,14 +140,14 @@
       </table>
         </div>
   <script>
-     const tableM = document.getElementById("waterLog");
-  const tbodyM = tableM.createTBody();
-
-function addRow(loggedAmount) {
+  const table = document.getElementById("waterLog");
+  const tbody = table.createTBody();
   const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
   const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+
+function addRow(loggedAmount) {
   const newRow = [date, time, loggedAmount];
-  const newTableRow = tbodyM.insertRow(0);
+  const newTableRow = tbody.insertRow(0);
 
   newRow.forEach((cell, cellIndex) => {
     const td = newTableRow.insertCell(cellIndex);
@@ -163,15 +164,12 @@ function addRow(loggedAmount) {
       updatedAmount += Number(cells[2].textContent);
     }
   });
-
   document.getElementById("currentAmount").textContent = updatedAmount;
 }
 
 
 function addCsvToTable(csvData) {
   const rows = csvData.split('\n').map(row => row.split(';'));
-  const table = document.getElementById('waterLog');
-  const tbody = table.createTBody();
   rows.slice(0, 30).forEach((row, rowIndex) => {
     const tr = tbody.insertRow();
     row.forEach((cell, cellIndex) => {
@@ -179,6 +177,15 @@ function addCsvToTable(csvData) {
       td.textContent = cell;
     });
   });
+    let updatedAmount = 0;
+  const rowsU = document.querySelectorAll("tbody tr");
+  rowsU.forEach((line) => {
+    const cellsU = line.cells;
+    if (cellsU[0].textContent === date) {
+      updatedAmount += Number(cellsU[2].textContent);
+    }
+  });
+  document.getElementById("currentAmount").textContent = updatedAmount;
   // Store the CSV data in a global variable for later use
   window.csvWaterLog = csvData;
 }
