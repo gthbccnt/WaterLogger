@@ -1,5 +1,6 @@
 <html>
   <head>
+   <meta name="apple-mobile-web-app-capable" content="yes">
     <style>
       * {box-sizing: border-box;
         font-family: "SF Pro Display";
@@ -7,7 +8,7 @@
       body {background-color: #99999950;}
       #waterInput {
         position: fixed;
-        top: 60%;
+        top: 30%;
         padding: 4vw;
         width: 96%;
         left: 2vw;
@@ -30,9 +31,6 @@
         border:none;
         text-align:center;
         vertical-align: middle;
-      }
-      .slide-fwd-center {
-	     animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
       }
       #svBt {
         width: 31vw;
@@ -127,19 +125,7 @@
     }
 .dark-theme tbody tr:nth-child(odd) {
       background-color: #41414150;
-    }      
-      
-@keyframes slide-fwd-center {
-  0% {
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-  }
-  100% {
-    -webkit-transform: translateZ(160px);
-            transform: translateZ(160px);
-  }
-}
-
+    }
     </style>
   </head>
   <body>
