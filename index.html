@@ -239,7 +239,7 @@ window.addEventListener('beforeunload', () => {
 
 
 window.addEventListener('load', () => {
-  // Delay execution by 500 milliseconds (0.5 seconds)
+  // Delay execution by 50 milliseconds
   window.setTimeout(() => {
     const data = JSON.parse(localStorage.getItem('waterLog'));
     if (data) {
@@ -258,7 +258,16 @@ window.addEventListener('load', () => {
         tableBody.appendChild(tableRow);
       });
     }
-  }, 800);
+  }, 50);
+  let updatedAmount = 0;
+  const rowsU = document.querySelectorAll("tbody tr");
+  rowsU.forEach((line) => {
+    const cellsU = line.cells;
+    if (cellsU[0].textContent === date) {
+      updatedAmount += Number(cellsU[2].textContent);
+    }
+  });
+  document.getElementById("currentAmount").textContent = updatedAmount;
 });
 
 const btn125 = document.getElementById("btn-125");
