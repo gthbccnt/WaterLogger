@@ -157,12 +157,13 @@ function addRow(loggedAmount) {
     // mark added cells
     td.classList.add("added-cell");
   });
-  const data = JSON.parse(localStorage.getItem('waterLog')) || [];
-  data.unshift(newRow);
-  localStorage.setItem('waterLog', JSON.stringify(data));
+  
+  const rows = document.querySelectorAll("tbody tr");
+  if (rows.length > 1) {
+    tbody.insertBefore(newTableRow, rows[1]);
+  }
 
   let updatedAmount = 0;
-  const rows = document.querySelectorAll("tbody tr");
   rows.forEach((row) => {
     const cells = row.cells;
     if (cells[0].textContent === date) {
@@ -171,6 +172,56 @@ function addRow(loggedAmount) {
   });
   document.getElementById("currentAmount").textContent = updatedAmount;
 }
+
+
+window.addEventListener('load', () => {
+  // Delay execution by 50 milliseconds
+  window.setTimeout(() => {
+    const data = JSON.parse(localStorage.getItem('waterLog'));
+    if (data) {
+      const tableBody = document.querySelector('table tbody');
+      // iterate through the data array from end to beginning
+      for (let i = data.length - 1; i >= 0; i--) {
+        const row = data[i];
+        const tableRow = document.createElement('tr');
+        const dateCell = document.createElement('td');
+        dateCell.textContent = row.date;
+        const timeCell = document.createElement('td');
+        timeCell.textContent = row.time;
+        const amountCell = document.createElement('td');
+        amountCell.textContent = row.amount;
+        tableRow.appendChild(dateCell);
+        tableRow.appendChild(timeCell);
+        tableRow.appendChild(amountCell);
+        tableBody.insertBefore(tableRow, tableBody.firstChild);
+      }
+    }
+  let updatedAmount = 0;
+  const rowsU = document.querySelectorAll("tbody tr");
+  rowsU.forEach((line) => {
+    const cellsU = line.cells;
+    if (cellsU[0].textContent === date) {
+      updatedAmount += Number(cellsU[2].textContent);
+    }
+  });
+  document.getElementById("currentAmount").textContent = updatedAmount;
+  }, 50);
+});
+
+window.addEventListener('beforeunload', () => {
+  const rows = document.querySelectorAll("tbody tr");
+  const data = [];
+  rows.forEach((row) => {
+    const cells = row.querySelectorAll('td');
+    const rowData = {
+      date: cells[0].innerHTML,
+      time: cells[1].innerHTML,
+      amount: cells[2].innerHTML
+    };
+    data.push(rowData);
+  });
+  localStorage.setItem('waterLog', JSON.stringify(data));
+});
 
 
 function addCsvToTable(csvData) {
@@ -220,54 +271,6 @@ saveButton.addEventListener("click", () => {
   if (value !== "") {
   addRow(value);
   }
-});
-
-window.addEventListener('beforeunload', () => {
-  const rows = document.querySelectorAll("tbody tr");
-  const data = [];
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll('td');
-    const rowData = {
-      date: cells[0].innerHTML,
-      time: cells[1].innerHTML,
-      amount: cells[2].innerHTML
-    };
-    data.push(rowData);
-  });
-  localStorage.setItem('waterLog', JSON.stringify(data));
-});
-
-
-window.addEventListener('load', () => {
-  // Delay execution by 50 milliseconds
-  window.setTimeout(() => {
-    const data = JSON.parse(localStorage.getItem('waterLog'));
-    if (data) {
-      const tableBody = document.querySelector('table tbody');
-      data.forEach((row) => {
-        const tableRow = document.createElement('tr');
-        const dateCell = document.createElement('td');
-        dateCell.textContent = row.date;
-        const timeCell = document.createElement('td');
-        timeCell.textContent = row.time;
-        const amountCell = document.createElement('td');
-        amountCell.textContent = row.amount;
-        tableRow.appendChild(dateCell);
-        tableRow.appendChild(timeCell);
-        tableRow.appendChild(amountCell);
-        tableBody.appendChild(tableRow);
-      });
-    }
-  let updatedAmount = 0;
-  const rowsU = document.querySelectorAll("tbody tr");
-  rowsU.forEach((line) => {
-    const cellsU = line.cells;
-    if (cellsU[0].textContent === date) {
-      updatedAmount += Number(cellsU[2].textContent);
-    }
-  });
-  document.getElementById("currentAmount").textContent = updatedAmount;
-  }, 50);
 });
 
 const btn125 = document.getElementById("btn-125");
