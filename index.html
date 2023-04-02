@@ -152,7 +152,7 @@
 <table id="waterLog">
         <thead>
         <tr>
-					${titles.map(title => `<td>${title}</td>`).join('')}
+	<td>date</td><td>time</td><td>amount</td>
         </tr>
       </thead>
         <tbody>
@@ -161,7 +161,6 @@
         </div>
     <script>
 let useSliceM = false;
-  const rowsM = ${JSON.stringify(linesM)};
   const tableM = document.getElementById("waterLog");
   const tbodyM = tableM.createTBody();
 
