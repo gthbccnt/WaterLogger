@@ -157,13 +157,9 @@ function addRow(loggedAmount) {
     // mark added cells
     td.classList.add("added-cell");
   });
-  
-  const rows = document.querySelectorAll("tbody tr");
-  if (rows.length > 1) {
-    tbody.insertBefore(newTableRow, rows[1]);
-  }
 
   let updatedAmount = 0;
+  const rows = document.querySelectorAll("tbody tr");
   rows.forEach((row) => {
     const cells = row.cells;
     if (cells[0].textContent === date) {
