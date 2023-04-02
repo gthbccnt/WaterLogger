@@ -1,43 +1,256 @@
-<!DOCTYPE html>
 <html>
   <head>
-    <title>Table Example</title>
+    <style>
+      * {box-sizing: border-box;
+        font-family: "SF Pro Display";
+        } 
+      body {background-color: #99999950;}
+      #waterInput {
+        position: fixed;
+        top: 60%;
+        padding: 4vw;
+        width: 96%;
+        left: 2vw;
+        font-size: 32pt;
+        background-color: #70707050;
+  -webkit-backdrop-filter: blur(30px);
+        border:none;
+        border-radius: 35px;
+        color: black;
+      }
+      button, input {
+        font-size: 5vw;
+        font-weight: light;
+        height: 15vw;
+        width: 20vw;
+        background-color: #ffffff50;
+        color: black;
+  -webkit-backdrop-filter: blur(30px);
+        border-radius: 20px;
+        border:none;
+        text-align:center;
+        vertical-align: middle;
+      }
+      .slide-fwd-center {
+	     animation: slide-fwd-center 0.45s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      }
+      #svBt {
+        width: 31vw;
+      }
+      #customInput {
+        width: 54vw;
+        caret-color: #00000090;
+        text-align: left;
+      }
+      #customInput:focus {
+        outline: none;
+        background-color: #ffffff80;
+  -webkit-backdrop-filter: blur(50px);
+      }
+      ::placeholder {
+       color: black;
+      opacity: 0.55;
+      }
+      #inputSaveList, #buttonList {
+        vertical-align: middle;
+        justify-content: space-between;
+        display: flex;
+        padding:0;
+      }
+      #buttonList, #header {
+        margin-bottom: 3vw;;
+      }
+      #header {
+        display: flex;
+        padding-top: 0vw;
+        vertical-align: bottom;
+        text-align: bottom;
+        height: 12vw;
+      }
+      #logTitle, #milliLiter, #currentAmount {
+        font-size: 10vw;
+        font-weight: bold;
+      }
+      .added-cell {
+        font-weight: bold;
+      }
+      #roundedCorners{
+        border-radius: 40px;
+        overflow: scroll;
+        width:95%;
+        height: 91%;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: center;
+      }
+      thead {
+        font-size: 6vw;
+        background-color: #33333340;
+        -webkit-backdrop-filter: blur(35px);
+        width: 25vw;
+        top: 0px;
+        position: sticky;
+        border: none;
+      }
+      thead tr {
+        height: 12vw;
+      }
+      tbody {
+        font-size: 4vw;
+        height:91%;
+      }
+      td {
+          width: 25vw;
+          height: 9vw;
+          border: none;
+      }
+      tbody tr:nth-child(even) {
+          background-color: #c5c5c580;
+      }
+      tbody tr:nth-child(odd) {
+          background-color: #ffffff50;
+      }
+      tbody td:nth-child(-n+2) {
+        font-size: 3.7vw;
+      }
+      
+* .dark-theme {
+      color: #bbbbbb;
+      background-color: #222222;
+    }
+.dark-theme tbody tr:nth-child(even) {
+      background-color: #383838;
+    }
+.dark-theme tbody tr:nth-child(odd) {
+      background-color: #41414150;
+    }      
+      
+@keyframes slide-fwd-center {
+  0% {
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+  }
+  100% {
+    -webkit-transform: translateZ(160px);
+            transform: translateZ(160px);
+  }
+}
+
+    </style>
   </head>
   <body>
-    <form>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount">
-      <button type="button" onclick=addRow() id="btn">Add</button>
-    </form>
-    <br>
-    <table id="myTable">
-      <tr>
-        <th>Amount</th>
-        <th>Date</th>
-        <th>Time</th>
-      </tr>
-    </table>
+  <form id="waterInput" action="/action_page.php">
+  <div id="header">
+  <div id=logTitle>Log:&nbsp;</div>
+  <div id="currentAmount">${fileWater}</div>
+  <div id="milliLiter">ml</div>
+  </div>
+  <div id="buttonList">
+  
+<button id="btn-125" value="125">125 ml</button>
+<button id="btn-200" value="200">200 ml</button>
+<button id="btn-250" value="250">250 ml</button>
+<button id="btn-500" value="500">500 ml</button>
 
+  </div>
+  <div id=inputSaveList>
+  <input type="number" placeholder="Enter ml" id="customInput">
+  <button id="svBt" type="submit">Save</button>
+  </div>
+</form>
+<div id="roundedCorners">
+<table id="waterLog">
+        <thead>
+        <tr>
+					${titles.map(title => `<td>${title}</td>`).join('')}
+        </tr>
+      </thead>
+        <tbody>
+        </tbody>
+      </table>
+        </div>
     <script>
-    function addRow() {
-        var amount = document.getElementById("amount").value;
-        var date = new Date().toLocaleDateString();
-        var time = new Date().toLocaleTimeString();
+let useSliceM = false;
+  const rowsM = ${JSON.stringify(linesM)};
+  const tableM = document.getElementById("waterLog");
+  const tbodyM = tableM.createTBody();
 
-        var table = document.getElementById("myTable");
-        var row = table.insertRow(-1);
-        var amountCell = row.insertCell(0);
-        var dateCell = row.insertCell(1);
-        var timeCell = row.insertCell(2);
+function initialTable() {
+  rowsM.slice(0, ${rowNumber}).forEach((rowM, rowIndex) => {
+    const cells = rowM.trim().split(";");
+    const tr = tbodyM.insertRow();
+    
+    cells.forEach((cell, cellIndex) => {
+      const td = tr.insertCell();
+      td.textContent = cell;
+    });
+  });
+}
+initialTable();
 
-        amountCell.innerHTML = amount;
-        dateCell.innerHTML = date;
-        timeCell.innerHTML = time;
-        }
-        
-   // btn.addEventListener("click", () => {
-     //   addRow()
-     //   });
+function addRow(loggedAmount) {
+  const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
+  const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+  const newRow = [date, time, loggedAmount];
+  const newTableRow = tbodyM.insertRow(0);
+
+  newRow.forEach((cell, cellIndex) => {
+  const td = newTableRow.insertCell(cellIndex);
+  td.textContent = cell;
+  // mark added cells
+  td.classList.add("added-cell");
+  });
+
+  const currentAmount = parseInt(document.getElementById("currentAmount").textContent);
+  const updatedAmount = currentAmount + Number(loggedAmount);
+  document.getElementById("currentAmount").textContent = updatedAmount;
+}
+
+const saveButton = document.getElementById("svBt");
+const customInput = document.getElementById("customInput");
+
+saveButton.addEventListener("click", () => {
+  const value = customInput.value;
+  if (value !== "") {
+  addRow(value);
+  }
+});
+
+const btn125 = document.getElementById("btn-125");
+const btn200 = document.getElementById("btn-200");
+const btn250 = document.getElementById("btn-250");
+const btn500 = document.getElementById("btn-500");
+
+btn125.addEventListener("click", function() {
+btn125.classList.add("slide-fwd-center");
+const value = btn125.value;
+addRow(value);
+});
+
+btn200.addEventListener("click", () => {
+  const value = btn200.value;
+  addRow(value);
+});
+btn250.addEventListener("click", () => {
+  const value = btn250.value;
+  addRow(value);
+});
+btn500.addEventListener("click", () => {
+  const value = btn500.value;
+  addRow(value);
+});
+
+      const body = document.querySelector('body');
+
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        body.classList.add('dark-theme');
+      } else {
+        body.classList.remove('dark-theme');
+      }
     </script>
   </body>
 </html>
