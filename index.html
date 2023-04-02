@@ -258,7 +258,6 @@ window.addEventListener('load', () => {
         tableBody.appendChild(tableRow);
       });
     }
-  }, 50);
   let updatedAmount = 0;
   const rowsU = document.querySelectorAll("tbody tr");
   rowsU.forEach((line) => {
@@ -268,6 +267,7 @@ window.addEventListener('load', () => {
     }
   });
   document.getElementById("currentAmount").textContent = updatedAmount;
+  }, 50);
 });
 
 const btn125 = document.getElementById("btn-125");
