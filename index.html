@@ -143,10 +143,10 @@
     </style>
   </head>
   <body>
-  <form id="waterInput" action="/action_page.php">
+  <form id="waterInput">
   <div id="header">
   <div id=logTitle>Log:&nbsp;</div>
-  <div id="currentAmount">${fileWater}</div>
+  <div id="currentAmount">0</div>
   <div id="milliLiter">ml</div>
   </div>
   <div id="buttonList">
@@ -178,19 +178,6 @@ let useSliceM = false;
   const rowsM = ${JSON.stringify(linesM)};
   const tableM = document.getElementById("waterLog");
   const tbodyM = tableM.createTBody();
-
-function initialTable() {
-  rowsM.slice(0, ${rowNumber}).forEach((rowM, rowIndex) => {
-    const cells = rowM.trim().split(";");
-    const tr = tbodyM.insertRow();
-    
-    cells.forEach((cell, cellIndex) => {
-      const td = tr.insertCell();
-      td.textContent = cell;
-    });
-  });
-}
-initialTable();
 
 function addRow(loggedAmount) {
   const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
