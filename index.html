@@ -171,7 +171,7 @@ rowsU.forEach((line) => {
 });
 document.getElementById("currentAmount").textContent = updatedAmount;
 }
-
+// ==================================================
 window.addEventListener('load', () => {
   // Delay execution by 50 milliseconds
   window.setTimeout(() => {
@@ -222,7 +222,23 @@ window.addEventListener('beforeunload', () => {
   });
   localStorage.setItem('waterLog', JSON.stringify(data));
 });
-
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') {
+    const rows = document.querySelectorAll("tbody tr");
+    const data = [];
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll('td');
+      const rowData = {
+        date: cells[0].innerHTML,
+        time: cells[1].innerHTML,
+        amount: cells[2].innerHTML
+      };
+      data.push(rowData);
+    });
+    localStorage.setItem('waterLog', JSON.stringify(data));
+  }
+});
+// ==================================================
 function addCsvToTable(csvData) {
   const rows = csvData.split('\n').map(row => row.split(';'));
   rows.slice(0, 30).forEach((row, rowIndex) => {
