@@ -8,14 +8,14 @@
       body {background-color: #99999950;}
       #waterInput {
         position: fixed;
-	z-index: 999;
+	      z-index: 999;
         top: 60%;
         padding: 4vw;
         width: 96%;
         left: 2vw;
         font-size: 32pt;
         background-color: #70707050;
-  -webkit-backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
         border:none;
         border-radius: 35px;
         color: black;
@@ -27,28 +27,18 @@
         width: 20vw;
         background-color: #ffffff50;
         color: black;
-  -webkit-backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
         border-radius: 20px;
         border:none;
         text-align:center;
         vertical-align: middle;
       }
-      #svBt {
-        width: 31vw;
-      }
+      #svBt { width: 31vw;}
+      
       #customInput {
         width: 54vw;
         caret-color: #00000090;
         text-align: left;
-      }
-      #customInput:focus {
-        outline: none;
-        background-color: #ffffff80;
-  -webkit-backdrop-filter: blur(50px);
-      }
-      ::placeholder {
-       color: black;
-      opacity: 0.55;
       }
       #inputSaveList, #buttonList {
         vertical-align: middle;
@@ -56,9 +46,8 @@
         display: flex;
         padding:0;
       }
-      #buttonList, #header {
-        margin-bottom: 3vw;;
-      }
+      #buttonList, #header {margin-bottom: 3vw;}
+      
       #header {
         display: flex;
         padding-top: 0vw;
@@ -70,65 +59,44 @@
         font-size: 10vw;
         font-weight: bold;
       }
-      .added-cell {
-        font-weight: bold;
-      }
+      .added-cell {font-weight: bold;}
+      
       #roundedCorners{
         border-radius: 40px;
         overflow: scroll;
         width:94%;
-	position: fixed;
-	top: 5%;
+	      position: fixed;
+	      top: 5%;
         height: 85%;
         margin-left: 2%;
         margin-right: 2%;
       }
       table {
-	border-collapse: collapse;
+	      border-collapse: collapse;
         width: 100%;
         text-align: center;
       }
       thead {
         font-size: 6vw;
         background-color: #33333340;
-        -webkit-backdrop-filter: blur(35px);
+    -webkit-backdrop-filter: blur(35px);
         width: 25vw;
         top: 0px;
         position: sticky;
         border: none;
       }
-      thead tr {
-        height: 12vw;
-      }
+      thead tr {height: 12vw;}
       tbody {
         font-size: 4vw;
         height:91%;
       }
       td {
-          width: 25vw;
-          height: 9vw;
-          border: none;
+        width: 25vw;
+        height: 9vw;
+        border: none;
       }
-      tbody tr:nth-child(even) {
-          background-color: #c5c5c580;
-      }
-      tbody tr:nth-child(odd) {
-          background-color: #ffffff50;
-      }
-      tbody td:nth-child(-n+2) {
-        font-size: 3.7vw;
-      }
-      
-* .dark-theme {
-      color: #bbbbbb;
-      background-color: #222222;
-    }
-.dark-theme tbody tr:nth-child(even) {
-      background-color: #383838;
-    }
-.dark-theme tbody tr:nth-child(odd) {
-      background-color: #41414150;
-    }
+      tbody tr:nth-child(even) {background-color: #c5c5c580;}
+      tbody tr:nth-child(odd) {background-color: #ffffff50;}
     </style>
   </head>
   <body>
@@ -190,6 +158,36 @@ function addRow(loggedAmount) {
 
   document.getElementById("currentAmount").textContent = updatedAmount;
 }
+
+function initialTable() {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.csv';
+  fileInput.onchange = () => {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const csvData = reader.result;
+      const rows = csvData.split('\n').map(row => row.split(';'));
+      const table = document.getElementById('waterLog');
+      const tbody = table.createTBody();
+      rows.forEach((row, rowIndex) => {
+        const tr = tbody.insertRow();
+        row.forEach((cell, cellIndex) => {
+          const td = tr.insertCell();
+          td.textContent = cell;
+        });
+      });
+      // Store the CSV data in a global variable for later use
+      window.csvWaterLog = csvData;
+    };
+    reader.readAsText(file);
+  };
+  fileInput.click();
+}
+
+
+initialTable();
 
 const saveButton = document.getElementById("svBt");
 const customInput = document.getElementById("customInput");
