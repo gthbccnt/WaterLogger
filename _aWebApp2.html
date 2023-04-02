@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Table Example</title>
+  </head>
+  <body>
+    <form>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount">
+      <button type="button" id="btn">Add</button>
+    </form>
+    <br>
+    <table id="myTable">
+      <tr>
+        <th>Amount</th>
+        <th>Date</th>
+        <th>Time</th>
+      </tr>
+    </table>
+
+    <script>
+    function addRow() {
+        var amount = document.getElementById("amount").value;
+        var date = new Date().toLocaleDateString();
+        var time = new Date().toLocaleTimeString();
+
+        var table = document.getElementById("myTable");
+        var row = table.insertRow(-1);
+        var amountCell = row.insertCell(0);
+        var dateCell = row.insertCell(1);
+        var timeCell = row.insertCell(2);
+
+        amountCell.innerHTML = amount;
+        dateCell.innerHTML = date;
+        timeCell.innerHTML = time;
+        }
+        
+    btn.addEventListener("click", () => {
+        addRow()
+        });
+    </script>
+  </body>
+</html>
