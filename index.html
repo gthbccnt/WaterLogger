@@ -80,6 +80,10 @@ button, input {
   outline: none
   -webkit-backdrop-filter: blur(55px);
 }
+#customInput::placeholder {
+  opacity: 0.6;
+  color:black;
+}
 #inputSaveList, #buttonList {
   vertical-align: middle;
   justify-content: space-between;
@@ -108,11 +112,11 @@ button, input {
   overflow: scroll;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
-  width: 94vw;
+  width: 92vw;
   max-height: 71vh;
   top: 20vw;
-  left: 3vw;
-  right: 3vw;
+  left: 4vw;
+  right: 4vw;
   box-shadow: 0px 0px 10px -2px #00669950;
 }
 table {
@@ -153,7 +157,7 @@ thead tr {
   padding:0;
   margin-right: 3vw;
   margin-top: 3vw;
-  margin-bottom: 3vw;
+  margin-bottom: 2vw;
 }
 tbody tr:nth-child(even) {background-color: #ffffffaa;}
 tbody tr:nth-child(odd) {background-color: #ffffff50;}
