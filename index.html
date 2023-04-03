@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
    <meta name="apple-mobile-web-app-capable" content="yes">
-   <meta name="viewport" initial-scale=1, maximum-scale=1, user-scalable=0">
+   <meta name="viewport" initial-scale="1" maximum-scale="1" user-scalable="0">
    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
    <link rel="apple-touch-icon" href="icon.png">
-    <style>
-      * {box-sizing: border-box;
+	<style>
+      * {
+        box-sizing: border-box;
         font-family: "SF Pro Display", system-ui;
       }
       ::-webkit-scrollbar {
@@ -15,14 +16,58 @@
         display: none;
         /* Disable default overscroll behavior of the scrollbar */
       }
-      body {
-        background-color: #00669950; 
-        text-align: right;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-      }
-      #waterInput {
+		body {
+		  margin:0;
+		  background-color: #03245890;
+          text-align: right;
+          position: fixed;
+		}
+        #backgroundFix {
+          background-color: rgba(255,255,255,.6);
+          height: 100vh;
+          width: 100vw;
+        }
+
+		.waves {
+		  position:relative;
+		  width: 100%;
+		  height:15vh;
+		  margin-bottom:-3px; /*Fix for safari gap*/
+		  min-height: 6vw;
+		  max-height: 10vw;
+		}
+		/* Animation */
+
+		.parallax > use {
+		  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+		}
+		.parallax > use:nth-child(1) {
+		  animation-delay: -2s;
+		  animation-duration: 7s;
+		}
+		.parallax > use:nth-child(2) {
+		  animation-delay: -3s;
+		  animation-duration: 10s;
+		}
+		.parallax > use:nth-child(3) {
+		  animation-delay: -4s;
+		  animation-duration: 13s;
+		}
+		.parallax > use:nth-child(4) {
+		  animation-delay: -5s;
+		  animation-duration: 20s;
+		}
+		@keyframes move-forever {
+		  0% {
+		   transform: translate3d(-90px,0,0);
+		  }
+		  100% { 
+		    transform: translate3d(85px,0,0);
+		  }
+		}
+		/*Shrinking for mobile*/
+		
+       #waterInput {
         position: fixed;
         z-index: 998;
         top: 60%;
@@ -137,10 +182,25 @@
       }
       tbody tr:nth-child(even) {background-color: #ffffffaa;}
       tbody tr:nth-child(odd) {background-color: #ffffff50;}
-    </style>
-  </head>
-  <body>
-  <form id="waterInput" action="" method="get" onsubmit="return false">
+	</style>
+</head>
+<body>
+<div id="niceWaves">
+	<svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+	viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+		<defs>
+		<path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+		</defs>
+		<g class="parallax">
+			<use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.1" />
+			<use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.2)" />
+			<use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.2)" />
+			<use xlink:href="#gentle-wave" x="48" y="7" fill="rgba(255,255,255,0.3)" />
+		</g>
+	</svg>
+</div>
+<div id="backgroundFix">
+	  <form id="waterInput" action="" method="get" onsubmit="return false">
   <div id="header">
   <div id=logTitle>Log:&nbsp;</div>
   <div id="currentAmount">0</div>
@@ -171,7 +231,10 @@
         </tbody>
       </table>
   </div>
-  <script>
+	
+</div>
+<script>
+ <script>
   const table = document.getElementById("waterLog");
   const tbody = table.createTBody();
   const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
@@ -361,5 +424,6 @@ const body = document.querySelector('body');
      body.classList.remove('dark-theme');
   }
     </script>
-  </body>
+</script>
+</body>
 </html>
