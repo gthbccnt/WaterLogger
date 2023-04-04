@@ -302,7 +302,7 @@ function loadSelectedFont() {
     document.head.appendChild(style);
   }
   const tableHeaders = document.querySelectorAll('thead tr td');
-  if (tableHeaders.length > 0) {
+  if (tableHeaders.length > 0 && fontData) {
     tableHeaders[0].textContent = '\u{100249}';
     tableHeaders[1].textContent = '\u{10042b}';
     tableHeaders[2].textContent = '\u{101384}';
