@@ -6,19 +6,12 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="apple-touch-icon" href="icon.png">
 <style>
-@font-face {
-  font-family: "iconModeFont";
-  src: url(data:${localStorage.getItem('iconMode')}) format('woff2');
-}
-* {
-  box-sizing: border-box;
-  font-family: system-ui, "iconModeFont";
-}
+* {box-sizing: border-box;font-family: iconMode, system-ui}
+
 ::-webkit-scrollbar {
   overscroll-behavior: none;
   display: none;
 }
-
 body {
   margin:0;
   background-color: #03245890;
@@ -33,7 +26,6 @@ body {
   height: 100vh;
   width: 100vw;
 }
-
 .waves {
   /* change this to animate water level 85 => 0 */
   margin-top: 80vh;
@@ -42,8 +34,7 @@ body {
   height:15vh;
   min-height: 6vw;
   max-height: 10vw;
-}
-    
+} 
 #waterInput {
   position: absolute;
   z-index: 998;
@@ -61,7 +52,6 @@ body {
 }
 button, input {
   font-size: 5vw;
-  font-weight: light;
   height: 15vw;
   width: 20vw;
   background-color: #ffffff80;
@@ -153,6 +143,7 @@ thead tr {
   height: 12vw;
   z-index: 1;
   position: sticky;
+  font-family: "iconMode";
 }
 #addRowsButton {
   z-index: auto;
@@ -164,6 +155,7 @@ thead tr {
   margin-right: 4vw;
   margin-top: 3vw;
   margin-bottom: 2vw;
+  box-shadow: 0px 0px 10px -2px #00669960;
 }
 tbody tr:nth-child(even) {background-color: #ffffffaa;}
 tbody tr:nth-child(odd) {background-color: #ffffff50;}
@@ -201,7 +193,7 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
 </head>
 <body>
 
-<button id="addRowsButton" onclick="openCsvFile()">+</button>
+<button id="addRowsButton" onclick="openCsvOrFont()">+</button>
   
 <div id="niceWaves">
   <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -244,7 +236,7 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
   <table id="waterLog">
     <thead class="tableHead">
       <tr>
-        <td>&#x100249;</td><td>Time</td><td>Amount</td>
+        <td>Date</td><td>Time</td><td>Amount</td>
       </tr>
     </thead>
     <tbody>
@@ -295,8 +287,31 @@ rowsU.forEach((line) => {
 document.getElementById("currentAmount").textContent = updatedAmount;
 }
 // ==================================================
+function loadSelectedFont() {
+  const fontData = localStorage.getItem('selectedFont');
+  if (fontData) {
+    const css = `@font-face {
+      font-family: 'iconMode';
+      src: url('data:font/opentype;charset=utf-8;base64,${fontData}');
+      font-display: swap;
+    }`;
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
+  }
+  const tableHeaders = document.querySelectorAll('thead tr td');
+  if (tableHeaders.length > 0) {
+    tableHeaders[0].textContent = '\u{100249}';
+    tableHeaders[1].textContent = '\u{10042b}';
+    tableHeaders[2].textContent = '\u{101384}';
+  }
+}
+
 window.addEventListener('load', () => {
   // Delay execution by 50 milliseconds
+  
+  loadSelectedFont()
+
   window.setTimeout(() => {
     const data = JSON.parse(localStorage.getItem('waterLog'));
     if (data) {
@@ -365,7 +380,7 @@ document.addEventListener('visibilitychange', () => {
 function openCsvOrFont() {
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
-  fileInput.accept = '.csv,.ttf,.otf,.woff,.woff2';
+  fileInput.accept = '.csv,.ttf,.otf';
   fileInput.onchange = () => {
     const file = fileInput.files[0];
     const reader = new FileReader();
@@ -373,14 +388,21 @@ function openCsvOrFont() {
       const fileData = reader.result;
       if (file.type === 'text/csv') {
         addCsvToTable(fileData);
-      } else if (file.type === 'font/ttf' || file.type === 'font/otf' || file.type === 'font/woff' || file.type === 'font/woff2') {
-        localStorage.setItem('iconMode', fileData);
-        console.log('Font file saved to localStorage!');
-      } else {
-        console.log('Unsupported file type.');
+      } else if (file.type === 'font/ttf' || file.type === 'font/otf') {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const fontData = reader.result.split(',')[1];
+          try {
+            localStorage.setItem('selectedFont', fontData);
+            alert('Selected font saved to local storage!');
+          } catch (e) {
+            alert('Error saving font to local storage: ' + e.message);
+          }
+        };
+        reader.readAsDataURL(file);
       }
     };
-    reader.readAsDataURL(file);
+    reader.readAsText(file);
   };
   fileInput.click();
 }
