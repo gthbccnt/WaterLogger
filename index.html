@@ -7,12 +7,12 @@
   <link rel="apple-touch-icon" href="icon.png">
 <style>
 @font-face {
-  font-family: "symbolsMode";
-  src: url(data:${localStorage.getItem("myFont")});
+  font-family: "iconModeFont";
+  src: url(data:${localStorage.getItem('iconMode')}) format('woff2');
 }
 * {
   box-sizing: border-box;
-  font-family: "symbolsMode", system-ui;
+  font-family: system-ui, "iconModeFont";
 }
 ::-webkit-scrollbar {
   overscroll-behavior: none;
@@ -249,34 +249,10 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
   
 </div>
 <script>
-  function promptForFontFile() {
-  setTimeout(() => {
-    const fileInput = document.createElement("input");
-    fileInput.type = "file";
-    fileInput.accept = ".ttf,.otf,.woff,.woff2";
-    fileInput.addEventListener("change", () => {
-      const file = fileInput.files[0];
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        localStorage.setItem("myFont", reader.result);
-        console.log("Font file saved to localStorage!");
-      });
-      reader.readAsDataURL(file);
-    });
-    const dataTransfer = new DataTransfer();
-    dataTransfer.items.add(fileInput);
-    const filePicker = document.createElement("div");
-    filePicker.style.display = "none";
-    filePicker.appendChild(fileInput);
-    document.body.appendChild(filePicker);
-    fileInput.click();
-  }, 750);
-}
-
-  const table = document.getElementById("waterLog");
-  const tbody = table.createTBody();
-  const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
-  const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
+const table = document.getElementById("waterLog");
+const tbody = table.createTBody();
+const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
+const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
 
 const tbodyTemp = document.querySelector('tbody');
 const theadTemp = document.querySelector('thead');
@@ -380,7 +356,30 @@ document.addEventListener('visibilitychange', () => {
     localStorage.setItem('waterLog', JSON.stringify(data));
   }
 });
-// ==================================================
+// ================= import font or csv ========================
+function openCsvOrFont() {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.csv,.ttf,.otf,.woff,.woff2';
+  fileInput.onchange = () => {
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const fileData = reader.result;
+      if (file.type === 'text/csv') {
+        addCsvToTable(fileData);
+      } else if (file.type === 'font/ttf' || file.type === 'font/otf' || file.type === 'font/woff' || file.type === 'font/woff2') {
+        localStorage.setItem('iconMode', fileData);
+        console.log('Font file saved to localStorage!');
+      } else {
+        console.log('Unsupported file type.');
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+  fileInput.click();
+}
+
 function addCsvToTable(csvData) {
   const rows = csvData.split('\n').map(row => row.split(';'));
   rows.slice(0, 30).forEach((row, rowIndex) => {
@@ -405,23 +404,7 @@ document.getElementById("currentAmount").textContent = updatedAmount;
  // Store the CSV data in a global variable for later use
   window.csvWaterLog = csvData;
 }
-
-function openCsvFile() {
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = '.csv';
-  fileInput.onchange = () => {
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const csvData = reader.result;
-      addCsvToTable(csvData);
-    };
-    reader.readAsText(file);
-  };
-  fileInput.click();
-}
-
+// ====== 
 const saveButton = document.getElementById("svBt");
 const customInput = document.getElementById("customInput");
 
