@@ -6,14 +6,19 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="apple-touch-icon" href="icon.png">
 <style>
+@font-face {
+  font-family: "symbolsMode";
+  src: url(data:${localStorage.getItem("myFont")});
+}
 * {
   box-sizing: border-box;
-  font-family: "SF Pro Display", system-ui;
+  font-family: "symbolsMode", system-ui;
 }
 ::-webkit-scrollbar {
   overscroll-behavior: none;
   display: none;
 }
+
 body {
   margin:0;
   background-color: #03245890;
@@ -234,7 +239,7 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
 <table id="waterLog">
         <thead class="tableHead">
         <tr>
-  <td>Date</td><td>Time</td><td>Amount</td>
+  <td>&#x100249;</td><td>Time</td><td>Amount</td>
         </tr>
       </thead>
         <tbody>
@@ -244,6 +249,30 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
   
 </div>
 <script>
+  function promptForFontFile() {
+  setTimeout(() => {
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = ".ttf,.otf,.woff,.woff2";
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        localStorage.setItem("myFont", reader.result);
+        console.log("Font file saved to localStorage!");
+      });
+      reader.readAsDataURL(file);
+    });
+    const dataTransfer = new DataTransfer();
+    dataTransfer.items.add(fileInput);
+    const filePicker = document.createElement("div");
+    filePicker.style.display = "none";
+    filePicker.appendChild(fileInput);
+    document.body.appendChild(filePicker);
+    fileInput.click();
+  }, 750);
+}
+
   const table = document.getElementById("waterLog");
   const tbody = table.createTBody();
   const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
