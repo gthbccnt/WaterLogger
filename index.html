@@ -200,7 +200,9 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
 </style>
 </head>
 <body>
+
 <button id="addRowsButton" onclick="openCsvFile()">+</button>
+  
 <div id="niceWaves">
   <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
   viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
@@ -215,6 +217,7 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
     </g>
   </svg>
 </div>
+  
 <div id="backgroundFix">
   
 <form id="waterInput" action="" method="get" onsubmit="return false">
@@ -402,11 +405,10 @@ rowsU.forEach((line) => {
   }
 });
 document.getElementById("currentAmount").textContent = updatedAmount;
- 
  // Store the CSV data in a global variable for later use
   window.csvWaterLog = csvData;
 }
-// ====== 
+// ======= buttons ========
 const saveButton = document.getElementById("svBt");
 const customInput = document.getElementById("customInput");
 
@@ -423,11 +425,9 @@ const btn250 = document.getElementById("btn-250");
 const btn500 = document.getElementById("btn-500");
 
 btn125.addEventListener("click", function() {
-btn125.classList.add("slide-fwd-center");
 const value = btn125.value;
 addRow(value);
 });
-
 btn200.addEventListener("click", () => {
   const value = btn200.value;
   addRow(value);
@@ -440,13 +440,13 @@ btn500.addEventListener("click", () => {
   const value = btn500.value;
   addRow(value);
 });
+// ===== dark mode ====
 const body = document.querySelector('body');
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-     body.classList.add('dark-theme');
-  } else {
-     body.classList.remove('dark-theme');
-  }
-    </script>
+if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+   body.classList.add('dark-theme');
+} else {
+   body.classList.remove('dark-theme');
+}
 </script>
 </body>
 </html>
