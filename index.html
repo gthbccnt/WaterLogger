@@ -145,7 +145,7 @@ td {
 .tableHead {background-color: #ffffffcc;}
       
 thead tr {
-  font-size: 4vw;
+  font-size: 22pt;
   width: 25vw;
   border: none;
   -webkit-backdrop-filter: blur(35px);
@@ -428,15 +428,6 @@ document.getElementById("currentAmount").textContent = updatedAmount;
 function loadSelectedFont() {
   const fontData = localStorage.getItem('selectedFont');
   if (fontData) {
-    const css = `@font-face {
-      font-family: 'iconMode';
-      src: url('data:font/opentype;charset=utf-8;base64,${fontData}');
-      font-display: swap;
-    }`;
-    const style = document.createElement('style');
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
-
     const tableHeaders = document.querySelectorAll('thead tr td');
     if (tableHeaders.length > 0) {
       tableHeaders[0].textContent = '\u{100249}';
@@ -444,8 +435,16 @@ function loadSelectedFont() {
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = '4vw'
+      menuButtonIcon.style.fontSize = '22pt'
       menuButtonIcon.textContent = '\u{100306}';
+          const css = `@font-face {
+      font-family: 'iconMode';
+      src: url('data:font/opentype;charset=utf-8;base64,${fontData}');
+      font-display: swap;
+    }`;
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(css));
+    document.head.appendChild(style);
   }
 }
 
