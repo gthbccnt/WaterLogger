@@ -27,9 +27,9 @@ body {
   /*Fix for safari gap margin-bottom:-3px; */
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.43) 100%);
-  margin-top: -4px;
+  margin-top: -4.1px;
   /*Fix for safari gap */
-  height: 100vh;
+  height: 85vh;
   width: 100vw;
 }
 
@@ -42,7 +42,7 @@ body {
   max-height: 10vw;
 }
 #niceWaves {
-  margin-top: 82vh;
+  margin-top: 0vh;
 }
     
 #waterInput {
@@ -170,28 +170,28 @@ thead tr {
 #popup {
   position: fixed;
   top: 55vh;
-  width: 60vw;
-  background: #ffffff50;
-  -webkit-backdrop-filter: blur(25px);
+  width: 80vw;
+  background: #00000020;
+  -webkit-backdrop-filter: blur(35px);
   box-shadow: 0px 0px 200vw 75vw #000000cc;
   border: none;
-  padding: 3%;
-  border-radius: 12pt ;
+  padding: 4%;
+  border-radius: 15pt ;
   display: none;
   z-index: 999;
-  left: 20%;
+  left: 10%;
 }
 
 #ifttt-form input, #ifttt-form button {
-  height: 9vw;  
+  height: 10vw;  
   padding: 10pt;
   padding-left: 12pt;
   height: 3;
   border: none;
   outline: none;
-  background-color: #ffffff80;
-  border-radius: 8pt;
-  font-size: 14pt;
+  background-color: #ffffff70;
+  border-radius: 10pt;
+  font-size: 16pt;
 }
 
 #ifttt-form button {
@@ -206,10 +206,10 @@ thead tr {
 }
 
 #ifttt-form input:focus {
-  background-color: #ffffffbb;
+  background-color: #ffffffaa;
 }
 
-::placeholder {color: #00000090; font-size: 12pt;}
+::placeholder {color: #00000090; font-size: 14pt;}
 
 #popBtnContainer {
   display: flex;
@@ -436,12 +436,16 @@ function loadSelectedFont() {
     const style = document.createElement('style');
     style.appendChild(document.createTextNode(css));
     document.head.appendChild(style);
-  }
-  const tableHeaders = document.querySelectorAll('thead tr td');
-  if (tableHeaders.length > 0 && fontData) {
-    tableHeaders[0].textContent = '\u{100249}';
-    tableHeaders[1].textContent = '\u{10042b}';
-    tableHeaders[2].textContent = '\u{101384}';
+
+    const tableHeaders = document.querySelectorAll('thead tr td');
+    if (tableHeaders.length > 0) {
+      tableHeaders[0].textContent = '\u{100249}';
+      tableHeaders[1].textContent = '\u{10042b}';
+      tableHeaders[2].textContent = '\u{101384}';
+    }
+    const menuButtonIcon = document.querySelector('#menuButton')
+      menuButtonIcon.style.fontSize = '4vw'
+      menuButtonIcon.textContent = '\u{100306}';
   }
 }
 
@@ -661,7 +665,7 @@ const observer = new MutationObserver((mutationsList, observer) => {
         sendPostRequest(value, key);
       }
       // update water level
-      increaseWaterLevel()
+      //increaseWaterLevel()
     }
   }
 });
@@ -696,7 +700,7 @@ function increaseWaterLevel() {
     waterElem.style.animation = 'riseWater .5s ease-in-out forwards';
   }, 00);
 }
-waterElem.style.animation = 'riseWaterInitial .4s ease-in-out forwards'
+//waterElem.style.animation = 'riseWaterInitial .4s ease-in-out forwards'
 // ===== dark mode ====
 // const body = document.querySelector('body');
 // if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
