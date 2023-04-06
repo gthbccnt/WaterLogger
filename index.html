@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="WaterLogger">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="viewport" initial-scale="1" maximum-scale="1" user-scalable="0">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width">
   <link rel="apple-touch-icon" href="icon.png">
 
 <style>
@@ -25,7 +26,7 @@ body {
   overflow:hidden;
 }
 #backgroundFix {
-  margin-top: -3px;/*Fix for safari gap margin:-3px; */
+  margin-top: -4px;/*Fix for safari gap margin:-3px; */
   background-color: #rgba(255,255,255,.43);
   background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.43) 100%);
   height: 80%;
@@ -35,7 +36,7 @@ body {
 .waves {
   /* change this to animate water level 85 => 0 */
   /* change this margin-top: 85vh; to animate water level */
-  margin-top: 40vh;
+  margin-top: 25vh;
   position: relative;
   width: 100%;
 }
@@ -44,32 +45,33 @@ body {
   position: absolute;
   z-index: 998;
   top: 60vh;
-  padding: 4vw;
-  width: 96%;
-  left: 2vw;
+  padding: 5vw;
+  width: 94vw;
+  left: 3vw;
   background-color: #ffffff30;
   -webkit-backdrop-filter: blur(45px);
+  backdrop-filter: blur(45px);
   border:none;
-  border-radius: 35px;
+  border-radius: 8vw;
   color: black;
   box-shadow:0px 0px 10px -4px #00000080;
 }
 button, input {
-  font-size: 16pt;
+  font-size: 5.4vw;
   height: 8vh;
-  width: 20vw;
+  width: 18.8vw;
   background-color: #ffffff80;
   color: black;
   -webkit-backdrop-filter: blur(35px);
-  border-radius: 10pt;
+  border-radius: 3.5vw;
   border:none;
   text-align:center;
   vertical-align: middle;
 }
-#svBt { width: 31vw;}
+#svBt { width: 29vw;}
 
 #customInput {
-  width: 54vw;
+  width: 52vw;
   caret-color: #00000090;
   text-align: left;
   outline: none;
@@ -78,6 +80,8 @@ button, input {
 #customInput:focus {
   outline: none
   -webkit-backdrop-filter: blur(55px);
+  backdrop-filter: blur(55px);
+  background-color: #ffffffaa;
 }
 #customInput::placeholder {
   opacity: 0.6;
@@ -89,7 +93,7 @@ button, input {
   display: flex;
   padding:0;
 }
-#buttonList, #waterInputheader {margin-bottom: 3vw;}
+#buttonList, #waterInputheader {margin-bottom: 2.8vw;}
 
 #waterInputheader {
   display: flex;
@@ -98,23 +102,24 @@ button, input {
   height: 6vh;
 }
 #logTitle, #milliLiter, #currentAmount {
-  font-size: 34pt;
+  font-size: 10vw;
   font-weight: bold;
 }
 .added-cell {font-weight: bold;}
 
 #roundedCorners{
   position: fixed;                           
-  border-radius: 22pt;
-  -webkit-backdrop-filter: blur(4px);
+  border-radius: 5vw;
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   overflow: scroll;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
-  width: 90vw;
+  width: 88vw;
   max-height: 71vh;
-  top: 12vh;
-  left: 5vw;
-  right: 5vw;
+  top: 10.5vh;
+  left: 6vw;
+  right: 6vw;
   box-shadow: 0px 0px 10px -2px #00669950;
 }
 table {
@@ -123,7 +128,7 @@ table {
   text-align: center;
 }
 tbody {
-  font-size: 12pt;
+  font-size: 3.5vw;
 }
 td {
   width: 25vw;
@@ -137,23 +142,24 @@ td {
       
 thead tr {
   position: sticky;
-  top: 0px;
+  top: 0;
   background-color: #ffffff80;
-  font-size: 18pt;
+  font-size: 4.5vw;
   width: 25vw;
   border: none;
   -webkit-backdrop-filter: blur(35px);
-  height: 8vw;
+  backdrop-filter: blur(35px);
+  height: 10vw;
   z-index: 1;
 }
 
 #menuButton {
   z-index: auto;
-  font-size: 18pt;
-  height: 7vh;
-  width: 16vw;
+  font-size: 4vw;
+  height: 6vh;
+  width: 14vw;
   padding:0;
-  margin-right: 5vw;
+  margin-right: 6vw;
   margin-top: 2vh;
   box-shadow: 0px 0px 10px -2px #00669960;
 }
@@ -164,10 +170,11 @@ thead tr {
   width: 80vw;
   background: #00000020;
   -webkit-backdrop-filter: blur(35px);
+  backdrop-filter: blur(35px);
   box-shadow: 0px 0px 100vw 75vw #000000cc;
   border: none;
   padding: 5%;
-  border-radius: 22pt;
+  border-radius: 5vw;
   display: none;
   z-index: 999;
   left: 10%;
@@ -179,8 +186,8 @@ thead tr {
   border: none;
   outline: none;
   background-color: #ffffff70;
-  border-radius: 12pt;
-  font-size: 16pt;
+  border-radius: 3.5vw;
+  font-size: 5vw;
 }
 
 #ifttt-form button {
@@ -192,14 +199,14 @@ thead tr {
   width: 100%;
   margin-bottom: 3.2%;
   text-align: left;
-  padding-left: 12pt;
+  padding-left: 4vw;
 }
 
 #ifttt-form input:focus {
   background-color: #ffffffaa;
 }
 
-::placeholder {color: #00000090; font-size: 14pt;}
+::placeholder {color: #00000090; font-size: 5vw;}
 
 #popBtnContainer {
   display: flex;
@@ -423,15 +430,15 @@ function loadSelectedFont() {
     const tableHeaders = document.querySelectorAll('thead tr td');
     const tableHeaderCell = document.querySelector('thead tr td');
     if (tableHeaders.length > 0) {
-      tableHeaders[0].style.fontSize = "12pt";
-      tableHeaders[1].style.fontSize = "12pt";
-      tableHeaders[2].style.fontSize = "12pt";
+      // tableHeaders[0].style.fontSize = "12pt";
+      // tableHeaders[1].style.fontSize = "12pt";
+      // tableHeaders[2].style.fontSize = "12pt";
       tableHeaders[0].textContent = '\u{100249}';
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = "12pt";
+      menuButtonIcon.style.fontSize = "3.5vw";
       menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
