@@ -16,36 +16,30 @@
 
 body {
   margin:0;
-  background: rgb(62,86,131);
+  background-color: rgb(62,86,131);
   background: linear-gradient(0deg, rgba(62,86,131,1) 0%, rgba(81,142,186,1) 100%);
   text-align: right;
   touch-action: none;
-  /*position: fixed;*/
+  background-attachment: fixed;
+  height: 100vh;
+  overflow:hidden;
 }
 #backgroundFix {
-  /*background-color: rgba(255,255,255,.43);*/
-  /*Fix for safari gap margin-bottom:-3px; */
-  background: rgb(255,255,255);
-  background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.43) 100%);
-  box-shadow:0px -4px 0px 0px rgba(255,255,255,.43);
-  /*Fix for safari gap */
-  margin-top: 0px;
-  height: 100vh;
+  margin-top: -3px;/*Fix for safari gap margin:-3px; */
+  background-color: #rgba(255,255,255,.43);
+  background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.43) 100%);
+  height: 80%;
   width: 100vw;
 }
 
 .waves {
   /* change this to animate water level 85 => 0 */
-  margin-top: 85vh;
+  /* change this margin-top: 85vh; to animate water level */
+  margin-top: 40vh;
+  position: relative;
   width: 100%;
-  /*height:15vh;*/
-  min-height: 6vw;
-  max-height: 10vw;
 }
-#niceWaves {
-  /*margin-top: 15vh;*/
-}
-    
+  
 #waterInput {
   position: absolute;
   z-index: 998;
@@ -61,13 +55,13 @@ body {
   box-shadow:0px 0px 10px -4px #00000080;
 }
 button, input {
-  font-size: 36pt;
-  height: 15vw;
+  font-size: 16pt;
+  height: 8vh;
   width: 20vw;
   background-color: #ffffff80;
   color: black;
   -webkit-backdrop-filter: blur(35px);
-  border-radius: 20px;
+  border-radius: 10pt;
   border:none;
   text-align:center;
   vertical-align: middle;
@@ -95,33 +89,32 @@ button, input {
   display: flex;
   padding:0;
 }
-#buttonList, #header {margin-bottom: 3vw;}
+#buttonList, #waterInputheader {margin-bottom: 3vw;}
 
-#header {
+#waterInputheader {
   display: flex;
-  padding-top: 0vw;
-  vertical-align: bottom;
-  text-align: bottom;
-  height: 12vw;
+  margin-top: 0vh;
+  margin-bottom: 2vh;
+  height: 6vh;
 }
 #logTitle, #milliLiter, #currentAmount {
-  font-size: 54pt;
+  font-size: 34pt;
   font-weight: bold;
 }
 .added-cell {font-weight: bold;}
 
 #roundedCorners{
-  position: absolute;                           
-  border-radius: 40px;
+  position: fixed;                           
+  border-radius: 22pt;
   -webkit-backdrop-filter: blur(4px);
   overflow: scroll;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
-  width: 92vw;
+  width: 90vw;
   max-height: 71vh;
-  top: 20vw;
-  left: 4vw;
-  right: 4vw;
+  top: 12vh;
+  left: 5vw;
+  right: 5vw;
   box-shadow: 0px 0px 10px -2px #00669950;
 }
 table {
@@ -130,40 +123,38 @@ table {
   text-align: center;
 }
 tbody {
-  font-size: 24pt;
-  height:91%;
+  font-size: 12pt;
 }
 td {
   width: 25vw;
-  height: 9vw;
+  height: 4vh;
   border: none;
 }
 .tableHeadData {
   filter: drop-shadow(0px 0px 2px #00000040);
   background-color: #ffffff90;
 }
-.tableHead {background-color: #ffffffcc;}
       
 thead tr {
-  font-size: 26pt;
+  position: sticky;
+  top: 0px;
+  background-color: #ffffff80;
+  font-size: 18pt;
   width: 25vw;
   border: none;
   -webkit-backdrop-filter: blur(35px);
-  top: 0px;
-  height: 12vw;
+  height: 8vw;
   z-index: 1;
-  position: sticky;
 }
+
 #menuButton {
   z-index: auto;
-  height: 12vw;
-  width: 12vw;
-  font-size: 26pt;
-  font-weight: bold;
+  font-size: 18pt;
+  height: 7vh;
+  width: 16vw;
   padding:0;
-  margin-right: 4vw;
-  margin-top: 3vw;
-  margin-bottom: 2vw;
+  margin-right: 5vw;
+  margin-top: 2vh;
   box-shadow: 0px 0px 10px -2px #00669960;
 }
 
@@ -176,21 +167,20 @@ thead tr {
   box-shadow: 0px 0px 100vw 75vw #000000cc;
   border: none;
   padding: 5%;
-  border-radius: 35px;
+  border-radius: 22pt;
   display: none;
   z-index: 999;
   left: 10%;
 }
 
 #ifttt-form input, #ifttt-form button {
-  height: 15vw;  
+  height: 8vh;  
   padding: 10pt;
-  height: 3;
   border: none;
   outline: none;
   background-color: #ffffff70;
-  border-radius: 22px;
-  font-size: 36pt;
+  border-radius: 12pt;
+  font-size: 16pt;
 }
 
 #ifttt-form button {
@@ -202,14 +192,14 @@ thead tr {
   width: 100%;
   margin-bottom: 3.2%;
   text-align: left;
-  padding-left: 22pt;
+  padding-left: 12pt;
 }
 
 #ifttt-form input:focus {
   background-color: #ffffffaa;
 }
 
-::placeholder {color: #00000090; font-size: 32pt;}
+::placeholder {color: #00000090; font-size: 14pt;}
 
 #popBtnContainer {
   display: flex;
@@ -321,13 +311,13 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
 <div id="popup">
   <form id="ifttt-form">
     <div id="popInpContainer">
-    <input type="text" placeholder="Water Target" name="waterTarget" id="formInput1">
-    <input type="text" placeholder="Enter IFTTT Key" name="iftttKeyInput" id="formInput2">
+      <input type="text" placeholder="Water Target" name="waterTarget" id="formInput1">
+      <input type="text" placeholder="Enter IFTTT Key" name="iftttKeyInput" id="formInput2">
     </div>
     <div id=popBtnContainer>
-    <button onclick="clearLocalStorage()" id="csvBtn">Wipe Data</button>
-    <button onclick="openCsvOrFont()" id="fontBtn">Add File</button>
-    <button type="submit" id="saveButton">Save</button>
+      <button onclick="clearLocalStorage()" id="csvBtn">Wipe Data</button>
+      <button onclick="openCsvOrFont()" id="fontBtn">Add File</button>
+      <button type="submit" id="saveButton">Save</button>
     </div>
   </form>
 </div>
@@ -346,40 +336,42 @@ tbody tr:nth-child(odd) {background-color: #ffffff50;}
     </g>
   </svg>
 </div>
-  
+
 <div id="backgroundFix">
-  
-<form id="waterInput" action="" method="get" onsubmit="return false">
-  <div id="header">
-    <div id=logTitle>Log:&nbsp;</div>
-    <div id="currentAmount">0</div>
-    <div id="milliLiter">ml</div>
+
+  <div id="roundedCorners">
+    <table id="waterLog">
+      <thead class="tableHead">
+        <tr>
+          <td>Date</td><td>Time</td><td>Amount</td>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
   </div>
   
-  <div id="buttonList">
-    <button id="btn-125" value="125">125 ml</button>
-    <button id="btn-200" value="200">200 ml</button>
-    <button id="btn-250" value="250">250 ml</button>
-    <button id="btn-500" value="500">500 ml</button>
-  </div>
-  
-  <div id=inputSaveList>
-    <input type="number" placeholder="Enter ml" id="customInput">
-    <button id="svBt" type="submit">Save</button>
-  </div>
-</form>
-  
-<div id="roundedCorners">
-  <table id="waterLog">
-    <thead class="tableHead">
-      <tr>
-        <td>Date</td><td>Time</td><td>Amount</td>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-</div>
+  <form id="waterInput" action="" method="get" onsubmit="return false">
+
+    <div id="waterInputheader">
+      <div id=logTitle>Log:&nbsp;</div>
+      <div id="currentAmount">0</div>
+      <div id="milliLiter">ml</div>
+    </div>
+    
+    <div id="buttonList">
+      <button id="btn-125" value="125">125 ml</button>
+      <button id="btn-200" value="200">200 ml</button>
+      <button id="btn-250" value="250">250 ml</button>
+      <button id="btn-500" value="500">500 ml</button>
+    </div>
+    
+    <div id=inputSaveList>
+      <input type="number" placeholder="Enter ml" id="customInput">
+      <button id="svBt" type="submit">Save</button>
+    </div>
+
+  </form>
   
 </div>
 <script>
@@ -429,13 +421,17 @@ function loadSelectedFont() {
   const fontData = localStorage.getItem('selectedFont');
   if (fontData) {
     const tableHeaders = document.querySelectorAll('thead tr td');
+    const tableHeaderCell = document.querySelector('thead tr td');
     if (tableHeaders.length > 0) {
+      tableHeaders[0].style.fontSize = "12pt";
+      tableHeaders[1].style.fontSize = "12pt";
+      tableHeaders[2].style.fontSize = "12pt";
       tableHeaders[0].textContent = '\u{100249}';
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = '26pt'
+      menuButtonIcon.style.fontSize = "12pt";
       menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
@@ -682,23 +678,26 @@ function clearLocalStorage() {
 checkWaterTarget()
 
 // ============= rise water level ====
-let waterLevelEnd = 88;
-let waterLevelStart = 100;
 
-const waterElem = document.getElementById('niceWaves');
+// let waterLevelEnd = 88;
+// let waterLevelStart = 100;
 
-function increaseWaterLevel() {
-  const storedWaterTarget = localStorage.getItem('waterTarget')
-  const currentWaterAmount = document.getElementById('currentAmount').value
-   let waveMarginTopUpdate = 85 - (currentWaterAmount*(85/currentTargetWater))-3
+// const waterElem = document.getElementById('niceWaves');
+
+// function increaseWaterLevel() {
+//   const storedWaterTarget = localStorage.getItem('waterTarget')
+//   const currentWaterAmount = document.getElementById('currentAmount').value
+//    let waveMarginTopUpdate = 85 - (currentWaterAmount*(85/currentTargetWater))-3
   
-  waterElem.style.animation = '';
-  setTimeout(() => {
-    document.documentElement.style.setProperty('--water-level-start', waterLevelStart + '%');
-    document.documentElement.style.setProperty('--water-level-end', waterLevelEnd + '%');
-    waterElem.style.animation = 'riseWater .5s ease-in-out forwards';
-  }, 00);
-}
+//   waterElem.style.animation = '';
+//   setTimeout(() => {
+//     document.documentElement.style.setProperty('--water-level-start', waterLevelStart + '%');
+//     document.documentElement.style.setProperty('--water-level-end', waterLevelEnd + '%');
+//     waterElem.style.animation = 'riseWater .5s ease-in-out forwards';
+//   }, 00);
+// }
+
+
 //waterElem.style.animation = 'riseWaterInitial .4s ease-in-out forwards'
 // ===== dark mode ====
 // const body = document.querySelector('body');
