@@ -27,8 +27,9 @@ body {
   /*Fix for safari gap margin-bottom:-3px; */
   background: rgb(255,255,255);
   background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.43) 100%);
-  margin-top: -4.1px;
+  box-shadow:0px -3px 0px 0px rgba(255,255,255,.43);
   /*Fix for safari gap */
+  margin-top: 0px;
   height: 100vh;
   width: 100vw;
 }
@@ -42,7 +43,7 @@ body {
   max-height: 10vw;
 }
 #niceWaves {
-  margin-top: 0vh;
+  margin-top: 15vh;
 }
     
 #waterInput {
@@ -52,8 +53,7 @@ body {
   padding: 4vw;
   width: 96%;
   left: 2vw;
-  font-size: 36pt;
-  background-color: #ffffff20;
+  background-color: #ffffff30;
   -webkit-backdrop-filter: blur(45px);
   border:none;
   border-radius: 35px;
@@ -130,7 +130,7 @@ table {
   text-align: center;
 }
 tbody {
-  font-size: 22pt;
+  font-size: 24pt;
   height:91%;
 }
 td {
@@ -145,7 +145,7 @@ td {
 .tableHead {background-color: #ffffffcc;}
       
 thead tr {
-  font-size: 24pt;
+  font-size: 26pt;
   width: 25vw;
   border: none;
   -webkit-backdrop-filter: blur(35px);
@@ -158,7 +158,7 @@ thead tr {
   z-index: auto;
   height: 12vw;
   width: 12vw;
-  font-size: 24pt;
+  font-size: 26pt;
   font-weight: bold;
   padding:0;
   margin-right: 4vw;
@@ -173,10 +173,10 @@ thead tr {
   width: 80vw;
   background: #00000020;
   -webkit-backdrop-filter: blur(35px);
-  box-shadow: 0px 0px 200vw 75vw #000000cc;
+  box-shadow: 0px 0px 100vw 75vw #000000cc;
   border: none;
-  padding: 4%;
-  border-radius: 15pt ;
+  padding: 5%;
+  border-radius: 35px;
   display: none;
   z-index: 999;
   left: 10%;
@@ -185,12 +185,11 @@ thead tr {
 #ifttt-form input, #ifttt-form button {
   height: 15vw;  
   padding: 10pt;
-  padding-left: 12pt;
   height: 3;
   border: none;
   outline: none;
   background-color: #ffffff70;
-  border-radius: 10pt;
+  border-radius: 22px;
   font-size: 36pt;
 }
 
@@ -203,13 +202,14 @@ thead tr {
   width: 100%;
   margin-bottom: 3.2%;
   text-align: left;
+  padding-left: 22pt;
 }
 
 #ifttt-form input:focus {
   background-color: #ffffffaa;
 }
 
-::placeholder {color: #00000090; font-size: 20pt;}
+::placeholder {color: #00000090; font-size: 32pt;}
 
 #popBtnContainer {
   display: flex;
@@ -435,7 +435,7 @@ function loadSelectedFont() {
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = '22pt'
+      menuButtonIcon.style.fontSize = '26pt'
       menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
