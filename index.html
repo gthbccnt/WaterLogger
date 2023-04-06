@@ -57,7 +57,7 @@ body {
   box-shadow:0px 0px 10px -4px #00000080;
 }
 button, input {
-  font-size: 5.4vw;
+  font-size: 5vw;
   height: 8vh;
   width: 18.8vw;
   background-color: #ffffff80;
@@ -107,17 +107,17 @@ button, input {
 }
 .added-cell {font-weight: bold;}
 
-#roundedCorners{
+#roundedCorners {
   position: fixed;                           
   border-radius: 5vw;
-  -webkit-backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(25px);
   backdrop-filter: blur(15px);
   overflow: scroll;
   overscroll-behavior: none;
   -webkit-overscroll-behavior: none;
   width: 88vw;
   max-height: 71vh;
-  top: 10.5vh;
+  top: 10vh;
   left: 6vw;
   right: 6vw;
   box-shadow: 0px 0px 10px -2px #00669950;
@@ -143,8 +143,8 @@ td {
 thead tr {
   position: sticky;
   top: 0;
-  background-color: #ffffff80;
-  font-size: 4.5vw;
+  background-color: #ffffff50;
+  font-size: 4vw;
   width: 25vw;
   border: none;
   -webkit-backdrop-filter: blur(35px);
@@ -168,10 +168,10 @@ thead tr {
   position: fixed;
   top: 55vh;
   width: 80vw;
-  background: #00000020;
-  -webkit-backdrop-filter: blur(35px);
+  background: #00000030;
+  -webkit-backdrop-filter: blur(55px);
   backdrop-filter: blur(35px);
-  box-shadow: 0px 0px 100vw 75vw #000000cc;
+  box-shadow: 0px 0px 150vw 150vw #000000bb;
   border: none;
   padding: 5%;
   border-radius: 5vw;
@@ -221,12 +221,12 @@ thead tr {
   margin-right: auto;
 }
 
-tbody tr:nth-child(even) {background-color: #ffffff85;}
-tbody tr:nth-child(odd) {background-color: #ffffff50;}
+tbody tr:nth-child(even) {background-color: #ffffff65;}
+tbody tr:nth-child(odd) {background-color: #ffffff45;}
 
 /* Animation */
 .parallax > use {
-  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
 }
 .parallax > use:nth-child(1) {
   animation-delay: -2s;
@@ -430,15 +430,15 @@ function loadSelectedFont() {
     const tableHeaders = document.querySelectorAll('thead tr td');
     const tableHeaderCell = document.querySelector('thead tr td');
     if (tableHeaders.length > 0) {
-      // tableHeaders[0].style.fontSize = "12pt";
-      // tableHeaders[1].style.fontSize = "12pt";
-      // tableHeaders[2].style.fontSize = "12pt";
+      tableHeaders[0].style.fontSize = "3vw";
+      tableHeaders[1].style.fontSize = "3vw";
+      tableHeaders[2].style.fontSize = "3vw";
       tableHeaders[0].textContent = '\u{100249}';
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = "3.5vw";
+      menuButtonIcon.style.fontSize = "3vw";
       menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
