@@ -728,31 +728,31 @@ function toggleTBody() {
   const computedStyle = getComputedStyle(tableBody);
   if (computedStyle.display === "none") {
     tableBody.style.display = "table-row-group";
+    
+        const tbodyEdit = document.querySelector('tbody');
+        tbodyEdit.addEventListener('click', function(event) {
+         if (event.target.tagName === 'TR') {
+         const confirmDelete = confirm('Are you sure you want to delete this row?');
+         if (confirmDelete) {
+            event.target.remove();
+            const rowsU = document.querySelectorAll("tbody tr");
+            rowsU.forEach((line) => {
+              const cellsU = line.cells;
+              const rowDate = cellsU[0].textContent;
+              const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+              if (rowDate === date && rowTime >= 2) {
+                updatedAmount += Number(cellsU[2].textContent);
+              }
+            });
+            document.getElementById("currentAmount").textContent = updatedAmount;
+          }
+          }
+        });
+    
   } else {
     tableBody.style.display = "none";
   }
 }
-
-const tbodyEdit = document.querySelector('tbody');
-
-tbodyEdit.addEventListener('click', function(event) {
-  if (event.target.tagName === 'TR') {
-    const confirmDelete = confirm('Are you sure you want to delete this row?');
-    if (confirmDelete) {
-      event.target.remove();
-      const rowsU = document.querySelectorAll("tbody tr");
-rowsU.forEach((line) => {
-  const cellsU = line.cells;
-  const rowDate = cellsU[0].textContent;
-  const rowTime = Number(cellsU[1].textContent.split(":")[0]);
-  if (rowDate === date && rowTime >= 2) {
-    updatedAmount += Number(cellsU[2].textContent);
-  }
-});
-document.getElementById("currentAmount").textContent = updatedAmount;
-    }
-  }
-});
 
 // ===== dark mode ====
 // const body = document.querySelector('body');
