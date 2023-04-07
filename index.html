@@ -701,8 +701,8 @@ const waves = document.querySelector('.waves');
 const storedWaterTarget = localStorage.getItem('waterTarget');
 
 function increaseWaterLevel() {
-  setTimeout(() => {
-    let currentWaterAmount = document.querySelector('#currentAmount').textContent;
+  //setTimeout(() => {
+    let currentWaterAmount = parseFloat(document.querySelector('#currentAmount').textContent);
     if (currentWaterAmount >= storedWaterTarget) {currentWaterAmount = storedWaterTarget}
     waveMarginTopStart = waveMarginTopEnd;
     if (currentWaterAmount === "0") {waveMarginTopStart=100}    
@@ -711,7 +711,7 @@ function increaseWaterLevel() {
           console.log('storedWaterTarget: ' + storedWaterTarget)
     waveMarginTopEnd = 90 - (currentWaterAmount * (90 / storedWaterTarget));
           console.log('end: ' + waveMarginTopEnd)
-          }, 50);
+          //}, 50);
                 waves.style.animation = '';
     setTimeout(() => {
       document.documentElement.style.setProperty('--water-level-start', waveMarginTopStart + 'vh');
