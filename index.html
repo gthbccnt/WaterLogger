@@ -711,13 +711,13 @@ function increaseWaterLevel() {
           console.log('storedWaterTarget: ' + storedWaterTarget)
     waveMarginTopEnd = 90 - (currentWaterAmount * (90 / storedWaterTarget));
           console.log('end: ' + waveMarginTopEnd)
+          }, 50);
                 waves.style.animation = '';
     setTimeout(() => {
       document.documentElement.style.setProperty('--water-level-start', waveMarginTopStart + 'vh');
       document.documentElement.style.setProperty('--water-level-end', waveMarginTopEnd + 'vh');
       waves.style.animation = 'riseWater .75s ease-in-out forwards';
     }, 00);
-  }, 30);
 }
 
 const tableHead = document.getElementById("tableHead");
