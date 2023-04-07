@@ -702,6 +702,9 @@ const storedWaterTarget = localStorage.getItem('waterTarget');
 
 function increaseWaterLevel() {
     let currentWaterAmount = document.querySelector('#currentAmount').textContent;
+    if (currentWaterAmount > storedWaterTarget) {
+      currentWaterAmount = storedWaterTarget
+      }
     waveMarginTopStart = waveMarginTopEnd;
     if (currentWaterAmount === "0") {waveMarginTopStart=100}    
           console.log('start: ' + waveMarginTopStart)
