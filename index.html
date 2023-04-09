@@ -176,6 +176,13 @@ thead tr {
   backdrop-filter: blur(55px);
 }
 
+#popupBackground {
+  background-color: #00000090;
+  -webkit-backdrop-filter: blur(20px;
+  backdrop-filter: blur(20px;
+  display: none;
+}
+
 #popup {
   position: fixed;
   top: 55vh;
@@ -183,7 +190,7 @@ thead tr {
   background: #00000030;
   -webkit-backdrop-filter: blur(55px);
   backdrop-filter: blur(55px);
-  box-shadow: 0px 0px 150vw 150vw #000000bb;
+  /*box-shadow: 0px 0px 150vw 150vw #000000bb;*/
   border: none;
   padding: 5%;
   border-radius: 5vw;
@@ -326,6 +333,7 @@ tbody tr:nth-child(odd) {background-color: #ffffff45;}
 <body>
 
 <button id="menuButton" onclick="showPopup()">+</button>
+<div id="popupBackground">
 <div id="popup">
   <form id="ifttt-form">
     <div id="popInpContainer">
@@ -338,6 +346,7 @@ tbody tr:nth-child(odd) {background-color: #ffffff45;}
       <button type="submit" id="saveButton">Save</button>
     </div>
   </form>
+</div>
 </div>
   
 <div id="niceWaves">
@@ -533,7 +542,7 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// ================= import font or csv ========================
+// ===== import font or csv ==========
 function openCsvOrFont() {
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -622,8 +631,11 @@ btn500.addEventListener("click", () => {
 
 // ========= popup =====
 function showPopup() {
+  const backgroundPopup = document.body.querySelector('#popupBackground')
   const popup = document.body.querySelector('#popup')
+  backgroundPopup.classList.add('slide-in-blurred-top');
   popup.classList.add('slide-in-blurred-top');
+  backgroundPopup.style.display= 'flex';
   popup.style.display= 'flex';
   
   const form = document.getElementById('ifttt-form');
@@ -638,11 +650,15 @@ function showPopup() {
     if (inputKey.value!==""){
     localStorage.setItem('iftttKey', inputKey.value);
     }
+    backgroundPopup.classList.remove('slide-in-blurred-top');
     popup.classList.remove('slide-in-blurred-top');
+    backgroundPopup.classList.add('slide-out-blurred-top');
     popup.classList.add('slide-out-blurred-top');
     
     setTimeout(() => {
+      backgroundPopup.classList.remove('slide-out-blurred-top');
       popup.classList.remove('slide-out-blurred-top');
+      backgroundPopup.style.display= 'none';
       popup.style.display= 'none';
     }, 450);
   });
