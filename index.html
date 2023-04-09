@@ -277,14 +277,16 @@ tbody tr:nth-child(odd) {background-color: #ffffff45;}
   }
 }
 .slide-in-blurred-top {
-  animation: slide-in-blurred-top 0.4s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+  animation: slide-in-blurred-top 0.6s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
   }
 .slide-out-blurred-top {
   animation: slide-out-blurred-top 0.20s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
   }
 
-.fade-in { animation: fade-in 0.55s ease; }
-.fade-out { animation: fade-out 0.2s ease; }
+.fade-in { animation: fade-in 0.4s ease; 
+  -webkit-backdrop-filter: blur(30px);
+}
+.fade-out { animation: fade-out 0.20s ease; }
 
 @keyframes slide-in-blurred-top {
   0% {
@@ -650,10 +652,13 @@ btn500.addEventListener("click", () => {
 function showPopup() {
   const backgroundPopup = document.body.querySelector('#popupBackground')
   const popup = document.body.querySelector('#popup')
+  const htmlBackground = document.querySelector('html')
+
   backgroundPopup.classList.add('fade-in');
+  htmlBackground.classList.add('fade-in');
   popup.classList.add('slide-in-blurred-top');
   backgroundPopup.style.display= 'block';
-  popup.style.display= 'flex';
+  popup.style.display= 'block';
   
   const form = document.getElementById('ifttt-form');
   form.addEventListener('submit', (event) => {
@@ -667,6 +672,7 @@ function showPopup() {
     if (inputKey.value!==""){
     localStorage.setItem('iftttKey', inputKey.value);
     }
+
     backgroundPopup.classList.remove('fade-in');
     popup.classList.remove('slide-in-blurred-top');
     backgroundPopup.classList.add('fade-out');
@@ -677,7 +683,7 @@ function showPopup() {
       popup.classList.remove('slide-out-blurred-top');
       backgroundPopup.style.display= 'none';
       popup.style.display= 'none';
-    }, 450);
+    }, 200);
   });
 }
 
