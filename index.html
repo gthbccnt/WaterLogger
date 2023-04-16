@@ -140,10 +140,10 @@ td {
   height: 4vh;
   border: none;
 }
-.tableHeadData {
+/*.tableHeadData {
   filter: drop-shadow(0px 0px 3px #00000040);
   background-color: #00000060;
-}
+}*/
       
 thead tr {
   position: sticky;
@@ -435,17 +435,17 @@ const tbody = table.createTBody();
 const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
 const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
 
-const tbodyTemp = document.querySelector('tbody');
-const theadTemp = document.querySelector('thead');
+//const tbodyTemp = document.querySelector('tbody');
+//const theadTemp = document.querySelector('thead');
 
-tbodyTemp.addEventListener('DOMNodeInserted', () => {
-  setTimeout(() => {
-    if (tbodyTemp.querySelectorAll('tr').length > 0) {
-      theadTemp.classList.remove('tableHead');
-      theadTemp.classList.add('tableHeadData');
-    }
-  }, 50);
-});
+//tbodyTemp.addEventListener('DOMNodeInserted', () => {
+  //setTimeout(() => {
+    //if (tbodyTemp.querySelectorAll('tr').length > 0) {
+      //theadTemp.classList.remove('tableHead');
+      //theadTemp.classList.add('tableHeadData');
+//    }
+//  }, 50);
+//});
 
 function addRow(loggedAmount) {
   const newRow = [date, time, loggedAmount];
