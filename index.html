@@ -631,6 +631,7 @@ saveButton.addEventListener("click", () => {
   const value = customInput.value;
   if (value !== "") {
   addRow(value);
+  customInput.value = "";
   }
 });
 
