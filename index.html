@@ -431,8 +431,6 @@ if ('serviceWorker' in navigator) {
 
 const table = document.getElementById("waterLog");
 const tbody = table.createTBody();
-const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
-const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
 
 //const tbodyTemp = document.querySelector('tbody');
 //const theadTemp = document.querySelector('thead');
@@ -447,6 +445,8 @@ const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2
 //});
 
 function addRow(loggedAmount) {
+const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
+const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
   const newRow = [date, time, loggedAmount];
   const newTableRow = table.tBodies[0].insertRow(0);
 
