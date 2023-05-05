@@ -476,15 +476,15 @@ function loadSelectedFont() {
     const tableHeaders = document.querySelectorAll('thead tr td');
     const tableHeaderCell = document.querySelector('thead tr td');
     if (tableHeaders.length > 0) {
-      tableHeaders[0].style.fontSize = "3vw";
-      tableHeaders[1].style.fontSize = "3vw";
-      tableHeaders[2].style.fontSize = "3vw";
+      tableHeaders[0].style.fontSize = "4vw";
+      tableHeaders[1].style.fontSize = "4vw";
+      tableHeaders[2].style.fontSize = "4vw";
       tableHeaders[0].textContent = '\u{100249}';
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = "3.5vw";
+      menuButtonIcon.style.fontSize = "5vw";
       menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
@@ -501,6 +501,7 @@ window.addEventListener('load', () => {
   // Delay execution by 50 milliseconds
   loadSelectedFont()
 // change menu placeholders
+  const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
   const currentTargetWater = localStorage.getItem('waterTarget')
   if (!localStorage.getItem('waterTarget')){} else {
       const popupWaterInput = document.getElementById('formInput1')
