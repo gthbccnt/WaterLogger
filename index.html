@@ -75,7 +75,7 @@ body {
   position: fixed;
   z-index: 998;
   top: 60vh;
-  padding: 5vw;
+  padding: 4.5vw;
   width: 94vw;
   left: 3vw;
   background-color: #ffffff30;
@@ -87,6 +87,22 @@ body {
   box-shadow:0px 0px 10px -4px #00000080;
 }
 
+#buttonList button:first-child {
+  border-radius: 13px 5px 5px 5px;
+}
+
+#buttonList button:last-child {
+  border-radius: 5px 13px 5px 5px;
+}
+
+#inputSaveList button:last-child {
+  border-radius: 5px 5px 13px 5px;
+}
+
+#inputSaveList input {
+  border-radius: 5px 5px 5px 13px;
+}
+
 .dark-theme #waterInput {
   background-color: #ffffff20;
 }
@@ -94,11 +110,11 @@ body {
 button, input {
   font-size: 5vw;
   height: 8vh;
-  width: 18.8vw;
+  width: 19vw;
   background-color: #ffffff60;
   color: black;
   -webkit-backdrop-filter: blur(35px);
-  border-radius: 10px;
+  border-radius: 5px;
   border:none;
   text-align:center;
   vertical-align: middle;
@@ -108,7 +124,7 @@ button, input {
   background-color: #00000030;
   color: #ffffff47;
 }
-#svBt { width: 29vw;}
+#svBt { width: 29.2vw;}
 
 #customInput {
   width: 52vw;
@@ -137,7 +153,7 @@ button, input {
   display: flex;
   padding:0;
 }
-#buttonList, #waterInputheader {margin-bottom: 2.8vw;}
+#buttonList, #waterInputheader {margin-bottom: 3.1vw;}
 
 #waterInputheader {
   display: flex;
@@ -212,12 +228,13 @@ thead tr {
   width: 6vh;
   padding:0;
   right: 6vw;
+  border-radius: 10px;
   margin-top: 2vh;
   position: fixed;
   background-color: #ffffff15;
   box-shadow: 0px 0px 12px -2px #00000020;
-   -webkit-backdrop-filter: blur(55px);
-  backdrop-filter: blur(55px);
+/*   -webkit-backdrop-filter: blur(55px);
+  backdrop-filter: blur(55px);*/
   filter: opacity(100%);
   transition: filter 2s ease;
 }
@@ -259,6 +276,18 @@ thead tr {
   outline: none;
   background-color: #ffffff70;
   font-size: 5vw;
+}
+
+#ifttt-form input:first-child {
+  border-radius: 10px 10px 5px 5px;
+}
+
+#ifttt-form button:first-child {
+  border-radius: 5px 5px 5px 10px;
+}
+
+#ifttt-form button:last-child {
+  border-radius: 5px 5px 10px 5px;
 }
 
 .dark-theme #ifttt-form input, .dark-theme #ifttt-form button {
@@ -606,6 +635,26 @@ window.addEventListener('load', () => {
         tableRow.appendChild(dateCell);
         tableRow.appendChild(timeCell);
         tableRow.appendChild(amountCell);
+
+tableRow.addEventListener('click', function(event) {
+    const confirmDelete = confirm('Are you sure you want to delete this log entry?');
+    if (confirmDelete) {
+      event.target.parentNode.remove();
+      let updatedAmount = 0;
+      const rowsU = document.querySelectorAll("tbody tr");
+      rowsU.forEach((line) => {
+        const cellsU = line.cells;
+        const rowDate = cellsU[0].textContent;
+        const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+        if (rowDate === date && rowTime >= 2) {
+          updatedAmount += Number(cellsU[2].textContent);
+        }
+      });
+      document.getElementById("currentAmount").textContent = updatedAmount;
+    }
+});
+
+        // tableRow.addEventListener('click', function() {deleteEntry(this)})
         tableBody.insertBefore(tableRow, tableBody.firstChild);
       }
     }
@@ -872,25 +921,25 @@ function increaseWaterLevel() {
 const tableHead = document.getElementById("tableHead");
 tableHead.addEventListener("click", toggleTBody);
 
-const tbodyEdit = document.querySelector('tbody');
-tbodyEdit.addEventListener('click', function(event) {
-  if (event.target.tagName === 'TR') {
-    const confirmDelete = confirm('Are you sure you want to delete this row?');
-    if (confirmDelete) {
-      event.target.remove();
-      const rowsU = document.querySelectorAll("tbody tr");
-      rowsU.forEach((line) => {
-        const cellsU = line.cells;
-        const rowDate = cellsU[0].textContent;
-        const rowTime = Number(cellsU[1].textContent.split(":")[0]);
-        if (rowDate === date && rowTime >= 2) {
-          updatedAmount += Number(cellsU[2].textContent);
-        }
-      });
-      document.getElementById("currentAmount").textContent = updatedAmount;
-    }
-  }
-});
+//const tbodyEdit = document.querySelector('tbody');
+// tbodyEdit.addEventListener('click', function(event) {
+//   if (event.target.tagName === 'TR') {
+//     const confirmDelete = confirm('Are you sure you want to delete this row?');
+//     if (confirmDelete) {
+//       event.target.remove();
+//       const rowsU = document.querySelectorAll("tbody tr");
+//       rowsU.forEach((line) => {
+//         const cellsU = line.cells;
+//         const rowDate = cellsU[0].textContent;
+//         const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+//         if (rowDate === date && rowTime >= 2) {
+//           updatedAmount += Number(cellsU[2].textContent);
+//         }
+//       });
+//       document.getElementById("currentAmount").textContent = updatedAmount;
+//     }
+//   }
+// });
 
 function toggleTBody() {
   const tableBody = document.querySelector("#waterLog tbody");
@@ -927,6 +976,12 @@ window.matchMedia('(prefers-color-scheme: dark)').addListener((event) => {
     bodyDarkMode.classList.remove('dark-theme');
   }
 })
+
+function deleteEntry(input) {
+  console.log(input)
+  //confirm('Do you want to delete this log entry?')
+
+}
 </script>
 </body>
 </html>
