@@ -18,13 +18,23 @@
 
 body {
   margin:0;
-  background-color: rgba(81,142,186,1);
+  background-color: rgba(81,142,186,0);
   background: linear-gradient(0deg, rgba(62,86,131,1) 0%, rgba(81,142,186,1) 90%);
   text-align: right;
   touch-action: none;
   background-attachment: fixed;
   height: 100vh;
   overflow:hidden;
+}
+
+#line {
+  position: fixed;
+  top: 100vh;
+  left: 0;
+  background-color: oklch(59% 0.083 247.24 / 80%);
+  height: 5pt;
+  width: 100vw;
+  transition: all 0.5s ease;
 }
 
 .dark-theme {
@@ -129,7 +139,6 @@ button, input {
   background-color: #00000030;
   color: #ffffff47;
 }
-  
 #svBt { width: 29.8vw;}
 
 #customInput {
@@ -139,7 +148,6 @@ button, input {
   outline: none;
   padding: 4vw;
 }
-  
 #customInput:focus {
   outline: none
   -webkit-backdrop-filter: blur(55px);
@@ -150,7 +158,6 @@ button, input {
 .dark-theme #customInput:focus {
   background-color: #00000060;
   }
-  
 #customInput::placeholder {
   opacity: 0.6;
   color:black;
@@ -206,7 +213,7 @@ tbody {
 }
 
 tbody tr {
-  height: 10vw;
+  height: 32pt;
 }
 
 td {
@@ -232,7 +239,7 @@ thead tr {
   border: none;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
-  height: 10vw;
+  height: 5vh;
   z-index: 10;
   transition: background-color 0.8s ease, box-shadow 0.8s ease, all 0.8s ease;
 }
@@ -279,7 +286,7 @@ thead tr {
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: none;
-  padding: 2%;
+  padding: 2.1%;
   border-radius: 5vw;
   display: none;
   left: 12vw;
@@ -317,13 +324,13 @@ thead tr {
 
 #ifttt-form button {
   padding: 5pt;
-  width: 32%;
+  width: 31.5%;
   height: 11.5vw;
 }
 
 #ifttt-form input {
   width: 100%;
-  margin-bottom: 2%;
+  margin-bottom: 2.6%;
   text-align: left;
   padding-left: 4vw;
 }
@@ -479,7 +486,7 @@ tbody tr:nth-child(odd) {
 </style>
 </head>
 <body>
-
+<div id="line"></div>
 <button id="menuButton" onclick="showPopup()">Menu</button>
 <div id="popupBackground">
 <div id="popup">
@@ -660,6 +667,9 @@ window.addEventListener('load', () => {
       const popupIftttInput = document.getElementById('formInput2')
       popupIftttInput.setAttribute('placeholder', 'IFTTT key found')
   }
+    setTimeout(() => {
+    calculateTarget();
+  }, 300)
   window.setTimeout(() => {
     const data = JSON.parse(localStorage.getItem('waterLog'));
     if (data) {
@@ -678,24 +688,24 @@ window.addEventListener('load', () => {
         tableRow.appendChild(timeCell);
         tableRow.appendChild(amountCell);
 
-tableRow.addEventListener('click', function(event) {
-  		event.target.classList.add('rowSelected');
-      event.target.previousSibling.classList.add('rowSelected');
-      event.target.nextSibling.classList.add('rowSelected');
-      setTimeout(() => {
-    const confirmDelete = confirm('Are you sure you want to delete this log entry?');
-    if (confirmDelete) {
-      event.target.parentNode.remove();
-      let updatedAmount = 0;
-      const rowsU = document.querySelectorAll("tbody tr");
-      rowsU.forEach((line) => {
-        const cellsU = line.cells;
-        const rowDate = cellsU[0].textContent;
-        const rowTime = Number(cellsU[1].textContent.split(":")[0]);
-        if (rowDate === date && rowTime >= 2) {
-          updatedAmount += Number(cellsU[2].textContent);
-        }
-      });
+  tableRow.addEventListener('click', function(event) {
+    		event.target.classList.add('rowSelected');
+        event.target.previousSibling.classList.add('rowSelected');
+        event.target.nextSibling.classList.add('rowSelected');
+        setTimeout(() => {
+      const confirmDelete = confirm('Are you sure you want to delete this log entry?');
+      if (confirmDelete) {
+        event.target.parentNode.remove();
+        let updatedAmount = 0;
+        const rowsU = document.querySelectorAll("tbody tr");
+        rowsU.forEach((line) => {
+          const cellsU = line.cells;
+          const rowDate = cellsU[0].textContent;
+          const rowTime = Number(cellsU[1].textContent.split(":")[0]);
+          if (rowDate === date && rowTime >= 2) {
+            updatedAmount += Number(cellsU[2].textContent);
+          }
+  });
       document.getElementById("currentAmount").textContent = updatedAmount;
     } else {
 
@@ -741,11 +751,13 @@ function saveDataToLocalStorage() {
 
 window.addEventListener('beforeunload', () => {
     saveDataToLocalStorage();
+    calculateTarget()
 });
 
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') {
     saveDataToLocalStorage();
+    calculateTarget()
   }
 });
 
@@ -811,6 +823,7 @@ saveButton.addEventListener("click", () => {
   saveButton.classList.add('buttonPressed');
   setTimeout(() => {
     saveButton.classList.remove('buttonPressed');
+    calculateTarget()
   }, 500)
   const value = customInput.value;
   if (value !== "") {
@@ -837,6 +850,7 @@ btn200.addEventListener("click", () => {
   btn200.classList.add('buttonPressed');
   setTimeout(() => {
     btn200.classList.remove('buttonPressed');
+    calculateTarget()
   }, 500)
   const value = btn200.value;
   addRow(value);
@@ -846,6 +860,7 @@ btn250.addEventListener("click", () => {
   btn250.classList.add('buttonPressed');
   setTimeout(() => {
     btn250.classList.remove('buttonPressed');
+    calculateTarget()
   }, 500)
   const value = btn250.value;
   addRow(value);
@@ -855,6 +870,7 @@ btn500.addEventListener("click", () => {
   btn500.classList.add('buttonPressed');
   setTimeout(() => {
     btn500.classList.remove('buttonPressed');
+    calculateTarget()
   }, 500)
   const value = btn500.value;
   addRow(value);
@@ -1037,8 +1053,34 @@ window.matchMedia('(prefers-color-scheme: dark)').addListener((event) => {
 function deleteEntry(input) {
   console.log(input)
   //confirm('Do you want to delete this log entry?')
-
 }
+
+function calculateTarget() {
+  let currentWaterAmount = parseFloat(document.querySelector('#currentAmount').textContent);
+  const line = document.querySelector('#line');
+  const waterTarget = localStorage.getItem("waterTarget");;
+  const targetTime = new Date();
+  targetTime.setHours(23, 0, 0, 0);
+  const currentTime = new Date();
+  const timeDiffMinutes = Math.ceil((targetTime - currentTime) / (1000 * 60));
+
+  console.log("diffMin: " + timeDiffMinutes);
+
+  const currentTarget = (waterTarget / 15) * (15 - timeDiffMinutes/60);
+  console.log("currentTarget ml: " + currentTarget);
+
+  var currentTargetTop = 100 - (currentTarget * (100 / waterTarget));
+  console.log("currentTarget: " + currentTargetTop + " vh")
+  if(currentWaterAmount < currentTarget) {
+    line.style.backgroundColor = "oklch(59% 0.083 247.24 / 80%)"
+    line.style.top = currentTargetTop + "vh";
+    console.log('not enough water' + currentWaterAmount+"ml")
+  } else {
+    line.style.backgroundColor = "#00000000"
+    console.log("currentWater high enough")
+  }
+}
+
 </script>
 </body>
 </html>
