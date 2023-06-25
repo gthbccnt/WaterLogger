@@ -183,7 +183,7 @@ button, input {
   top: 10vh;
   left: 6vw;
   right: 6vw;
-  box-shadow: 0px 0px 10px -2px #00000010;
+  box-shadow: 0px 0px 6px -2px #00000010;
   transition: max-height 0.5s ease-out;
 }
 
@@ -211,24 +211,24 @@ td {
 }
 
 .tableHeadData {
-  background-color: #ffffff20;
+/*  background-color: #ffffff20;*/
   color: black;
   box-shadow: 0px 0px 3px 0px #00000040;
-  -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
       
 thead tr {
   position: sticky;
   top: 0;
   background-color: #ffffff10;
-  color: #00000090;
+  color: #00000070;
   font-size: 3.6vw;
   width: 25vw;
   border: none;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  height: 6vh;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  height: 5vh;
   z-index: 10;
   transition: background-color 0.8s ease, box-shadow 0.8s ease, all 0.8s ease;
 }
@@ -241,17 +241,17 @@ thead tr {
 #menuButton {
   z-index: 988;
   font-size: 4vw;
-  height: 7vh;
-  width: 7vh;
+  height: 12vw;
+  width: 12vw;
   padding:0;
   right: 6vw;
   border-radius: 10px;
   margin-top: 2vh;
   position: fixed;
   background-color: #ffffff10;
-  box-shadow: 0px 0px 10px -2px #00000010;
-   -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
+  box-shadow: 0px 0px 6px -2px #00000010;
+   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   filter: opacity(100%);
   transition: filter 2s ease;
 }
@@ -270,7 +270,7 @@ thead tr {
 #popup {
   position: fixed;
   top: 30vh;
-  width: 84vw;
+  width: 80vw;
   background-color: #ffffff30;
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
@@ -278,7 +278,7 @@ thead tr {
   padding: 3%;
   border-radius: 5vw;
   display: none;
-  left: 8vw;
+  left: 10vw;
 }
 
 .dark-theme #popup {
@@ -286,24 +286,25 @@ thead tr {
 }
 
 #ifttt-form input, #ifttt-form button {
-  height: 8vh;  
+  height: 14vw;  
   padding: 10pt;
   border: none;
   outline: none;
   background-color: #ffffff50;
   font-size: 4.5vw;
+  border-radius: 4px;
 }
 
 #ifttt-form input:first-child {
-  border-radius: 10px 10px 5px 5px;
+  border-radius: 10px 10px 4px 4px;
 }
 
 #ifttt-form button:first-child {
-  border-radius: 5px 5px 5px 10px;
+  border-radius: 4px 4px 4px 10px;
 }
 
 #ifttt-form button:last-child {
-  border-radius: 5px 5px 10px 5px;
+  border-radius: 4px 4px 10px 4px;
 }
 
 .dark-theme #ifttt-form input, .dark-theme #ifttt-form button {
@@ -621,15 +622,15 @@ function loadSelectedFont() {
     const tableHeaders = document.querySelectorAll('thead tr td');
     const tableHeaderCell = document.querySelector('thead tr td');
     if (tableHeaders.length > 0) {
-      tableHeaders[0].style.fontSize = "2.8vw";
-      tableHeaders[1].style.fontSize = "2.8vw";
-      tableHeaders[2].style.fontSize = "2.8vw";
+      tableHeaders[0].style.fontSize = "5vw";
+      tableHeaders[1].style.fontSize = "5vw";
+      tableHeaders[2].style.fontSize = "5vw";
       tableHeaders[0].textContent = '\u{100249}';
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
     }
     const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = "4vw";
+      menuButtonIcon.style.fontSize = "6vw";
       menuButtonIcon.textContent = '\u{100306}';;
           const css = `@font-face {
       font-family: 'iconMode';
@@ -992,13 +993,13 @@ function toggleTBody() {
   const roundedCorners = document.querySelector("#roundedCorners");
   const tableBody = document.querySelector('tbody');
   console.log(roundedCorners.style.maxHeight)
-  if (roundedCorners.style.maxHeight < "60vh" || roundedCorners.style.maxHeight === "6vh") {
+  if (roundedCorners.style.maxHeight < "60vh" || roundedCorners.style.maxHeight === "5vh") {
     console.log("roundedCorners smaller")
     tableBody.style.display = "table-row-group";
     roundedCorners.style.maxHeight = "61vh";
     tableHead.classList.add('tableHeadData');
   } else {
-    roundedCorners.style.maxHeight = "6vh";
+    roundedCorners.style.maxHeight = "5vh";
     tableHead.classList.remove('tableHeadData');
     setTimeout(() => {
       tableBody.style.display = "none";
