@@ -36,10 +36,11 @@ body {
   height: 1rem;
   width: 100vw;
   transition: all 0.5s ease;
-  font-size: 6pt;
+  font-size: 10pt;
   text-align: center;
   justify-content: space-evenly;
   align-items: center;
+  color: oklch(0% 0 0 /80%);
 }
 
 #currentMl, #currentTarget {
@@ -323,7 +324,10 @@ thead tr {
   background-color: oklch(100% 0 0 / 55%);
 }
 
-::placeholder {color: #00000090; font-size: 5vw;}
+::placeholder {
+  color: #00000090;
+  font-size: 14pt;
+}
 
 #popBtnContainer {
   display: flex;
@@ -376,6 +380,14 @@ thead tr {
   font-weight: bold;
 }
 
+#kbDelete {
+  grid-column: 3 / 5; /* Starts on the third column line and ends on the fifth column line */
+}
+
+.dark-theme #line {
+  color: oklch(0% 0 0 /100%);
+}
+
 .dark-theme {
   background-color: oklch(21.6% 0.014 262.67);
 }
@@ -420,11 +432,24 @@ thead tr {
 }
 
 .dark-theme #popup {
-  background-color: #ffffff20;
+  background-color: oklch(100% 0 0 / 10%);
 }
 
 .dark-theme #ifttt-form input, .dark-theme #ifttt-form button {
-  background-color: #00000040;
+  background-color: oklch(100% 0 0 / 6%);
+}
+
+.dark-theme #ifttt-form input {
+  background-color: oklch(0% 0 0 / 25%)
+}
+
+.dark-theme #ifttt-form input:focus {
+  background-color: oklch(100% 0 0 / 15%);
+  color: oklch(0% 0 0 / 75%);
+}
+
+.dark-theme #ifttt-form input::placeholder {
+  color: oklch(100% 0 0 / 20%); 
 }
 
 .dark-theme #waterInput {
@@ -450,15 +475,6 @@ thead tr {
 
 .dark-theme #waterInput ::placeholder {
   color: oklch(0% 0 0 / 80%);
-}
-
-.dark-theme #ifttt-form input {
-  background-color: oklch(0% 0 0 / 15%)
-}
-
-.dark-theme #ifttt-form input:focus {
-  background-color: oklch(0% 0 0 / 35%);
-  color: oklch(100% 0 0 / 35%);
 }
 
 
@@ -737,9 +753,13 @@ function loadSelectedFont() {
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
     }
+
+    const backspace = document.getElementById('kbDelete');
+      backspace.textContent = "\u{10019b}";
+
     const menuButtonIcon = document.querySelector('#menuButton')
       menuButtonIcon.style.fontSize = "6vw";
-      menuButtonIcon.textContent = '\u{100306}';;
+      menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
       src: url('data:font/opentype;charset=utf-8;base64,${fontData}');
@@ -860,6 +880,37 @@ document.addEventListener('visibilitychange', () => {
 });
 
 // ===== import font or csv ==========
+// function openCsvOrFont() {
+//   const fileInput = document.createElement('input');
+//   fileInput.type = 'file';
+//   fileInput.accept = '.csv,.ttf,.otf';
+//   fileInput.onchange = () => {
+//     const file = fileInput.files[0];
+//     const reader = new FileReader();
+//     reader.onload = () => {
+//       const fileData = reader.result;
+//       if (file.type === 'text/csv') {
+//         addCsvToTable(fileData);
+//       } else if (file.type === 'font/ttf' || file.type === 'font/otf') {
+//         const reader = new FileReader();
+//         reader.onload = () => {
+//           const fontData = reader.result.split(',')[1];
+//           try {
+//             localStorage.setItem('selectedFont', fontData);
+//             alert('Selected font saved to local storage!');
+//           } catch (e) {
+//             alert('Error saving font to local storage: ' + e.message);
+//           }
+//         };
+//         reader.readAsDataURL(file);
+//       }
+//     };
+//     reader.readAsText(file);
+//   };
+//   fileInput.click();
+//   location.reload();
+// }
+
 function openCsvOrFont() {
   const fileInput = document.createElement('input');
   fileInput.type = 'file';
@@ -871,24 +922,32 @@ function openCsvOrFont() {
       const fileData = reader.result;
       if (file.type === 'text/csv') {
         addCsvToTable(fileData);
+        location.reload();
       } else if (file.type === 'font/ttf' || file.type === 'font/otf') {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const fontData = reader.result.split(',')[1];
-          try {
-            localStorage.setItem('selectedFont', fontData);
-            alert('Selected font saved to local storage!');
-          } catch (e) {
-            alert('Error saving font to local storage: ' + e.message);
+        try {
+          if ('caches' in window) {
+            caches.open('v1').then(cache => {
+              // Cache the font file
+              cache.put('iconMode.otf', new Response(file));
+            });
           }
-        };
-        reader.readAsDataURL(file);
+
+          const dataURLReader = new FileReader();
+          dataURLReader.onload = () => {
+            const fontData = dataURLReader.result.split(',')[1];
+            localStorage.setItem('selectedFont', fontData);
+            alert('Selected font saved to local storage and cached as "iconMode"!');
+            location.reload();
+          };
+          dataURLReader.readAsDataURL(file);
+        } catch (e) {
+          alert('Error saving font to local storage and cache: ' + e.message);
+        }
       }
     };
     reader.readAsText(file);
   };
   fileInput.click();
-  location.reload();
 }
 
 function addCsvToTable(csvData) {
@@ -1017,17 +1076,21 @@ function showPopup() {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    // backgroundPopup.classList.add('fade-out');
-    // popup.classList.add('slide-out-blurred-top');
-
     const inputWater = document.querySelector('[name="waterTarget"]');
     if (inputWater.value!==""){
-    localStorage.setItem('waterTarget', inputWater.value);
+      localStorage.setItem('waterTarget', inputWater.value);
+      inputWater.value="";
+      const currentTargetWater = localStorage.getItem('waterTarget')
+      if (!localStorage.getItem('waterTarget')) {} else {
+        inputWater.setAttribute('placeholder', 'Current Target: ' + currentTargetWater + 'ml')
+      }
+      increaseWaterLevel();
     }
     
     const inputKey = document.querySelector('[name="iftttKeyInput"]');
     if (inputKey.value!==""){
     localStorage.setItem('iftttKey', inputKey.value);
+    inputKey.value = "";
     }
   });
 }
@@ -1084,7 +1147,7 @@ function clearLocalStorage() {
 function increaseWaterLevel() {
   const indicator = document.querySelector('#waterIndicator');
 	const storedWaterTarget = localStorage.getItem('waterTarget');
-	const currentAmount = parseFloat(document.getElementById("currentAmount").textContent);
+	var currentAmount = parseFloat(document.getElementById("currentAmount").textContent);
   if (currentAmount > storedWaterTarget) {currentAmount = storedWaterTarget}
   
   
