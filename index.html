@@ -29,12 +29,21 @@ body {
 
 #line {
   position: fixed;
+  display: flex;
   top: 100vh;
   left: 0;
-  background-color: oklch(100% 0 0 / 1%);
-  height: 5pt;
+  background-color: oklch(100% 0 0 / 0.5%);
+  height: 1rem;
   width: 100vw;
   transition: all 0.5s ease;
+  font-size: 6pt;
+  text-align: center;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#currentMl, #currentTarget {
+  mix-blend-mode: lighten;
 }
 
 .waves {
@@ -546,7 +555,11 @@ thead tr {
 </style>
 </head>
 <body>
-<div id="line"></div>
+<div id="line">
+  <div id="currentTarget"></div>
+  <div id="currentMl"></div>
+</div>
+
 <button id="menuButton" onclick="showPopup()">Menu</button>
 <div id="popupBackground">
 <div id="popup">
@@ -1145,6 +1158,8 @@ function calculateTarget() {
   targetTime.setHours(23, 0, 0, 0);
   const currentTime = new Date();
   const timeDiffMinutes = Math.ceil((targetTime - currentTime) / (1000 * 60));
+  const textCurrent = document.getElementById('currentMl');
+  const textTarget = document.getElementById('currentTarget');
 
   console.log("diffMin: " + timeDiffMinutes);
 
@@ -1153,25 +1168,22 @@ function calculateTarget() {
 
   var currentTargetTop = 90 - (currentTarget * (85 / waterTarget));
   console.log("currentTarget: " + currentTargetTop + " vh")
+
+  textCurrent.textContent = "Aktuell: " + Math.round(currentWaterAmount) + "ml";
+  textTarget.textContent = "Soll: " + Math.round(currentTarget) + 'ml';
+
   if(currentWaterAmount < currentTarget) {
     line.style.backgroundColor = "oklch(100% 0 0 / 10%)"
     line.style.top = currentTargetTop + "vh";
     console.log('not enough water' + currentWaterAmount+"ml")
   } else {
-    line.style.backgroundColor = "oklch(100% 0 0 / 5%)"
+    line.style.backgroundColor = "oklch(100% 0 0 / 2%)"
     console.log("currentWater high enough")
   }
 }
 
 const waterInput = document.getElementById('waterInput');
-const inputHack = document.getElementById('inputHack');
 const keyboard = document.getElementById('keypadContainer')
-
-// function showKeyboard() {
-//   var input = document.getElementById("waterInput");
-//   input.click();
-//   input.focus();
-// }
 
 customInput.addEventListener('touchstart', function() {
   waterInput.classList.add('changeHeight');
