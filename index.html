@@ -296,12 +296,11 @@ thead tr {
 .show-history {
   display: block !important;
   width: 83vw !important;
-  height: 13rem !important;
+  height: 14.5rem !important;
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
   border-radius: 1.5rem !important;
-  background-color: oklch(100% 0 0 / 5%) !important;
+  background-color: oklch(100% 0 0 / 10%) !important;
   border: solid 0.2rem oklch(100% 0 0 / 20%) !important;
-/*  overflow-x: scroll !important;*/
 }
 
 #targetAxis {
@@ -309,7 +308,7 @@ thead tr {
   height: 0rem;
   border: dashed 0.01rem;
   position: absolute;
-  top: 11%;
+  top: 20%;
   display: none;
 }
 
@@ -317,13 +316,13 @@ thead tr {
   text-align: left;
   font-size: 10pt;
   margin-left: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   margin-bottom: 0;
   position: absolute;
 }
 
 #chartContainer {
-  overflow: hidden;
+  overflow-y: hidden;
   overflow-x: scroll;
   border: solid 0pt;
   width: 100%;
@@ -341,8 +340,9 @@ thead tr {
   width: 2.2rem;
   height: 0.5rem;
   color: black;
-  background-color: oklch(35% 0.08 252.67);
+  background-color: oklch(100% 0 0 / 30%);
   transition: height 0.5s ease;
+  border-radius: 8px 8px 2px 2px;
 }
 
 .block-date {
@@ -1168,6 +1168,12 @@ function closePopup(){
     menuSaveButton.removeEventListener('click', closePopup);
     buttonTitle.style.display = "block";
     chartContainer.classList.remove('chartContainer-active');
+    const chartBlock = document.querySelectorAll('.chart-block');
+    chartBlock.forEach((block, index) => {
+      block.style.height = "0.5rem";
+    })
+    tAxis.style.display = "none";
+    tAxisText.style.display = "none";
     // historyButton.textContent = "History";
   }, 1000);
 }
@@ -1419,9 +1425,7 @@ function setInputValueOnClick() {
 const waterLogString = localStorage.getItem('waterLog');
 const waterLogtemp = JSON.parse(waterLogString);
 
-const dailyIntakes = getDailyWaterIntakes(waterLogtemp);
-const chartBlock = document.querySelectorAll('.chart-block');
-const blockDates = document.querySelectorAll('.block-date');
+var dailyIntakes = getDailyWaterIntakes(waterLogtemp);
 
 function showChart() {
   buttonTitle.style.display = "none";
@@ -1429,9 +1433,14 @@ function showChart() {
   tAxis.style.display ="block";
   historyButton.classList.add('show-history');
   chartContainer.classList.add('chartContainer-active');
+  tAxis.style.display = "block";
+  tAxisText.style.display = "block";
 
-alert(dailyIntakes);
-
+// alert(dailyIntakes);
+  adjustScroll();
+  setTimeout(() => {
+    updateChart();
+  }, 200);
 }
 
 
@@ -1446,6 +1455,53 @@ function getDailyWaterIntakes(waterLog) {
   }
   return Object.values(dailyWaterIntakes);
 }
+
+function updateChart() {
+    // const dailyIntakes = [3150, 3200, 1900, 2750, 2200, 2900, 1950, 3025, 2775, 2450, 2650, 3100, 2250, 2500, 2400, 2250, 2700, 1575, 2525, 2000];
+    const chartBlock = document.querySelectorAll('.chart-block');
+    const blockDates = document.querySelectorAll('.block-date');
+    
+    const today = new Date();
+    
+    // Modified date options to display only day and month
+    const dateOptions = {year: '2-digit', month: '2-digit', day: '2-digit'};
+    
+    chartBlock.forEach((block, index) => {
+        setTimeout(() => {
+            const dailyIntake = dailyIntakes[index];
+            const waterTarget = localStorage.getItem('waterTarget'); 
+            const blockHeight = (10.35 / waterTarget) * dailyIntake + "rem";
+            
+            block.style.height = blockHeight;
+            
+            const date = new Date();
+            date.setDate(today.getDate() - index);
+            
+            const formattedDate = date.toLocaleDateString('de-DE', dateOptions);
+            
+            blockDates[index].textContent = formattedDate;
+        }, index * 100); // Delay each iteration by 100ms * index
+    });
+}
+
+
+
+  function adjustScroll() {
+    chartContainer.scrollTop = chartContainer.scrollHeight;
+  }
+
+  // Set up the mutation observer
+  const observerChart = new MutationObserver(adjustScroll);
+
+  // Start observing the target node for configured mutations
+  observerChart.observe(chartContainer, {
+    attributes: true, // observe changes in attributes 
+    childList: true, // observe changes in the child elements
+    subtree: true, // observe changes in the descendants
+    attributeFilter: ['style'] // observe only style attribute changes
+  });
+
+
 
 setInputValueOnClick()
 
