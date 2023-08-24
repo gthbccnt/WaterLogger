@@ -306,19 +306,26 @@ thead tr {
 #targetAxis {
   width: 100%;
   height: 0rem;
-  border: dashed 0.01rem;
+  border: dashed 0.05rem;
   position: absolute;
   top: 20%;
   display: none;
+  color: oklch(100% 0 0 / 40%);
 }
 
 #targetAxisText {
   text-align: left;
-  font-size: 10pt;
-  margin-left: 1rem;
-  margin-top: 1rem;
+  font-size: 11pt;
+  margin-left: 0.35rem;
+  margin-top: 0.35rem;
   margin-bottom: 0;
   position: absolute;
+  color: oklch(100% 0 0 / 50%);
+  padding: 0.5rem;
+  padding-left: 0.7rem;
+  background-color: oklch(100% 0 0 / 20%);
+  border-radius: 16px 4px 4px 4px;
+  display: none;
 }
 
 #chartContainer {
@@ -339,14 +346,23 @@ thead tr {
 .chart-block {
   width: 2.2rem;
   height: 0.5rem;
-  color: black;
-  background-color: oklch(100% 0 0 / 30%);
-  transition: height 0.5s ease;
-  border-radius: 8px 8px 2px 2px;
+  color: oklch(100% 0 0 / 50%);
+  background-color: oklch(100% 0 0 / 20%);
+  transition: all 0.5s ease;
+  border-radius: 3px;
+  font-size: 9pt;
+  text-align: center;
+}
+
+.dark-theme .chart-block {
+  color: oklch(100% 0 0 / 40%);
+  background-color: oklch(58.4% 0.067 257 / 50%);
 }
 
 .block-date {
-  font-size: 6pt;
+  font-size: 9pt;
+  direction: ltr;
+  color: oklch(100% 0 0 / 50%);
 /*  background-color: oklch(100% 0 0 / 20%);*/
 }
 
@@ -507,11 +523,11 @@ thead tr {
   background-color: oklch(100% 0 0 / 5%);
 }
 
-.dark-theme tbody tr:nth-child(even) {
+.dark-theme tbody tr:nth-child(odd) {
   background-color: oklch(100% 0 0 / 3%);
   color: oklch(100% 0 0 / 20%);
 }
-.dark-theme tbody tr:nth-child(odd) {
+.dark-theme tbody tr:nth-child(even) {
   background-color: oklch(100% 0 0 / 5%);
   color: oklch(100% 0 0 / 20%);
 }
@@ -1429,7 +1445,7 @@ var dailyIntakes = getDailyWaterIntakes(waterLogtemp);
 
 function showChart() {
   buttonTitle.style.display = "none";
-  tAxisText.textContent = localStorage.getItem('waterTarget');
+  tAxisText.textContent = localStorage.getItem('waterTarget') + " ml";
   tAxis.style.display ="block";
   historyButton.classList.add('show-history');
   chartContainer.classList.add('chartContainer-active');
@@ -1451,20 +1467,19 @@ function getDailyWaterIntakes(waterLog) {
     if (!dailyWaterIntakes[date]) {
       dailyWaterIntakes[date] = 0;
     }
-    dailyWaterIntakes[date] += parseInt(entry["amount"]); // Parse the amount to an integer before adding
+    dailyWaterIntakes[date] += parseInt(entry["amount"]);
   }
   return Object.values(dailyWaterIntakes);
 }
 
 function updateChart() {
-    // const dailyIntakes = [3150, 3200, 1900, 2750, 2200, 2900, 1950, 3025, 2775, 2450, 2650, 3100, 2250, 2500, 2400, 2250, 2700, 1575, 2525, 2000];
     const chartBlock = document.querySelectorAll('.chart-block');
     const blockDates = document.querySelectorAll('.block-date');
     
     const today = new Date();
     
     // Modified date options to display only day and month
-    const dateOptions = {year: '2-digit', month: '2-digit', day: '2-digit'};
+    const dateOptions = {day: '2-digit', month: '2-digit'};
     
     chartBlock.forEach((block, index) => {
         setTimeout(() => {
@@ -1472,13 +1487,20 @@ function updateChart() {
             const waterTarget = localStorage.getItem('waterTarget'); 
             const blockHeight = (10.35 / waterTarget) * dailyIntake + "rem";
             
-            block.style.height = blockHeight;
+            if (dailyIntake > 0){
+              block.style.height = blockHeight;
+              block.textContent = dailyIntake;
+              block.style.paddingTop= "1rem";
+              block.style.borderRadius = "7px 7px 3px 3px";
+            } else {
+              block.style.height = "0rem"
+            }
             
             const date = new Date();
             date.setDate(today.getDate() - index);
-            
-            const formattedDate = date.toLocaleDateString('de-DE', dateOptions);
-            
+
+            const formattedDate = date.toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit'});
+
             blockDates[index].textContent = formattedDate;
         }, index * 100); // Delay each iteration by 100ms * index
     });
@@ -1489,11 +1511,7 @@ function updateChart() {
   function adjustScroll() {
     chartContainer.scrollTop = chartContainer.scrollHeight;
   }
-
-  // Set up the mutation observer
   const observerChart = new MutationObserver(adjustScroll);
-
-  // Start observing the target node for configured mutations
   observerChart.observe(chartContainer, {
     attributes: true, // observe changes in attributes 
     childList: true, // observe changes in the child elements
