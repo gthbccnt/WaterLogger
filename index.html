@@ -14,6 +14,8 @@
 ::-webkit-scrollbar {
   overscroll-behavior: none;
   display: none;
+  height: 0;
+  width: 0;
 }
 
 body {
@@ -214,10 +216,10 @@ tbody tr {
   height: 2.6rem;
 }
 
-tbody tr:nth-child(even) {
+tbody tr:nth-child(odd) {
   background-color: oklch(100% 0 0 / 5%);
 }
-tbody tr:nth-child(odd) {
+tbody tr:nth-child(even) {
   background-color: oklch(100% 0 0 / 10%);
 }
 
@@ -253,7 +255,7 @@ thead tr {
   z-index: 988;
   font-size: 11pt;
   height: 3rem;
-  width: 3rem;
+  width: 4rem;
   padding:0;
   right: 6vw;
   border-radius: 10px;
@@ -278,7 +280,7 @@ thead tr {
   border-radius: 10px;
   top: 3vh;
   position: fixed;
-  background-color: oklch(100% 0 0 / 10%);
+  background-color: oklch(100% 0 0 / 15%);
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 10%);
   border: solid 0pt oklch(100% 0 0 / 0%);
   filter: opacity(0%);
@@ -299,6 +301,7 @@ thead tr {
   border-radius: 1.5rem !important;
   background-color: oklch(100% 0 0 / 10%) !important;
   border: solid 0.2rem oklch(100% 0 0 / 20%) !important;
+  /*padding: 0.3rem !important;*/
 }
 
 #targetAxis {
@@ -322,7 +325,7 @@ thead tr {
   padding: 0.5rem;
   padding-left: 0.7rem;
   background-color: oklch(100% 0 0 / 20%);
-  border-radius: 16px 4px 4px 4px;
+  border-radius: 16px 4px 4px 3px;
   display: none;
 }
 
@@ -339,6 +342,7 @@ thead tr {
   direction: rtl;
   display: none;
   padding: 0.3rem;
+  padding-right: 0.35rem;
 }
 
 .chart-block {
@@ -517,7 +521,7 @@ thead tr {
 }
 
 .dark-theme {
-  background-color: oklch(21.6% 0.014 262.67);
+  background-color: oklch(25.6% 0.014 262.67);
 }
 
 .dark-theme .stop-color-top {
@@ -560,7 +564,7 @@ thead tr {
 }
 
 .dark-theme #popup {
-  background-color: oklch(100% 0 0 / 10%);
+  background-color: oklch(0% 0 0 / 10%);
 }
 
 .dark-theme #ifttt-form input, .dark-theme #ifttt-form button {
@@ -568,7 +572,7 @@ thead tr {
 }
 
 .dark-theme #ifttt-form input {
-  background-color: oklch(0% 0 0 / 25%)
+  background-color: oklch(100% 0 0 / 4%)
 }
 
 .dark-theme #ifttt-form input:focus {
@@ -605,6 +609,23 @@ thead tr {
   color: oklch(0% 0 0 / 80%);
 }
 
+.dark-theme #historyButton {
+  background-color: oklch(0% 0 0 / 15%);
+  box-shadow: "";
+}
+
+.dark-theme .show-history {
+  background-color: oklch(0% 0 0 / 10%) !important;
+  border: solid 0.2rem oklch(100% 0 0 / 10%) !important;
+}
+
+.dark-theme #targetAxisText {
+  background-color: oklch(100% 0 0 / 10%);
+}
+
+.dark-theme #buttonTitle {
+  color: oklch(100% 0 0 / 30%);
+}
 
 /* Animation */
 .parallax > use {
@@ -924,6 +945,11 @@ function loadSelectedFont() {
 
     const backspace = document.getElementById('kbDelete');
       backspace.textContent = "\u{10019b}";
+      
+    const historyButtonTemp = document.getElementById('buttonTitle');
+    		historyButtonTemp.textContent = "\u{1008c9}";
+      historyButtonTemp.style.color = "oklch(100% 0 0 / 50%)";
+      historyButtonTemp.style.fontSize = "24pt";
     const menuButtonIcon = document.querySelector('#menuButton')
       menuButtonIcon.style.fontSize = "18pt";
       menuButtonIcon.textContent = '\u{100306}';
@@ -1453,7 +1479,6 @@ function showChart() {
   }, 200);
 }
 
-
 function getDailyWaterIntakes(waterLog) {
   const dailyWaterIntakes = {};
   for (const entry of waterLog) {
@@ -1463,7 +1488,8 @@ function getDailyWaterIntakes(waterLog) {
     }
     dailyWaterIntakes[date] += parseInt(entry["amount"]);
   }
-  return Object.values(dailyWaterIntakes);
+  //alert(dailyWaterIntakes)
+  return dailyWaterIntakes; // Return the object instead of its values
 }
 
 function updateChart() {
@@ -1472,36 +1498,43 @@ function updateChart() {
     var waterLogString = localStorage.getItem('waterLog');
     var waterLogtemp = JSON.parse(waterLogString);
     const dailyIntakes = getDailyWaterIntakes(waterLogtemp);
+    console.log(dailyIntakes);
     
-    const today = new Date();
-    
-    // Modified date options to display only day and month
     const dateOptions = {day: '2-digit', month: '2-digit'};
-    
+
+    // Use Object.keys to get the dates (keys) from the dailyIntakes object
+    const keysArray = Object.keys(dailyIntakes);
+
     chartBlock.forEach((block, index) => {
         setTimeout(() => {
-            const dailyIntake = dailyIntakes[index];
+            // Use the key (date) for the current iteration from keysArray
+            const currentKey = keysArray[index];
+            const dailyIntake = dailyIntakes[currentKey];
+
             const waterTarget = localStorage.getItem('waterTarget'); 
             const blockHeight = (10.1 / waterTarget) * dailyIntake + "rem";
             
             if (dailyIntake > 0){
               block.style.height = blockHeight;
               block.textContent = dailyIntake;
-              block.style.paddingTop= "1rem";
+              if (dailyIntake > 1000) {
+                block.style.paddingTop= "1rem";
+              } else {
+                block.style.paddingTop = "0.15rem";
+              }
               block.style.borderRadius = "7px 7px 3px 3px";
             } else {
               block.style.height = "0rem"
             }
             
-            const date = new Date();
-            date.setDate(today.getDate() - index);
+            var date = currentKey.slice(0, -3);
+            blockDates[index].textContent = date;
 
-            const formattedDate = date.toLocaleDateString('de-DE', {day: '2-digit', month: '2-digit'});
-
-            blockDates[index].textContent = formattedDate;
         }, index * 100); // Delay each iteration by 100ms * index
     });
 }
+
+
 
   function adjustScroll() {
     chartContainer.scrollTop = chartContainer.scrollHeight;
