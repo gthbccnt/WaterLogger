@@ -406,15 +406,15 @@ thead tr {
 }
 
 #ifttt-form input:first-child {
-  border-radius: 15px 15px 4px 4px;
+  border-radius: 18px 18px 4px 4px;
 }
 
 #ifttt-form button:first-child {
-  border-radius: 4px 4px 4px 15px;
+  border-radius: 4px 4px 4px 18px;
 }
 
 #ifttt-form button:last-child {
-  border-radius: 4px 4px 15px 4px;
+  border-radius: 4px 4px 18px 4px;
 }
 
 
@@ -460,7 +460,7 @@ thead tr {
   grid-template-columns: 3fr 3fr 3fr 3fr ;
   gap: 0.65rem;
   border-radius: 1.8rem;
-  padding: 1rem;
+  padding: 0.7rem;
   background-color: oklch(100% 0 0 / 15%);
   -webkit-backdrop-filter: blur(40px);
   backdrop-filter: blur(40px);
@@ -490,19 +490,19 @@ thead tr {
 }
 
 .keys:first-child {
-  border-radius: 1rem 0.45rem 0.45rem 0.45rem;
+  border-radius: 1.2rem 0.45rem 0.45rem 0.45rem;
 }
 
 .keys:nth-child(4) {
-  border-radius: 0.45rem 1rem 0.45rem 0.45rem;
+  border-radius: 0.45rem 1.2rem 0.45rem 0.45rem;
 }
 
 .keys:nth-child(9) {
-  border-radius: 0.45rem 0.45rem 0.45rem 1rem;
+  border-radius: 0.45rem 0.45rem 0.45rem 1.2rem;
 }
 
 .keys:nth-child(11) {
-  border-radius: 0.45rem 0.45rem 1rem 0.45rem;
+  border-radius: 0.45rem 0.45rem 1.2rem 0.45rem;
 }
 
 
@@ -521,11 +521,11 @@ thead tr {
 }
 
 .dark-theme {
-  background-color: oklch(25.6% 0.014 262.67);
+  background-color: oklch(25% 0.005 262.67);
 }
 
 .dark-theme .stop-color-top {
-  stop-color: oklch(47.6% 0.079 255.7 / 8%)
+  stop-color: oklch(50% 0.079 255.7 / 8%)
 }
 
 .dark-theme .stop-color-bottom {
@@ -538,16 +538,21 @@ thead tr {
 
 .dark-theme thead tr {
   color: oklch(100% 0 0 / 25%);
+  background-color: oklch(100% 0 0 / 3%);
+}
+
+.dark-theme .tableHeadData {
+  color: oklch(100% 0 0 / 50%);
   background-color: oklch(100% 0 0 / 5%);
 }
 
 .dark-theme tbody tr:nth-child(odd) {
   background-color: oklch(100% 0 0 / 3%);
-  color: oklch(100% 0 0 / 20%);
+  color: oklch(100% 0 0 / 30%);
 }
 .dark-theme tbody tr:nth-child(even) {
   background-color: oklch(100% 0 0 / 5%);
-  color: oklch(100% 0 0 / 20%);
+  color: oklch(100% 0 0 / 30%);
 }
 
 .dark-theme .rowSelected {
@@ -559,8 +564,8 @@ thead tr {
 }
 
 .dark-theme #menuButton {
-  color: oklch(100% 0 0 / 25%);
-  background-color: oklch(100% 0 0 / 5%);
+  color: oklch(100% 0 0 / 30%);
+  background-color: oklch(100% 0 0 / 8%);
 }
 
 .dark-theme #popup {
@@ -611,6 +616,7 @@ thead tr {
 
 .dark-theme #historyButton {
   background-color: oklch(0% 0 0 / 15%);
+  border: solid 1pt oklch(100% 0 0 / 5%);
   box-shadow: "";
 }
 
@@ -624,7 +630,7 @@ thead tr {
 }
 
 .dark-theme #buttonTitle {
-  color: oklch(100% 0 0 / 30%);
+  color: oklch(100% 0 0 / 20%);
 }
 
 /* Animation */
@@ -1356,7 +1362,7 @@ var metaTag = document.querySelector('meta[name="theme-color"]');
 // Check if the system's color scheme is light or dark
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
     bodyDarkMode.classList.add('dark-theme');
-    metaTag.setAttribute('content', '#161a20');// add value for popup
+    metaTag.setAttribute('content', '#202224');// add value for popup
   } else {
     metaTag.setAttribute('content', '#3a688e')
     bodyDarkMode.classList.remove('dark-theme');
@@ -1366,7 +1372,7 @@ var metaTag = document.querySelector('meta[name="theme-color"]');
 window.matchMedia('(prefers-color-scheme: dark)').addListener((event) => {
   if (event.matches) {
     bodyDarkMode.classList.add('dark-theme');
-    metaTag.setAttribute('content', '#161a20');// add value for popup
+    metaTag.setAttribute('content', '#202224');// add value for popup
   } else {
     metaTag.setAttribute('content', '#3a688e')
     bodyDarkMode.classList.remove('dark-theme');
