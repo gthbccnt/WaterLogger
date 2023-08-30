@@ -1091,15 +1091,20 @@ function saveDataToLocalStorage() {
 
 window.addEventListener('beforeunload', () => {
     saveDataToLocalStorage();
-    calculateTarget()
 });
 
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'hidden') {
     saveDataToLocalStorage();
-    calculateTarget()
   }
 });
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    calculateTarget();
+  }
+});
+
 
 // ===== import font or csv ==========
 function openCsvOrFont() {
@@ -1385,29 +1390,6 @@ function toggleTBody() {
 // ==============================================
 // ================ dark mode ===================
 // ==============================================
-// const bodyDarkMode = document.querySelector('body');
-// var metaTag = document.querySelector('meta[name="theme-color"]');
-
-// // Check if the system's color scheme is light or dark
-//   if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-//     bodyDarkMode.classList.add('dark-theme');
-//     metaTag.setAttribute('content', '#202224');// add value for popup
-//   } else {
-//     metaTag.setAttribute('content', '#3a688e')
-//     bodyDarkMode.classList.remove('dark-theme');
-//   }
-
-// // Add a listener to toggle the theme when the system's color scheme changes
-// window.matchMedia('(prefers-color-scheme: dark)').addEventListener((event) => {
-//   if (event.matches) {
-//     bodyDarkMode.classList.add('dark-theme');
-//     metaTag.setAttribute('content', '#202224');// add value for popup
-//   } else {
-//     metaTag.setAttribute('content', '#3a688e')
-//     bodyDarkMode.classList.remove('dark-theme');
-//   }
-// })
-
 let bodyDarkMode = document.querySelector('body'); // replace with the appropriate selector
 //let metaTag = document.querySelector('meta[name="theme-color"]'); // assuming you're trying to adjust a theme-color meta tag
 
@@ -1421,23 +1403,14 @@ function adjustThemeBasedOnPreference(event) {
     bodyDarkMode.classList.remove('dark-theme');
   }
 }
-
 // Initial check
 let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 adjustThemeBasedOnPreference(mediaQuery);
-
 // Listen to changes
 mediaQuery.addListener(adjustThemeBasedOnPreference);
-
 // ==============================================
 // ==============================================
 // ==============================================
-
-function deleteEntry(input) {
-  console.log(input)
-  //confirm('Do you want to delete this log entry?')
-}
-
 function calculateTarget() {
   let currentWaterAmount = parseFloat(document.querySelector('#currentAmount').textContent);
   const line = document.querySelector('#line');
