@@ -1370,7 +1370,7 @@ var metaTag = document.querySelector('meta[name="theme-color"]');
   }
 
 // Add a listener to toggle the theme when the system's color scheme changes
-window.matchMedia('(prefers-color-scheme: dark)').addListener((event) => {
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener((event) => {
   if (event.matches) {
     bodyDarkMode.classList.add('dark-theme');
     metaTag.setAttribute('content', '#202224');// add value for popup
