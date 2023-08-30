@@ -9,7 +9,11 @@
   <link rel="apple-touch-icon" href="icon.png">
 
 <style>
-* {box-sizing: border-box;font-family: system-ui, iconMode};
+
+* {
+  box-sizing: border-box;
+  font-family: system-ui, iconMode;
+};
 
 ::-webkit-scrollbar {
   overscroll-behavior: none;
@@ -29,174 +33,14 @@ body {
   position: fixed;
 }
 
-#line {
-  position: fixed;
-  display: flex;
-  top: 100vh;
-  left: 4vw;
-  background-color: oklch(100% 0 0 / 10%);
-  height: 1rem;
-  width: 92vw;
-  border-radius: 0.5rem;
-  box-shadow: 0px 0px 6px -4px oklch(0% 0 0 / 10%);
-  transition: all 1s ease;
-  font-size: 10pt;
-  text-align: center;
-  justify-content: space-evenly;
-  color: oklch(0% 0 0 /90%);
-  filter: opacity(0%);
-}
-
-.line-higher {
-  filter: opacity(100%) !important;
-}
-
-#currentMl, #currentTarget {
-  mix-blend-mode: lighten;
-}
-
-.waves {
-  width: 100%;
-  height: 35rem;
-/*  height: 140vw;*/
-  position: relative;
-}
-
-.stop-color-top {
-  stop-color: oklch(91.7% 0.025 255.7 / 10%)
-}
-
-.stop-color-bottom {
-  stop-color: oklch(50% 0.08 245.64 / 30%)
-}
-
-#waterIndicator {
-  top: 90vh;
-  position: fixed;
-  transition: top 0.8s ease;
-/*  height: 95vw;*/
-/*  height: 30rem;*/
-  width: 100%;
-}
-  
-#waterInput {
-  position: fixed;
-  z-index: 998;
-  top: 62vh;
-  margin-bottom: 0;
-  padding: 1rem;
-  width: 94vw;
-  left: 3vw;
-  background-color: oklch(100% 0 0 / 18%);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border:none;
-  border-radius: 1.8rem;
-  color: black;
-  box-shadow: 0px 0px 8px -4px #00000040;
-  transition: all 0.5s cubic-bezier(0.65,0.05,0.36,1);
-}
-
-.changeHeight {
-  top: 40vh !important;
-/*  box-shadow: 0px 0px 0px 0px !important;*/
-}
-
-#inputSaveList button:last-child {
-  border-radius: 7px 7px 18px 7px;
-}
-
-#inputSaveList input {
-  border-radius: 7px 7px 7px 18px;
-}
-
 button, input {
-  font-size: 14pt;
-  height: 4rem;
-  width: 4.5rem;
+  border: none;
   background-color: oklch(100% 0 0 / 15%);
   color: black;
-  border-radius: 7px;
-  border:none;
-  text-align:center;
-  vertical-align: middle;
+  font-size: 12pt;
 }
 
-#waterInput button, #waterInput input {
-  -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
-}
-
-.buttonPressed {
-  font-weight: 500;
-  filter: brightness(1.1);
-}
-
-.rowSelected {
-  background-color: oklch(100% 0 0 / 20%);
-}
-
-
-#svBt { width: 7.1rem;}
-
-#customInput {
-  width: 12.2rem;
-  caret-color: #00000090;
-  text-align: left;
-  outline: none;
-  padding: 10pt;
-  background-color: oklch(100% 0 0 / 7%);
-  transition: all 0.5s ease;
-}
-#customInput:focus {
-  outline: none;
-  background-color: oklch(100% 0 0 / 25%);
-}
-
-#customInput::placeholder {
-  opacity: 0.6;
-  color:black;
-}
-
-#inputSaveList, #buttonList {
-  vertical-align: middle;
-  justify-content: space-between;
-  display: flex;
-  padding:0;
-}
-
-#buttonList, #waterInputheader {
-  margin-bottom: 0.7rem;
-}
-
-#waterInputheader {
-  display: flex;
-  align-items: center;
-  margin-top: 0;
-  height: 2.5rem;
-}
-
-#logTitle, #milliLiter, #currentAmount {
-  font-size: 26pt;
-  font-weight: bold;
-}
-
-.added-cell {font-weight: 600;}
-
-#roundedCorners {
-  position: fixed;
-  border-radius: 15px;
-  overflow: scroll;
-  -webkit-overscroll-behavior: none;
-  overscroll-behavior: none;
-  width: 88vw;
-  max-height: 3.1rem;
-  top: 10vh;
-  left: 6vw;
-  right: 6vw;
-  box-shadow: 0px 0px 6px -2px #00000010;
-  transition: max-height 0.5s ease-out;
-}
+/* ====== Water Log / Table ====== */
 
 table {
   border-collapse: collapse;
@@ -228,14 +72,6 @@ td {
   border: none;
 }
 
-.tableHeadData {
-  background-color: oklch(100% 0 0 / 10%);
-  color: black;
-  box-shadow: 0px 0px 3px 0px #00000090;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-      
 thead tr {
   position: sticky;
   top: 0;
@@ -251,23 +87,179 @@ thead tr {
   transition: all 0.8s ease;
 }
 
-#menuButton {
-  z-index: 988;
-  font-size: 11pt;
-  height: 3rem;
-  width: 4rem;
-  padding:0;
-  right: 6vw;
-  border-radius: 10px;
-  margin-top: 2vh;
-  position: fixed;
-  background-color: oklch(100% 0 0 / 8%);
-  box-shadow: 0px 0px 6px -2px #00000010;
-   -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  filter: opacity(100%);
-  transition: filter 2s ease;
+.tableHeadData {
+  background-color: oklch(100% 0 0 / 10%);
+  color: black;
+  box-shadow: 0px 0px 3px 0px #00000090;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
+
+.added-cell {
+  font-weight: 600;
+}
+
+#roundedCorners {
+  position: fixed;
+  border-radius: 15px;
+  overflow: scroll;
+  -webkit-overscroll-behavior: none;
+  overscroll-behavior: none;
+  width: 88vw;
+  max-height: 3.1rem;
+  top: 10vh;
+  left: 6vw;
+  right: 6vw;
+  box-shadow: 0px 0px 6px -2px #00000010;
+  transition: max-height 0.5s ease-out;
+}
+
+/* ====== Water Target ====== */
+
+#line {
+  position: fixed;
+  display: flex;
+  top: 100vh;
+  left: 4vw;
+  background-color: oklch(100% 0 0 / 10%);
+  height: 1rem;
+  width: 92vw;
+  border-radius: 0.5rem;
+  box-shadow: 0px 0px 6px -4px oklch(0% 0 0 / 10%);
+  transition: all 1s ease;
+  font-size: 10pt;
+  text-align: center;
+  justify-content: space-evenly;
+  color: oklch(0% 0 0 /90%);
+  filter: opacity(0%);
+}
+
+.line-higher {
+  filter: opacity(100%) !important;
+}
+
+#currentMl, #currentTarget {
+  mix-blend-mode: lighten;
+}
+
+/* ====== Waves ====== */
+
+.waves {
+  width: 100%;
+  height: 35rem;
+  position: relative;
+}
+
+.stop-color-top {
+  stop-color: oklch(91.7% 0.025 255.7 / 10%)
+}
+
+.stop-color-bottom {
+  stop-color: oklch(50% 0.08 245.64 / 30%)
+}
+
+#waterIndicator {
+  top: 90vh;
+  position: fixed;
+  transition: top 0.8s ease;
+  width: 100%;
+}
+
+/* ====== Water Input ====== */
+  
+#waterInput {
+  position: fixed;
+  z-index: 998;
+  top: 62vh;
+  right: 0.7rem;
+  padding: 1rem;
+  width: 94vw;
+  max-width: 26rem;
+  background-color: oklch(100% 0 0 / 18%);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-radius: 1.8rem;
+  color: black;
+  box-shadow: 0px 0px 8px -4px #00000040;
+  transition: all 0.5s cubic-bezier(0.65,0.05,0.36,1);
+}
+
+.changeHeight {
+  top: 40vh !important;
+}
+
+#waterInput button, #waterInput input {
+  -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
+  border-radius: 7px;
+}
+
+#inputSaveList button:last-child {
+  border-radius: 7px 7px 18px 7px;
+}
+
+#inputSaveList input {
+  border-radius: 7px 7px 7px 18px;
+}
+
+.buttonPressed {
+  font-weight: 500;
+  filter: brightness(1.1);
+}
+
+.rowSelected {
+  background-color: oklch(100% 0 0 / 20%);
+}
+
+#customInput {
+  caret-color: #00000090;
+  text-align: left;
+  outline: none;
+  padding: 10pt;
+  background-color: oklch(100% 0 0 / 7%);
+  transition: all 0.5s ease;
+}
+
+
+#inputSaveList, #buttonList {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: 3fr 3fr 3fr 3fr ;
+  height: 4rem;
+  width: 100%;
+}
+
+#inputSaveList {
+  grid-template-columns: 3fr 3fr;
+}
+
+#buttonList, #waterInputheader {
+  margin-bottom: 0.7rem;
+}
+
+#customInput:focus {
+  outline: none;
+  background-color: oklch(100% 0 0 / 25%);
+}
+
+#customInput::placeholder {
+  opacity: 0.6;
+  color:black;
+}
+
+#waterInputheader {
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+  height: 2.5rem;
+}
+
+#logTitle, #milliLiter, #currentAmount {
+  font-size: 26pt;
+  font-weight: bold;
+}
+
+/* ====== History Button / Chart ====== */
 
 #historyButton {
   display: flex;
@@ -301,7 +293,6 @@ thead tr {
   border-radius: 1.5rem !important;
   background-color: oklch(100% 0 0 / 10%) !important;
   border: solid 0.2rem oklch(100% 0 0 / 20%) !important;
-  /*padding: 0.3rem !important;*/
 }
 
 #targetAxis {
@@ -316,17 +307,17 @@ thead tr {
 }
 
 #targetAxis::after {
-    content: "";
-    position: absolute;
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><circle cx="2.5" cy="2.5" r="1.3" fill="oklch(100% 0 0 / 20%)" /></svg>');
-    background-repeat: round;
+  content: "";
+  position: absolute;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><circle cx="2.5" cy="2.5" r="1.3" fill="oklch(100% 0 0 / 20%)" /></svg>');
+  background-repeat: round;
 }
 
 #targetAxis::after {
-    top: -3px;
-    left: 0;
-    right: 0;
-    height: 5px;
+  top: -3px;
+  left: 0;
+  right: 0;
+  height: 5px;
 }
 
 #targetAxisText {
@@ -375,11 +366,6 @@ thead tr {
   text-align: center;
 }
 
-.dark-theme .chart-block {
-  color: oklch(100% 0 0 / 40%);
-  background-color: oklch(58.4% 0.067 257 / 50%);
-}
-
 .block-date {
   font-size: 9pt;
   direction: ltr;
@@ -388,6 +374,26 @@ thead tr {
 
 .chartContainer-active {
   display: grid !important;
+}
+
+/* ====== Menu Button Popup ====== */
+
+#menuButton {
+  z-index: 988;
+  font-size: 11pt;
+  height: 3rem;
+  width: 3.5rem;
+  padding:0;
+  right: 6vw;
+  border-radius: 10px;
+  margin-top: 2vh;
+  position: fixed;
+  background-color: oklch(100% 0 0 / 8%);
+  box-shadow: 0px 0px 6px -2px #00000010;
+   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  filter: opacity(100%);
+  transition: filter 2s ease;
 }
 
 #popupBackground {
@@ -402,9 +408,11 @@ thead tr {
 }
 
 #popup {
-  position: fixed;
+  position: relative;
   top: 35vh;
   width: 84vw;
+  margin: 0 auto;
+  max-width: 22rem;
   background-color: oklch(100% 0 0 / 15%);
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
@@ -412,7 +420,6 @@ thead tr {
   padding: 0.5rem;
   border-radius: 1.5rem;
   display: none;
-  left: 8vw;
 }
 
 #ifttt-form input, #ifttt-form button {
@@ -474,6 +481,8 @@ thead tr {
   margin-right: auto;
 }
 
+/* ====== Keyboard ====== */
+
 #keypadContainer {
   display: none;
   grid-template-columns: 3fr 3fr 3fr 3fr ;
@@ -485,8 +494,9 @@ thead tr {
   backdrop-filter: blur(40px);
   position: fixed;
   width: 94vw;
+  max-width: 26rem;
   height: 12rem;
-  left: 3vw;
+  right: 0.7rem;
   bottom: -20rem;
   transition: bottom 0.5s cubic-bezier(0.65,0.05,0.36,1), backdrop-filter 1s cubic-bezier(0.65,0.05,0.36,1);
 }
@@ -506,7 +516,6 @@ thead tr {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  /*  border: solid 0.1pt oklch(0% 0 0 / 100%);*/
   transition: all 0.1s ease;
 }
 
@@ -528,14 +537,14 @@ thead tr {
 
 
 .keys-pressed {
-/*  filter: brightness(1.3);*/
-/*  font-weight: 900;*/
   background-color: oklch(100% 0 0 / 50%);
 }
 
 #kbDelete {
-  grid-column: 3 / 5; /* Starts on the third column line and ends on the fifth column line */
+  grid-column: 3 / 5; /* Starts third column ends fifth column  */
 }
+
+/* ====== Dark theme ====== */
 
 .dark-theme #line {
   color: oklch(0% 0 0 /100%);
@@ -660,7 +669,12 @@ thead tr {
   color: oklch(100% 0 0 / 20%);
 }
 
-/* Animation */
+.dark-theme .chart-block {
+  color: oklch(100% 0 0 / 40%);
+  background-color: oklch(58.4% 0.067 257 / 50%);
+}
+
+/* ====== Animation ====== */ 
 .parallax > use {
   animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
 }
@@ -1390,8 +1404,7 @@ function toggleTBody() {
 // ==============================================
 // ================ dark mode ===================
 // ==============================================
-let bodyDarkMode = document.querySelector('body'); // replace with the appropriate selector
-//let metaTag = document.querySelector('meta[name="theme-color"]'); // assuming you're trying to adjust a theme-color meta tag
+let bodyDarkMode = document.querySelector('body');
 
 // Function to adjust theme based on preference
 function adjustThemeBasedOnPreference(event) {
