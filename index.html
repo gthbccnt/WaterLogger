@@ -306,12 +306,27 @@ thead tr {
 
 #targetAxis {
   width: 100%;
-  height: 0rem;
-  border: dashed 0.05rem;
-  position: absolute;
+  height: 0.01rem;
   top: 20%;
   display: none;
-  color: oklch(100% 0 0 / 40%);
+  border: 0.1rem;
+  border-style: dotted none none none;
+  position: absolute;
+  color: oklch(100% 0 0 / 0%);
+}
+
+#targetAxis::after {
+    content: "";
+    position: absolute;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><circle cx="2.5" cy="2.5" r="1.3" fill="oklch(100% 0 0 / 20%)" /></svg>');
+    background-repeat: round;
+}
+
+#targetAxis::after {
+    top: -3px;
+    left: 0;
+    right: 0;
+    height: 5px;
 }
 
 #targetAxisText {
@@ -325,11 +340,11 @@ thead tr {
   color: oklch(100% 0 0 / 50%);
   padding: 0.5rem;
   padding-left: 0.7rem;
-  background-color: oklch(100% 0 0 / 5%);
+  background-color: oklch(100% 0 0 / 10%);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border-radius: 16px 4px 4px 3px;
-  border: solid 0.1pt;
+  border: solid 0.1pt oklch(100% 0 0 / 40%);
   display: none;
 }
 
