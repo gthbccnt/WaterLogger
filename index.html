@@ -629,8 +629,7 @@ thead tr {
 }
 
 .dark-theme .keys-pressed {
-  background-color: oklch(0% 0 0 / 30%);
-/*  box-shadow: none;*/
+  background-color: oklch(100% 0 0 / 30%);
 }
 
 
@@ -1506,7 +1505,7 @@ function setInputValueOnClick() {
     keyboardButton.classList.add('keys-pressed');
       setTimeout(() => {
         keyboardButton.classList.remove('keys-pressed');
-      }, 300);
+      }, 250);
       event.preventDefault();
 
       var input = document.activeElement;
