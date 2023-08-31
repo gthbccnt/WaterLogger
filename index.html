@@ -1458,7 +1458,7 @@ function calculateTarget() {
 
   console.log("diffMin: " + timeDiffMinutes);
 
-  const currentTarget = (waterTarget / 15) * (15 - timeDiffMinutes/60);
+  var currentTarget = (waterTarget / 15) * (15 - timeDiffMinutes/60);
   console.log("currentTarget ml: " + currentTarget);
   if (currentTarget >= waterTarget) {
     currentTarget = waterTarget
