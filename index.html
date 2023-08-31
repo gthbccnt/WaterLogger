@@ -3,8 +3,7 @@
 <head>
   <meta name="apple-mobile-web-app-title" content="WaterLogger">
   <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content ="#3a688e">
   <link rel="apple-touch-icon" href="icon.png">
 
@@ -30,7 +29,7 @@ body {
   background-attachment: fixed;
   height: 100vh;
   overflow: hidden;
-/*  position: fixed;*/
+  position: fixed;
   align-content: center;
   align-items: center;
 }
@@ -125,10 +124,11 @@ thead tr {
   position: fixed;
   display: flex;
   top: 100vh;
-  left: 4vw;
+  margin-left: 4vw;
   background-color: oklch(100% 0 0 / 10%);
   height: 1rem;
   width: 92vw;
+  max-width: 22rem;
   border-radius: 0.5rem;
   box-shadow: 0px 0px 6px -4px oklch(0% 0 0 / 10%);
   transition: all 1s ease;
@@ -515,7 +515,7 @@ thead tr {
 
 .keys {
   border-radius: 0.3rem;
-  background-color: oklch(100% 0 0 / 30%);
+  background-color: oklch(100% 0 0 / 25%);
   font-size: 14pt;
   padding: 0.5rem;
   display: flex;
@@ -978,7 +978,7 @@ newTableRow.addEventListener('click', function(event) {
       document.getElementById("currentAmount").textContent = updatedAmount;
     } else {
         for (let i = 0; i < children.length; i++) {
-          children[i].classList.add('rowSelected');
+          children[i].classList.remove('rowSelected');
         }
     }
     }, 200)
@@ -1484,7 +1484,7 @@ function calculateTarget() {
 const waterInput = document.getElementById('waterInput');
 const keyboard = document.getElementById('keypadContainer')
 
-customInput.addEventListener('touchstart', function() {
+customInput.addEventListener('pointerdown', function() {
   waterInput.classList.add('changeHeight');
   customInput.focus();
   keyboard.style.display= "grid";
@@ -1493,12 +1493,13 @@ customInput.addEventListener('touchstart', function() {
   }, 10);
 });
 
-document.addEventListener('touchstart', function(event) {
+document.addEventListener('pointerdown', function(event) {
   // Check if the touch event target is not the customInput element
   if (!customInput.contains(event.target) && !keyboard.contains(event.target)) {
       waterInput.classList.remove('changeHeight');
       keyboard.classList.remove('activateKeyboard');
       customInput.blur();
+      customInput.value = "";
       setTimeout(() => {
         keyboard.style.display= "none";;
       }, 550);
@@ -1508,7 +1509,7 @@ document.addEventListener('touchstart', function(event) {
 function setInputValueOnClick() {
   const keyboardButtons = document.querySelectorAll('#keypadContainer div');
   keyboardButtons.forEach(keyboardButton => {
-    keyboardButton.addEventListener('touchstart', (event) => {
+    keyboardButton.addEventListener('pointerdown', (event) => {
     keyboardButton.classList.add('keys-pressed');
       setTimeout(() => {
         keyboardButton.classList.remove('keys-pressed');
