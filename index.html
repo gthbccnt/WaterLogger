@@ -371,7 +371,7 @@ thead tr {
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
   border-radius: 1.8rem !important;
   background-color: oklch(100% 0 0 / 0%) !important;
-  border: solid 0.45rem oklch(100% 0 0 / 20%) !important;
+  border: solid 0.45rem oklch(100% 0 0 / 10%) !important;
 }
 
 #targetAxis {
@@ -413,7 +413,7 @@ thead tr {
   background-color: oklch(100% 0 0 / 10%);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  border-radius: 17px 4px 4px 3px;
+  border-radius: 1px 4px 4px 3px;
   border: solid 0.1pt oklch(100% 0 0 / 40%);
   display: none;
 }
@@ -1366,8 +1366,8 @@ saveButton.addEventListener("click", () => {
   }, 500)
   const value = customInput.value;
   if (value !== "") {
-  addRow(value);
-  customInput.value = "";
+    addRow(value);
+    customInput.value = "";
   }
 });
 
@@ -1446,7 +1446,7 @@ btn250.addEventListener("touchstart", () => {
 
       // Use the named function to add the event listener
       document.addEventListener('mousedown', handleMousedown);
-  }, 700);
+  }, 600);
 });
 
 btn250.addEventListener("touchend", () => {
@@ -1455,12 +1455,12 @@ btn250.addEventListener("touchend", () => {
   clearTimeout(timer);
 
   // Check if touch duration was between 300ms and 699ms
-  if (touchDuration >= 200 && touchDuration <= 699) {
+  if (touchDuration >= 200 && touchDuration <= 599) {
     setTimeout(() => {
       waterInputChange.classList.remove('waterButtonPress');
       waterInputChange.classList.remove('waterInputLarge');
       showTutorial();
-    }, 500);
+    }, 200);
   } else if (!timerCompleted && waterInputChange.classList.contains('waterButtonPress')) {
     setTimeout(() => {
       waterInputChange.classList.remove('waterButtonPress');
@@ -1724,7 +1724,7 @@ document.addEventListener('pointerdown', function(event) {
       waterInput.classList.remove('changeHeight');
       keyboard.classList.remove('activateKeyboard');
       customInput.blur();
-      customInput.value = "";
+      //customInput.value = "";
       setTimeout(() => {
         keyboard.style.display= "none";;
       }, 550);
@@ -1813,10 +1813,14 @@ function updateChart() {
             if (dailyIntake > 0){
               block.style.height = blockHeight;
               block.textContent = dailyIntake;
-              if (dailyIntake > 1000) {
+              if (dailyIntake > 800 && dailyIntake < 3200) {
                 block.style.paddingTop= "1rem";
+              } else if (dailyIntake<350) {
+                block.textContent = "";
+              } else if (dailyIntake > 3200) {
+                block.style.paddingTop = "8rem";
               } else {
-                block.style.paddingTop = "0.15rem";
+                block.style.paddingTop = "0.25rem";
               }
               block.style.borderRadius = "7px 7px 3px 3px";
             } else {
