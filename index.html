@@ -41,7 +41,7 @@ body {
   margin: 0 auto;
   top: 0.2rem;
   position: absolute;
-  color: oklch(47% 0.08 245.64);
+  color: oklch(46% 0.08 245.64);
   z-index: -1;
   transition: all 1s ease;
 /*  mix-blend-mode: exclusion;*/
@@ -92,14 +92,14 @@ thead tr {
   top: 0;
   background-color: oklch(100% 0 0 / 4%);
   color: oklch(0% 0 0 / 65%);
-  font-size: 12pt;
+  font-size: 8pt;
   width: 6rem;
   border: none;
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
   height: 3.1rem;
   z-index: 10;
-  transition: all 0.8s ease;
+  transition: all 0.5s ease;
 }
 
 .tableHeadData {
@@ -108,6 +108,7 @@ thead tr {
   box-shadow: 0px 0px 3px 0px #00000090;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
+  font-size: 13pt;
 }
 
 .added-cell {
@@ -138,6 +139,8 @@ thead tr {
   top: 100vh;
   right: 1rem;
   background-color: oklch(100% 0 0 / 10%);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   height: 1.2rem;
   width: 92vw;
   max-width: 22rem;
@@ -152,10 +155,13 @@ thead tr {
   padding-right: 1.7rem;
   color: oklch(0% 0 0 /90%);
   filter: opacity(0%);
+  z-index: 999;
 }
 
 .line-higher {
   filter: opacity(100%) !important;
+  backdrop-filter: blur(5px)!important;
+  -webkit-backdrop-filter: blur(5px)!important;
 }
 
 #currentMl, #currentTarget {
@@ -196,8 +202,8 @@ thead tr {
   width: 30vw;
   max-width: 4.5rem;
   background-color: oklch(100% 0 0 / 18%);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
   border-radius: 0.7rem;
   filter: opacity(25%);
   color: black;
@@ -216,6 +222,9 @@ thead tr {
   border-radius: 1.8rem !important;
   transition: all 0.8s ease, bottom 0.5s ease !important;
   display: grid !important;
+  background-color: oklch(100% 0 0 / 8%)!important;
+  -webkit-backdrop-filter: blur(30px)!important;
+  backdrop-filter: blur(30px)!important;
 }
 
 .waterButtonPress {
@@ -465,7 +474,7 @@ thead tr {
 /* ====== Menu Button Popup ====== */
 
 #menuButton {
-  z-index: 988;
+  z-index: 1001;
   font-size: 11pt;
   height: 3.5rem;
   width: 3.5rem;
@@ -490,7 +499,7 @@ thead tr {
   left: 0px;
   width: 100vw;
   height: 100vh;
-  z-index: 999;
+  z-index: 1002;
 }
 
 #popup {
@@ -749,7 +758,7 @@ thead tr {
 
 .dark-theme #menuButton {
   color: oklch(100% 0 0 / 30%);
-  background-color: oklch(100% 0 0 / 8%);
+  background-color: oklch(100% 0 0 / 3%);
 }
 
 .dark-theme #popup {
@@ -1138,9 +1147,9 @@ function loadSelectedFont() {
     const tableHeaders = document.querySelectorAll('thead tr td');
     const tableHeaderCell = document.querySelector('thead tr td');
     if (tableHeaders.length > 0) {
-      tableHeaders[0].style.fontSize = "14pt";
-      tableHeaders[1].style.fontSize = "14pt";
-      tableHeaders[2].style.fontSize = "14pt";
+      // tableHeaders[0].style.fontSize = "14pt";
+      // tableHeaders[1].style.fontSize = "14pt";
+      // tableHeaders[2].style.fontSize = "14pt";
       tableHeaders[0].textContent = '\u{100249}';
       tableHeaders[1].textContent = '\u{10042b}';
       tableHeaders[2].textContent = '\u{101384}';
@@ -1673,9 +1682,11 @@ function toggleTBody() {
     console.log("roundedCorners smaller")
     tableBody.style.display = "table-row-group";
     roundedCorners.style.maxHeight = "61vh";
+    roundedCorners.style.zIndex = "1000";
     tableHead.classList.add('tableHeadData');
   } else {
     roundedCorners.style.maxHeight = "3.1rem";
+    roundedCorners.style.zIndex = "1";
     tableHead.classList.remove('tableHeadData');
     setTimeout(() => {
       tableBody.style.display = "none";
@@ -1873,8 +1884,6 @@ function updateChart() {
         }, index * 100); // Delay each iteration by 100ms * index
     });
 }
-
-
 
   function adjustScroll() {
     chartContainer.scrollTop = chartContainer.scrollHeight;
