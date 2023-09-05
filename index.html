@@ -15,26 +15,37 @@
   -webkit-tap-highlight-color: transparent;
   user-select: none;
   -webkit-user-select: none;
-};
-
-::-webkit-scrollbar {
-  overscroll-behavior: none;
-  display: none;
-  height: 0;
-  width: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+  
+*::-webkit-scrollbar {
+    display: none;
 }
 
 body {
   margin:0;
   background-color: oklch(50% 0.08 245.64);
-/*  text-align: right;*/
-  /*touch-action: none;*/
-  /*background-attachment: fixed;*/
   height: 100vh;
   overflow: hidden;
   position: fixed;
-/*  align-content: center;
-  align-items: center;*/
+  /*z-index: 1;*/
+}
+
+#currentWaterBG {
+  font-size: 60pt;
+  /*font-stretch: 90%;*/
+  font-weight: 100;
+  text-align: center;
+  width: 100vw;
+  margin: 0 auto;
+  top: 0.2rem;
+  position: absolute;
+  color: oklch(47% 0.08 245.64);
+  z-index: -1;
+  transition: all 1s ease;
+/*  mix-blend-mode: exclusion;*/
+  filter: opacity(1);
 }
 
 button, input {
@@ -79,7 +90,7 @@ td {
 thead tr {
   position: sticky;
   top: 0;
-  background-color: oklch(100% 0 0 / 8%);
+  background-color: oklch(100% 0 0 / 4%);
   color: oklch(0% 0 0 / 65%);
   font-size: 12pt;
   width: 6rem;
@@ -105,18 +116,16 @@ thead tr {
 
 #roundedCorners {
   position: relative;
-  border-radius: 15px;
+  border-radius: 1.7rem;
   overflow: scroll;
   -webkit-overscroll-behavior: none;
   overscroll-behavior: none;
   width: 87vw;
-  max-width: 21rem;
+  max-width: 28rem;
   max-height: 3.1rem;
   margin-top: 6rem;
   margin-left: 1.5rem;
   margin-right: auto;
-/*  left: 1.5rem;*/
-/*  right: 6vw;*/
   box-shadow: 0px 0px 6px -2px #00000010;
   transition: all 0.5s ease-out;
 }
@@ -132,7 +141,7 @@ thead tr {
   height: 1.2rem;
   width: 92vw;
   max-width: 22rem;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   box-shadow: 0px 0px 6px -4px oklch(0% 0 0 / 10%);
   transition: all 1s ease;
   font-size: 10pt;
@@ -162,11 +171,11 @@ thead tr {
 }
 
 .stop-color-top {
-  stop-color: oklch(91.7% 0.025 255.7 / 10%)
+  stop-color: oklch(91.7% 0.025 255.7 / 20%)
 }
 
 .stop-color-bottom {
-  stop-color: oklch(50% 0.08 245.64 / 30%)
+  stop-color: oklch(50% 0.08 245.64 / 10%)
 }
 
 #waterIndicator {
@@ -215,8 +224,6 @@ thead tr {
 }
 
 .activateWaterHeader {
-  /*display: flex !important;*/
-/*  font-size: 26pt !important;*/
   height: 2.5rem !important;
   filter: opacity(100%) !important;
   
@@ -371,7 +378,7 @@ thead tr {
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
   border-radius: 1.8rem !important;
   background-color: oklch(100% 0 0 / 0%) !important;
-  border: solid 0.45rem oklch(100% 0 0 / 10%) !important;
+  border: solid 0.4rem oklch(100% 0 0 / 10%) !important;
 }
 
 #targetAxis {
@@ -419,7 +426,7 @@ thead tr {
 }
 
 #chartContainer {
-  overflow-y: hidden;
+  overflow-y: scroll;
   overflow-x: scroll;
   border: solid 0pt;
   width: 100%;
@@ -625,22 +632,39 @@ thead tr {
 
 /* ====== Big screen ====== */
 
-@media (min-width: 769px) {
+@media (min-width: 500px) {
 
   #roundedCorners {
     max-height: 3.1rem;
     margin-top: 1.5rem;
     margin-left: 1.5rem;
     margin-right: auto;
+    max-width: 21rem;
   }
 
   #line {
     right: 8rem;
   }
 
+  #currentWaterBG {
+    top: 4rem;
+/*    left: 7.5rem;*/
+/*    margin: 1rem;*/
+/*    margin-left: 1rem;*/
+/*    text-align: left;*/
+    font-size: 25vw;
+    font-weight: 600;
+  }
+  
+  .dark-theme #currentWaterBG {
+    color: oklch(24.5% 0.005 262.67)!important;
+  }
 }
 
 /* ====== Dark theme ====== */
+.dark-theme #currentWaterBG {
+  color: oklch(22% 0.005 262.67);
+}
 
 .dark-theme #line {
   color: oklch(100% 0 0 /25%);
@@ -685,7 +709,7 @@ thead tr {
 }
 
 .dark-theme .stop-color-top {
-  stop-color: oklch(50% 0.079 255.7 / 8%)
+  stop-color: oklch(50% 0.079 255.7 / 10%)
 }
 
 .dark-theme .stop-color-bottom {
@@ -963,6 +987,8 @@ thead tr {
 
 </div>
 
+<div id="currentWaterBG"></div>
+
 <div id="waterIndicator">    
   <div id="niceWaves">
     <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -1034,7 +1060,6 @@ thead tr {
     
     <div id="kbDelete" class="keys">Del</div>
 </div>
-
 
 <script>
 // ===== 
@@ -1450,35 +1475,44 @@ btn250.addEventListener("touchstart", () => {
 });
 
 btn250.addEventListener("touchend", () => {
-  const touchDuration = Date.now() - touchStartTimestamp; // Calculate how long the touch lasted
+    const touchDuration = Date.now() - touchStartTimestamp; // Calculate how long the touch lasted
 
-  clearTimeout(timer);
+    clearTimeout(timer);
 
-  // Check if touch duration was between 300ms and 699ms
-  if (touchDuration >= 200 && touchDuration <= 599) {
-    setTimeout(() => {
-      waterInputChange.classList.remove('waterButtonPress');
-      waterInputChange.classList.remove('waterInputLarge');
-      showTutorial();
-    }, 200);
-  } else if (!timerCompleted && waterInputChange.classList.contains('waterButtonPress')) {
-    setTimeout(() => {
-      waterInputChange.classList.remove('waterButtonPress');
-      waterInputChange.classList.remove('waterInputLarge');
-    }, 500);
+    // Action when touch duration is between 200ms and 599ms
+    if (touchDuration >= 200 && touchDuration <= 599) {
+        setTimeout(() => {
+            waterInputChange.classList.remove('waterButtonPress');
+            waterInputChange.classList.remove('waterInputLarge');
+            showTutorial();
+        }, 200);
+    } 
 
-    btn250.classList.add('buttonPressed');
-    setTimeout(() => {
-      btn250.classList.remove('buttonPressed');
-      calculateTarget()
-    }, 500)
-    const value = btn250.value;
-    addRow(value);
-  } 
+    else if (touchDuration > 600) {}
+    // Action when waterInputLarge is present or the timer is not completed
+    else if (waterInputChange.classList.contains('waterInputLarge')) {
+        btn250.classList.add('buttonPressed');
+        setTimeout(() => {
+          btn250.classList.remove('buttonPressed');
+          calculateTarget()
+        }, 500);
+        const value = btn250.value;
+        addRow(value);
+    }
+    else if (!timerCompleted && waterInputChange.classList.contains('waterButtonPress') || waterInputChange.classList.contains('waterButtonPress')) {
+        setTimeout(() => {
+             waterInputChange.classList.remove('waterButtonPress');
+        }, 500);
+      
+        btn250.classList.add('buttonPressed');
+        setTimeout(() => {
+            btn250.classList.remove('buttonPressed');
+            calculateTarget()
+        }, 500);
+        const value = btn250.value;
+        addRow(value);
+    }
 });
-
-
-// ==================
 
 btn500.addEventListener("click", () => {
   btn500.classList.add('buttonPressed');
@@ -1594,6 +1628,8 @@ const observer = new MutationObserver((mutationsList, observer) => {
         sendPostRequest(value, key);
       }
       // update water level ==========
+      const currentWaterBG = document.getElementById('currentWaterBG');
+      currentWaterBG.textContent = currentAmount.textContent;
       increaseWaterLevel();
       saveDataToLocalStorage();
     }
@@ -1690,6 +1726,7 @@ function calculateTarget() {
   }
 
   var currentTargetTop = 90 - (currentTarget * (85 / waterTarget));
+  const bgText = document.getElementById('currentWaterBG');
   console.log("currentTarget: " + currentTargetTop + " vh")
 
   textCurrent.textContent = "Aktuell: " + Math.round(currentWaterAmount) + "ml";
@@ -1699,10 +1736,13 @@ function calculateTarget() {
     line.classList.add('line-higher');
     line.style.top = currentTargetTop + "vh";
     console.log('not enough water' + currentWaterAmount+"ml")
+    bgText.style.filter = "opacity(0)";
   } else {
     line.classList.remove('line-higher');
     line.style.top = currentTargetTop + "vh";
     console.log("currentWater high enough")
+    //const bgText = document.getElementById('currentWaterBG');
+    bgText.style.filter = "opacity(1)";
   }
 }
 
@@ -1813,11 +1853,11 @@ function updateChart() {
             if (dailyIntake > 0){
               block.style.height = blockHeight;
               block.textContent = dailyIntake;
-              if (dailyIntake > 800 && dailyIntake < 3200) {
+              if (dailyIntake > 800 && dailyIntake < 3400) {
                 block.style.paddingTop= "1rem";
               } else if (dailyIntake<350) {
                 block.textContent = "";
-              } else if (dailyIntake > 3200) {
+              } else if (dailyIntake > 3400) {
                 block.style.paddingTop = "8rem";
               } else {
                 block.style.paddingTop = "0.25rem";
