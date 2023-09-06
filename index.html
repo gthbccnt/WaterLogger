@@ -375,7 +375,7 @@ thead tr {
 }
 
 #buttonTitle {
-  transition: filter 0.1s ease;
+  transition: all 0.5s ease;
   filter: opacity(100%);
 }
 
@@ -386,7 +386,7 @@ thead tr {
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
   border-radius: 1.8rem !important;
   background-color: oklch(100% 0 0 / 0%) !important;
-  border: solid 0.4rem oklch(100% 0 0 / 10%) !important;
+  border: solid 0.35rem oklch(100% 0 0 / 10%) !important;
 }
 
 #targetAxis {
@@ -511,7 +511,7 @@ thead tr {
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: none;
-  padding: 0.5rem;
+  padding: 0.4rem;
   border-radius: 1.5rem;
   display: none;
 }
@@ -539,14 +539,14 @@ thead tr {
 
 
 #ifttt-form button {
-  width: 31.5%;
+  width: 31.9%;
   height: 3rem;
   background-color: oklch(100% 0 0 / 25%);
 }
 
 #ifttt-form input {
   width: 100%;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   text-align: left;
   padding-left: 1rem;
   background-color: oklch(100% 0 0 / 15%);
@@ -1956,7 +1956,12 @@ function addRowClickListener(newTableRow) {
             selectedRows = document.querySelectorAll('.rowSelected'); // Update selected rows after deselecting
             existingPopup.querySelector('.delText').textContent = `Do you want to delete ${Math.floor(selectedRows.length / 3)} rows?`;
             if (!selectedRows.length && existingPopup) {
-                existingPopup.remove();
+                existingPopup.style.filter = "opacity(0%)";
+                existingPopup.style.top = "70vh";
+                existingPopup.classList.remove('delContainerActive');
+                setTimeout(() => {
+                  existingPopup.remove();
+                }, 550);
             }
 
             return; // Exit
