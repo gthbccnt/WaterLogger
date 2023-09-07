@@ -716,9 +716,9 @@ thead tr {
   width: 73vw;
   margin-left: 3.15rem;
   max-width: 17rem;
-  top: 70vh;
+  top: 60vh;
   position: fixed;
-  background-color: oklch(100% 0 0 / 8%);
+  background-color: oklch(100% 0 0 / 15%);
   backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);
   border-radius: 1.2rem;
@@ -762,8 +762,9 @@ thead tr {
   height: 100%;
   padding: 0.5rem;
   padding-bottom: 2rem;
+/*  font-size: 13pt;*/
   padding-top: 2rem;
-  background-color: oklch(100% 0 0 / 20%);
+  background-color: oklch(100% 0 0 / 25%);
   display: flex;
   justify-content: space-evenly;
   align-content: center;
@@ -773,14 +774,14 @@ thead tr {
   display: grid;
   gap: 2px;
   grid-template-columns: 1fr 1fr;
-  height: 3rem;
+  height: 2.8rem;
   width: 100%;
   margin: 0 auto;
   padding: 0;
 }
 
 .delButtons button {
-   background-color: oklch(100% 0 0 / 30%);
+   background-color: oklch(100% 0 0 / 35%);
 }
 
 .delButtons button:first-child {
@@ -1926,7 +1927,7 @@ function deleteConfirm(onConfirm, onCancel, rowElement) {
     deleteOk.addEventListener('click', () => {
         onConfirm(rowElement);
         deleteContainer.style.filter = "opacity(0%)";
-        deleteContainer.style.top = "70vh";
+        deleteContainer.style.top = "60vh";
         deleteContainer.classList.remove('delContainerActive');
         setTimeout(() => {
           deleteContainer.remove();
@@ -1937,7 +1938,7 @@ function deleteConfirm(onConfirm, onCancel, rowElement) {
     deleteNo.addEventListener('click', () => {
         onCancel();
         deleteContainer.classList.remove('delContainerActive');
-        deleteContainer.style.top = "70vh";
+        deleteContainer.style.top = "60vh";
         setTimeout(() => {
           deleteContainer.remove();
         }, 550);
@@ -1961,7 +1962,7 @@ function addRowClickListener(newTableRow) {
             existingPopup.querySelector('.delText').textContent = `Do you want to delete ${Math.floor(selectedRows.length / 3)} rows?`;
             if (!selectedRows.length && existingPopup) {
                 existingPopup.style.filter = "opacity(0%)";
-                existingPopup.style.top = "70vh";
+                existingPopup.style.top = "60vh";
                 existingPopup.classList.remove('delContainerActive');
                 setTimeout(() => {
                   existingPopup.remove();
@@ -1977,7 +1978,7 @@ function addRowClickListener(newTableRow) {
         });
 
         if (existingPopup && selectedRows.length > 0) { // Check if popup exists and there are other rows selected
-            existingPopup.style.top = "70vh"; // Move to bottom
+            existingPopup.style.top = "75vh"; // Move to bottom
             existingPopup.querySelector('.delText').textContent = `Do you want to delete ${Math.floor(selectedRows.length / 3) + 1} rows?`; // Update text
             return; // Exit and don't show a new popup
         }
