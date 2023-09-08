@@ -370,8 +370,10 @@ thead tr {
   background-color: oklch(100% 0 0 / 15%);
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 10%);
   border: solid 0pt oklch(100% 0 0 / 0%);
+/*  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);*/
   filter: opacity(0%);
-  transition: all 0.7s ease, filter 0.5s ease;
+  transition: all 0.5s ease, filter 0.7s ease;
   overflow: hidden;
 }
 
@@ -386,8 +388,10 @@ thead tr {
   height: 14.5rem !important;
   box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
   border-radius: 1.8rem !important;
-  background-color: oklch(100% 0 0 / 0%) !important;
+  background-color: oklch(50% 0.08 245.64 / 10%) !important;
   border: solid 0.35rem oklch(100% 0 0 / 10%) !important;
+/*  backdrop-filter: blur(15px)!important;
+  -webkit-backdrop-filter: blur(15px)!important;*/
 }
 
 #targetAxis {
@@ -418,8 +422,8 @@ thead tr {
 #targetAxisText {
   text-align: left;
   font-size: 11pt;
-  margin-left: 0.25rem;
-  margin-top: 0.25rem;
+  margin-left: 0.30rem;
+  margin-top: 0.30rem;
   margin-bottom: 0;
   position: absolute;
   z-index: 999;
@@ -455,7 +459,7 @@ thead tr {
   height: 0.5rem;
   color: oklch(100% 0 0 / 50%);
   background-color: oklch(100% 0 0 / 20%);
-  transition: all 0.5s ease;
+  transition: all 0.65s ease;
   border-radius: 3px;
   font-size: 9pt;
   text-align: center;
@@ -1879,7 +1883,7 @@ function updateChart() {
             var date = currentKey.slice(0, -3);
             blockDates[index].textContent = date;
 
-        }, index * 100); // Delay each iteration by 100ms * index
+        }, index * 80); // Delay each iteration by 100ms * index
     });
 }
 
