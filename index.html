@@ -222,7 +222,7 @@ thead tr {
   border-radius: 1.8rem !important;
   transition: all 0.8s ease, bottom 0.5s ease !important;
   display: grid !important;
-  background-color: oklch(100% 0 0 / 8%)!important;
+  background-color: oklch(100% 0 0 / 12%)!important;
   -webkit-backdrop-filter: blur(30px)!important;
   backdrop-filter: blur(30px)!important;
 }
@@ -368,12 +368,12 @@ thead tr {
   top: 3vh;
   position: fixed;
   background-color: oklch(100% 0 0 / 15%);
-  box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 10%);
-  border: solid 0pt oklch(100% 0 0 / 0%);
+  /*box-shadow: 0px 0px 6px -2px oklch(100% 0 0 / 50%);*/
+  border: solid 0.5pt oklch(100% 0 0 / 20%);
 /*  backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);*/
   filter: opacity(0%);
-  transition: all 0.5s ease, filter 0.7s ease;
+  transition: all 0.5s ease, filter 0.4s ease;
   overflow: hidden;
 }
 
@@ -436,6 +436,8 @@ thead tr {
   border-radius: 19px 4px 4px 4px;
   border: solid 0.1pt oklch(100% 0 0 / 40%);
   display: none;
+  filter: opacity(0%);
+  transition: all 0.4s ease;
 }
 
 #chartContainer {
@@ -458,7 +460,7 @@ thead tr {
   width: 2.2rem;
   height: 0.5rem;
   color: oklch(100% 0 0 / 50%);
-  background-color: oklch(100% 0 0 / 20%);
+  background-color: oklch(100% 0 0 / 25%);
   transition: all 0.65s ease;
   border-radius: 3px;
   font-size: 9pt;
@@ -597,6 +599,7 @@ thead tr {
   height: 12rem;
   right: 0.7rem;
   bottom: -20rem;
+  z-index: 1000;
   transition: bottom 0.5s ease /*cubic-bezier(0.65,0.05,0.36,1)*/, backdrop-filter 1s ease /*cubic-bezier(0.65,0.05,0.36,1)*/;
 }
 
@@ -737,7 +740,7 @@ thead tr {
 .dark-theme .delContainer {
   background-color: oklch(30% 0.005 262.67 / 70%);
   box-shadow: 0px;
-  border: solid 1pt oklch(0% 0 0 / 40%);
+  border: solid 0pt oklch(0% 0 0 / 40%);
 }
 
 .dark-theme .delText {
@@ -908,7 +911,7 @@ thead tr {
 
 .dark-theme .show-history {
   background-color: oklch(0% 0 0 / 0%) !important;
-  border: solid 0.45rem oklch(0% 0 0 / 18%) !important;
+  border: solid 0.35rem oklch(0% 0 0 / 18%) !important;
 }
 
 .dark-theme #targetAxisText {
@@ -1555,10 +1558,11 @@ const chartContainer = document.getElementById('chartContainer');
 
 function closePopup(){
   backgroundPopup.classList.add('fade-out');
+  historyButton.style.filter = "opacity(0)"
   popup.classList.add('slide-out-blurred-top');
   menuButton.style.filter = "opacity(1)"
   historyButton.classList.remove('show-history');
-  historyButton.style.filter = "opacity(0)"
+  tAxisText.style.filter = "opacity(0%)"
 
   setTimeout(() => {
     backgroundPopup.classList.remove('fade-out');
@@ -1586,7 +1590,7 @@ function showPopup() {
   menuButton.style.filter = "opacity(0)"
   setTimeout(() => {
     historyButton.style.filter = "opacity(100%)"
-  }, 200);
+  }, 100);
 
   menuSaveButton.addEventListener('click', () => {
     closePopup();
@@ -1713,9 +1717,11 @@ let bodyDarkMode = document.querySelector('body');
 // Function to adjust theme based on preference
 function adjustThemeBasedOnPreference(event) {
   if (event.matches) {
+    console.log('dark')
     bodyDarkMode.classList.add('dark-theme');
     metaTag.setAttribute('content', '#202224');
   } else {
+    console.log(mediaQuery)
     metaTag.setAttribute('content', '#3a688e');
     bodyDarkMode.classList.remove('dark-theme');
   }
@@ -1725,6 +1731,8 @@ let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 adjustThemeBasedOnPreference(mediaQuery);
 // Listen to changes
 mediaQuery.addListener(adjustThemeBasedOnPreference);
+
+//mediaQuery.addEventListener('change', adjustThemeBasedOnPreference);
 // ==============================================
 // ==============================================
 // ==============================================
@@ -1827,11 +1835,12 @@ function showChart() {
   chartContainer.classList.add('chartContainer-active');
   tAxis.style.display = "block";
   tAxisText.style.display = "block";
+  tAxisText.style.filter = "opacity(100%)"
 
   adjustScroll();
   setTimeout(() => {
     updateChart();
-  }, 200);
+  }, 150);
 }
 
 function getDailyWaterIntakes(waterLog) {
@@ -1861,7 +1870,7 @@ function updateChart() {
             const dailyIntake = dailyIntakes[currentKey];
 
             const waterTarget = localStorage.getItem('waterTarget'); 
-            const blockHeight = (10.1 / waterTarget) * dailyIntake + "rem";
+            const blockHeight = (9.8 / waterTarget) * dailyIntake + "rem";
             
             if (dailyIntake > 0){
               block.style.height = blockHeight;
