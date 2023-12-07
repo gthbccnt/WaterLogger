@@ -1,1483 +1,1652 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta name="apple-mobile-web-app-title" content="WaterLogger">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content ="#3a688e">
-  <link rel="apple-touch-icon" href="icon.png">
+  <head>
+    <meta name="apple-mobile-web-app-title" content="WaterLogger" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#3a688e" />
+    <link rel="apple-touch-icon" href="icon.png" />
 
-<style>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: system-ui, iconMode;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
 
-* {
-  box-sizing: border-box;
-  font-family: system-ui, iconMode;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-  
-*::-webkit-scrollbar {
-    display: none;
-}
+      *::-webkit-scrollbar {
+        display: none;
+      }
 
-body {
-  margin:0;
-  background-color: oklch(50% 0.08 245.64);
-  height: 100vh;
-  overflow: hidden;
-  position: fixed;
-  /*z-index: 1;*/
-}
+      body {
+        margin: 0;
+        background-color: oklch(50% 0.08 245.64);
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        /*z-index: 1;*/
+      }
 
-#currentWaterBG {
-  font-size: 60pt;
-  /*font-stretch: 90%;*/
-  font-weight: 100;
-  text-align: center;
-  width: 100vw;
-  margin: 0 auto;
-  top: 0.2rem;
-  position: absolute;
-  color: oklch(46% 0.08 245.64);
-  z-index: -1;
-  transition: all 1s ease;
-  filter: opacity(1);
-}
+      #currentWaterBG {
+        font-size: 60pt;
+        /*font-stretch: 90%;*/
+        font-weight: 100;
+        text-align: center;
+        width: 100vw;
+        margin: 0 auto;
+        top: 0.2rem;
+        position: absolute;
+        color: oklch(46% 0.08 245.64);
+        z-index: -1;
+        transition: all 1s ease;
+        opacity: 1;
+      }
 
-button, input {
-  border: none;
-  background-color: oklch(100% 0 0 / 15%);
-  color: black;
-  font-size: 12pt;
-}
+      button,
+      input {
+        border: none;
+        background-color: oklch(100% 0 0 / 15%);
+        color: black;
+        font-size: 12pt;
+      }
 
-/* ====== Water Log / Table ====== */
+      /* ====== Water Log / Table ====== */
 
-table {
-  border-collapse: collapse;
-  width: 100%;
-  text-align: center;
-}
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: center;
+      }
 
-tbody {
-  font-size: 10pt;
-  display: none;
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  z-index: 1;
-}
+      tbody {
+        font-size: 10pt;
+        display: none;
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px);
+        z-index: 1;
+      }
 
-tbody tr {
-  height: 2.6rem;
-}
+      tbody tr {
+        height: 2.6rem;
+      }
 
-tbody tr:nth-child(odd) {
-  background-color: oklch(100% 0 0 / 5%);
-}
-tbody tr:nth-child(even) {
-  background-color: oklch(100% 0 0 / 10%);
-}
+      tbody tr:nth-child(odd) {
+        background-color: oklch(100% 0 0 / 5%);
+      }
+      tbody tr:nth-child(even) {
+        background-color: oklch(100% 0 0 / 10%);
+      }
 
-td {
-  width: 6rem;
-  border: none;
-}
+      td {
+        width: 6rem;
+        border: none;
+      }
 
-thead tr {
-  position: sticky;
-  top: 0;
-  background-color: oklch(100% 0 0 / 4%);
-  color: oklch(0% 0 0 / 65%);
-  font-size: 8pt;
-  width: 6rem;
-  border: none;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-  height: 3.1rem;
-  z-index: 10;
-  transition: all 0.5s ease;
-}
+      thead tr {
+        position: sticky;
+        top: 0;
+        background-color: oklch(100% 0 0 / 4%);
+        color: oklch(0% 0 0 / 65%);
+        font-size: 8pt;
+        width: 6rem;
+        border: none;
+        -webkit-backdrop-filter: blur(2px);
+        backdrop-filter: blur(2px);
+        height: 3.1rem;
+        z-index: 10;
+        transition: all 0.5s ease;
+      }
 
-.tableHeadData {
-  background-color: oklch(100% 0 0 / 10%);
-  color: black;
-  box-shadow: 0px 0px 3px 0px #00000090;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  font-size: 13pt;
-}
+      .tableHeadData {
+        background-color: oklch(100% 0 0 / 10%);
+        color: black;
+        box-shadow: 0px 0px 3px 0px #00000090;
+        -webkit-backdrop-filter: blur(8px);
+        backdrop-filter: blur(8px);
+        font-size: 13pt;
+      }
 
-.added-cell {
-  font-weight: 600;
-}
+      .added-cell {
+        font-weight: 600;
+      }
 
-#roundedCorners {
-  position: relative;
-  border-radius: 1.7rem;
-  overflow: scroll;
-  -webkit-overscroll-behavior: none;
-  overscroll-behavior: none;
-  width: 87vw;
-  max-width: 28rem;
-  max-height: 3.1rem;
-  margin-top: 6rem;
-  margin-left: 1.5rem;
-  margin-right: auto;
-  box-shadow: 0px 0px 6px -2px #00000010;
-  transition: all 0.5s ease-out;
-/*  z-index: -1;*/
-}
+      #roundedCorners {
+        position: relative;
+        border-radius: 1.7rem;
+        overflow: scroll;
+        -webkit-overscroll-behavior: none;
+        overscroll-behavior: none;
+        width: 87vw;
+        max-width: 28rem;
+        max-height: 3.1rem;
+        margin-top: 6rem;
+        margin-left: 1.5rem;
+        margin-right: auto;
+        box-shadow: 0px 0px 6px -2px #00000010;
+        transition: all 0.5s ease-out;
+        /*  z-index: -1;*/
+      }
 
-/* ====== Water Target ====== */
+      /* ====== Water Target ====== */
 
-#line {
-  position: fixed;
-  display: flex;
-  top: 100vh;
-  right: 1rem;
-  background-color: oklch(100% 0 0 / 10%);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  height: 1.2rem;
-  width: 92vw;
-  max-width: 22rem;
-  border-radius: 1rem;
-  box-shadow: 0px 0px 6px -4px oklch(0% 0 0 / 10%);
-  transition: top 1s ease;
-  font-size: 10pt;
-  text-align: center;
-  align-items: center;
-  justify-content: space-evenly;
-  padding-left: 1.7rem;
-  padding-right: 1.7rem;
-  color: oklch(0% 0 0 /90%);
-  filter: opacity(0%);
-  z-index: 999;
-}
+      #line {
+        position: fixed;
+        display: flex;
+        top: 100vh;
+        right: 1rem;
+        background-color: oklch(100% 0 0 / 10%);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        height: 1.2rem;
+        width: 92vw;
+        max-width: 22rem;
+        border-radius: 1rem;
+        box-shadow: 0px 0px 6px -4px oklch(0% 0 0 / 10%);
+        transition: top 1s ease;
+        font-size: 10pt;
+        text-align: center;
+        align-items: center;
+        justify-content: space-evenly;
+        padding-left: 1.7rem;
+        padding-right: 1.7rem;
+        color: oklch(0% 0 0 /90%);
+        opacity: 0;
+        z-index: 999;
+      }
 
-.line-higher {
-  filter: opacity(100%) !important;
-  backdrop-filter: blur(5px)!important;
-  -webkit-backdrop-filter: blur(5px)!important;
-}
+      .line-higher {
+        opacity: 1 !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
+      }
 
-#currentMl, #currentTarget {
-  mix-blend-mode: lighten;
-}
+      #currentMl,
+      #currentTarget {
+        mix-blend-mode: lighten;
+      }
 
-/* ====== Waves ====== */
+      /* ====== Waves ====== */
 
-.waves {
-  width: 100%;
-  height: 35rem;
-  position: relative;
-}
+      .waves {
+        width: 100%;
+        height: 35rem;
+        position: relative;
+      }
 
-.stop-color-top {
-  stop-color: oklch(91.7% 0.025 255.7 / 20%)
-}
+      .stop-color-top {
+        stop-color: oklch(91.7% 0.025 255.7 / 20%);
+      }
 
-.stop-color-bottom {
-  stop-color: oklch(50% 0.08 245.64 / 10%)
-}
+      .stop-color-bottom {
+        stop-color: oklch(50% 0.08 245.64 / 10%);
+      }
 
-#waterIndicator {
-  top: 90vh;
-  position: fixed;
-  transition: top 0.8s ease;
-  width: 100%;
-}
+      #waterIndicator {
+        top: 90vh;
+        position: fixed;
+        transition: top 0.8s ease;
+        width: 100%;
+      }
 
-/* ====== Water Input ====== */
-  
-#waterInput {
-  position: fixed;
-  z-index: 1000;
-  bottom: 4rem;
-  right: 0.7rem;
-  padding: 0.3rem;
-  width: 30vw;
-  max-width: 4.5rem;
-  background-color: oklch(100% 0 0 / 18%);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  border-radius: 0.7rem;
-  filter: opacity(25%);
-  color: black;
-  box-shadow: 0px 0px 8px -4px #00000040;
-  transition: all 0.6s ease; /*cubic-bezier(0.65,0.05,0.36,1);*/
-  display: grid;
-  gap: 0.7rem;
-  overflow: hidden;
-  display: block;
-}
+      /* ====== Water Input ====== */
 
-.waterInputLarge {
-  max-width: 24rem !important;
-  width: 94vw !important;
-  padding: 1rem !important;
-  border-radius: 1.8rem !important;
-  transition: all 0.8s ease, bottom 0.5s ease !important;
-  display: grid !important;
-  background-color: oklch(100% 0 0 / 12%)!important;
-  -webkit-backdrop-filter: blur(30px)!important;
-  backdrop-filter: blur(30px)!important;
-}
+      #waterInput {
+        position: fixed;
+        z-index: 1000;
+        bottom: 4rem;
+        right: 0.7rem;
+        padding: 0.3rem;
+        width: 30vw;
+        max-width: 4.5rem;
+        background-color: oklch(100% 0 0 / 18%);
+        -webkit-backdrop-filter: blur(5px);
+        backdrop-filter: blur(5px);
+        border-radius: 0.7rem;
+        color: black;
+        box-shadow: 0px 0px 8px -4px #00000040;
+        transition: all 0.6s ease; /*cubic-bezier(0.65,0.05,0.36,1);*/
+        display: grid;
+        gap: 0.7rem;
+        overflow: hidden;
+        display: block;
+      }
 
-.waterButtonPress {
-  filter: opacity(100%) !important;
-  /*transition: all 1s ease !important;*/
-}
+      .waterInputLarge {
+        max-width: 24rem !important;
+        width: 94vw !important;
+        padding: 1rem !important;
+        border-radius: 1.8rem !important;
+        transition: all 0.8s ease, bottom 0.5s ease !important;
+        display: grid !important;
+        background-color: oklch(100% 0 0 / 12%) !important;
+        -webkit-backdrop-filter: blur(30px) !important;
+        backdrop-filter: blur(30px) !important;
+      }
 
-.activateWaterHeader {
-  height: 2.5rem !important;
-  filter: opacity(100%) !important;
-  
-}
+      .waterButtonPress {
+        opacity: 1 !important;
+        /*transition: all 1s ease !important;*/
+      }
 
-#waterInputheader {
-  display: flex;
-  align-items: center;
-/*  margin: 0;*/
-  height: 0rem;
-  font-size: 26pt;
-  transition: all 0.5s ease;
-  filter: opacity(0%);
-  overflow: hidden;
-}
+      #waterInputheader {
+        display: flex;
+        align-items: center;
+        /*  margin: 0;*/
+        height: 0rem;
+        font-size: 26pt;
+        transition: all 0.5s ease;
+        opacity: 0;
+        overflow: hidden;
+      }
 
-#logTitle, #milliLiter, #currentAmount {
-  font-size: inherit;
-  font-weight: bold;
-  transition: inherit;
-}
+      .activateWaterHeader {
+        height: 2.5rem !important;
+        opacity: 1 !important;
+        /* border: solid 1pt; */
+      }
 
-.activateButtonList {
-  display: grid !important;
-  gap: 0.7rem !important;
-  grid-template-columns: 3fr 3fr 3fr 3fr  !important;
-  width: 100% !important;
-  height: 4rem !important;
-  border-radius: 0px !important;
-}
+      /* #logTitle,
+      #milliLiter,
+      #currentAmount {
+        font-size: inherit;
+        font-weight: bold;
+        transition: inherit;
+        color: black;
+      } */
 
-.activateInputSaveList {
-  height: 4rem !important;
-  filter: opacity(100%) !important;
-  gap: 0.7rem !important;
-  grid-template-columns: 5fr 3fr !important;
-}
+      .activateButtonList {
+        display: grid !important;
+        gap: 0.7rem !important;
+        grid-template-columns: 3fr 3fr 3fr 3fr !important;
+        width: 100% !important;
+        height: 4rem !important;
+        border-radius: 0px !important;
+      }
 
-#inputSaveList {
-  display: grid;
-  height: 0rem;
-  filter: opacity(0%);
-  transition: all 0.5s ease;
-}
+      .activateInputSaveList {
+        height: 4rem !important;
+        opacity: 1 !important;
+        gap: 0.7rem !important;
+        grid-template-columns: 5fr 3fr !important;
+      }
 
-.activateInputButtons {
-  filter: opacity(100%) !important;
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-}
+      #inputSaveList {
+        display: grid;
+        height: 0rem;
+        opacity: 0;
+        transition: all 0.5s ease;
+      }
 
-#btn-125, #btn-200, #btn-500 {
-  filter: opacity(100%);
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  display: none;
-}
+      .activateInputButtons {
+        opacity: 1 !important;
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
+      }
 
-#buttonList {
-  height: 3.5rem;
-  width:100%;
-  transition: all 0.5s ease;
-  display: block;
-  overflow: hidden;
-}
+      #btn-125,
+      #btn-200,
+      #btn-500 {
+        opacity: 1;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+        display: none;
+      }
 
-#btn-250 {
-  filter: opacity(100%) !important;
-  height: 3.5rem;
-  width: 100%;
-}
+      #buttonList {
+        height: 3.5rem;
+        width: 100%;
+        transition: all 0.5s ease;
+        display: block;
+        overflow: hidden;
+      }
 
-.changeHeight {
-  bottom: 15rem !important;
-}
+      #btn-250 {
+        opacity: 1 !important;
+        height: 3.5rem;
+        width: 100%;
+      }
 
-#waterInput button, #waterInput input {
-  -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
-  border-radius: 7px;
-  height: 100%;
-}
+      .changeHeight {
+        bottom: 15rem !important;
+      }
 
-#inputSaveList button:last-child {
-  border-radius: 7px 7px 18px 7px;
-}
+      #waterInput button,
+      #waterInput input {
+        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
+        border-radius: 7px;
+        height: 100%;
+      }
 
-#inputSaveList input {
-  border-radius: 7px 7px 7px 18px;
-}
+      #inputSaveList button:last-child {
+        border-radius: 7px 7px 18px 7px;
+      }
 
-.buttonPressed {
-  filter: brightness(1.1);
-}
+      #inputSaveList input {
+        border-radius: 7px 7px 7px 18px;
+      }
 
-.rowSelected {
-  background-color: oklch(100% 0 0 / 20%);
-}
+      .buttonPressed {
+        filter: brightness(1.1);
+      }
 
-#customInput {
-  caret-color: #00000090;
-  text-align: left;
-  outline: none;
-  padding: 10pt;
-  width: 100%;
-  background-color: oklch(100% 0 0 / 7%);
-  transition: all 0.5s ease;
-}
+      .rowSelected {
+        background-color: oklch(100% 0 0 / 20%);
+      }
 
-#customInput:focus {
-  outline: none;
-  background-color: oklch(100% 0 0 / 25%);
-}
+      #customInput {
+        caret-color: #00000090;
+        text-align: left;
+        outline: none;
+        padding: 10pt;
+        width: 100%;
+        background-color: oklch(100% 0 0 / 7%);
+        transition: all 0.5s ease;
+      }
 
-#customInput::placeholder {
-  opacity: 0.6;
-  color:black;
-}
+      #customInput:focus {
+        outline: none;
+        background-color: oklch(100% 0 0 / 25%);
+      }
 
-/* ====== History Button / Chart ====== */
+      #customInput::placeholder {
+        opacity: 0.6;
+        color: black;
+      }
 
-#historyButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 3rem;
-  width: 4.5rem;
-  padding:0;
-  left: 8.5vw;
-  border-radius: 10px;
-  top: 3vh;
-  position: fixed;
-  background-color: oklch(100% 0 0 / 15%);
-  /*box-shadow: 0px 0px 6px -2px oklch(100% 0 0 / 50%);*/
-  border: solid 0.5pt oklch(100% 0 0 / 20%);
-/*  backdrop-filter: blur(0px);
+      /* ====== History Button / Chart ====== */
+
+      #historyButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 3rem;
+        width: 4.5rem;
+        padding: 0;
+        left: 8.5vw;
+        border-radius: 10px;
+        top: 3vh;
+        position: fixed;
+        background-color: oklch(100% 0 0 / 15%);
+        /*box-shadow: 0px 0px 6px -2px oklch(100% 0 0 / 50%);*/
+        border: solid 0.5pt oklch(100% 0 0 / 20%);
+        /*  backdrop-filter: blur(0px);
   -webkit-backdrop-filter: blur(0px);*/
-  filter: opacity(0%);
-  transition: all 0.5s ease, filter 0.4s ease;
-  overflow: hidden;
-}
+        opacity: 0;
+        transition: all 0.5s ease, filter 0.4s ease;
+        overflow: hidden;
+      }
 
-#buttonTitle {
-  transition: all 0.5s ease;
-  filter: opacity(100%);
-}
+      #buttonTitle {
+        transition: all 0.5s ease;
+        opacity: 1;
+      }
 
-.show-history {
-  display: block !important;
-  width: 83vw !important;
-  height: 14.5rem !important;
-  box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
-  border-radius: 1.8rem !important;
-  background-color: oklch(50% 0.08 245.64 / 10%) !important;
-  border: solid 0.35rem oklch(100% 0 0 / 10%) !important;
-/*  backdrop-filter: blur(15px)!important;
+      .show-history {
+        display: block !important;
+        width: 83vw !important;
+        height: 14.5rem !important;
+        box-shadow: 0px 0px 6px -2px oklch(0% 0 0 / 15%) !important;
+        border-radius: 1.8rem !important;
+        background-color: oklch(50% 0.08 245.64 / 10%) !important;
+        border: solid 0.35rem oklch(100% 0 0 / 10%) !important;
+        /*  backdrop-filter: blur(15px)!important;
   -webkit-backdrop-filter: blur(15px)!important;*/
-}
-
-#targetAxis {
-  width: 100%;
-  height: 0.01rem;
-  top: 20%;
-  display: none;
-  border: 0.1rem;
-  border-style: dotted none none none;
-  position: absolute;
-  color: oklch(100% 0 0 / 0%);
-}
-
-#targetAxis::after {
-  content: "";
-  position: absolute;
-  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><circle cx="2.5" cy="2.5" r="1.3" fill="oklch(100% 0 0 / 20%)" /></svg>');
-  background-repeat: round;
-}
-
-#targetAxis::after {
-  top: -3px;
-  left: 0;
-  right: 0;
-  height: 5px;
-}
-
-#targetAxisText {
-  text-align: left;
-  font-size: 11pt;
-  margin-left: 0.30rem;
-  margin-top: 0.30rem;
-  margin-bottom: 0;
-  position: absolute;
-  z-index: 999;
-  color: oklch(100% 0 0 / 50%);
-  padding: 0.5rem;
-  padding-left: 0.7rem;
-  background-color: oklch(100% 0 0 / 10%);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-radius: 19px 4px 4px 4px;
-  border: solid 0.1pt oklch(100% 0 0 / 40%);
-  display: none;
-  filter: opacity(0%);
-  transition: all 0.4s ease;
-}
-
-#chartContainer {
-  overflow-y: scroll;
-  overflow-x: scroll;
-  border: solid 0pt;
-  width: 100%;
-  height: 100%;
-  border-radius: 1.4rem;
-  grid-auto-flow: column;
-  gap: 0.5rem;
-  align-items: end;
-  direction: rtl;
-  display: none;
-  padding: 0.3rem;
-  padding-right: 0.35rem;
-}
-
-.chart-block {
-  width: 2.2rem;
-  height: 0.5rem;
-  color: oklch(100% 0 0 / 50%);
-  background-color: oklch(100% 0 0 / 25%);
-  transition: all 0.65s ease;
-  border-radius: 3px;
-  font-size: 9pt;
-  text-align: center;
-}
-
-.block-date {
-  font-size: 9pt;
-  direction: ltr;
-  color: oklch(100% 0 0 / 50%);
-}
-
-.chartContainer-active {
-  display: grid !important;
-}
-
-/* ====== Menu Button Popup ====== */
-
-#menuButton {
-  z-index: 1001;
-  font-size: 11pt;
-  height: 3.5rem;
-  width: 3.5rem;
-  padding:0;
-  right: 1.5rem;
-  border-radius: 10px;
-  top: 1.5rem;
-  position: fixed;
-  background-color: oklch(100% 0 0 / 4%);
-  box-shadow: 0px 0px 6px -2px #00000010;
-   -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  filter: opacity(100%);
-  transition: filter 2s ease;
-}
-
-#popupBackground {
-  background-color: #00000000;
-  display: none;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1002;
-}
-
-#popup {
-  position: relative;
-  top: 35vh;
-  width: 84vw;
-  margin: 0 auto;
-  max-width: 22rem;
-  background-color: oklch(100% 0 0 / 15%);
-  -webkit-backdrop-filter: blur(15px);
-  backdrop-filter: blur(15px);
-  border: none;
-  padding: 0.4rem;
-  border-radius: 1.5rem;
-  display: none;
-}
-
-#ifttt-form input, #ifttt-form button {
-  height: 3.5rem;  
-  padding: 0.5rem;
-  border: none;
-  outline: none;
-  font-size: 14pt;
-  border-radius: 4px;
-}
-
-#ifttt-form input:first-child {
-  border-radius: 18px 18px 4px 4px;
-}
-
-#ifttt-form button:first-child {
-  border-radius: 4px 4px 4px 18px;
-}
-
-#ifttt-form button:last-child {
-  border-radius: 4px 4px 18px 4px;
-}
-
-
-#ifttt-form button {
-  width: 31.9%;
-  height: 3rem;
-  background-color: oklch(100% 0 0 / 25%);
-}
-
-#ifttt-form input {
-  width: 100%;
-  margin-bottom: 0.4rem;
-  text-align: left;
-  padding-left: 1rem;
-  background-color: oklch(100% 0 0 / 15%);
-  transition: all 0.5s ease;
-}
-
-#ifttt-form input:focus {
-  background-color: oklch(100% 0 0 / 55%);
-}
-
-::placeholder {
-  color: #00000090;
-  font-size: 13pt;
-}
-
-#popBtnContainer {
-  display: flex;
-  justify-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#popInpContainer {
-  justify-content: space-evenly;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* ====== Keyboard ====== */
-
-#keypadContainer {
-  display: none;
-  grid-template-columns: 3fr 3fr 3fr 3fr ;
-  gap: 0.65rem;
-  border-radius: 1.8rem;
-  padding: 0.7rem;
-  background-color: oklch(100% 0 0 / 15%);
-  -webkit-backdrop-filter: blur(40px);
-  backdrop-filter: blur(40px);
-  position: fixed;
-  width: 94vw;
-  max-width: 24rem;
-  height: 12rem;
-  right: 0.7rem;
-  bottom: -20rem;
-  z-index: 1000;
-  transition: bottom 0.5s ease /*cubic-bezier(0.65,0.05,0.36,1)*/, backdrop-filter 1s ease /*cubic-bezier(0.65,0.05,0.36,1)*/;
-}
-
-.activateKeyboard {
-  bottom: 2rem !important;
-  backdrop-filter: blur(3px) !important;
-  -webkit-backdrop-filter: blur(3px) !important;
-  box-shadow:0px 0px 8px -4px #00000040 !important;
-}
-
-.keys {
-  border-radius: 0.3rem;
-  background-color: oklch(100% 0 0 / 25%);
-  font-size: 14pt;
-  padding: 0.5rem;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  transition: all 0.1s ease;
-}
-
-.keys:first-child {
-  border-radius: 1.2rem 0.3rem 0.3rem 0.3rem;
-}
-
-.keys:nth-child(4) {
-  border-radius: 0.3rem 1.2rem 0.3rem 0.3rem;
-}
-
-.keys:nth-child(9) {
-  border-radius: 0.3rem 0.3rem 0.3rem 1.2rem;
-}
-
-.keys:nth-child(11) {
-  border-radius: 0.3rem 0.3rem 1.2rem 0.3rem;
-}
-
-
-.keys-pressed {
-  background-color: oklch(100% 0 0 / 50%);
-}
-
-#kbDelete {
-  grid-column: 3 / 5; /* Starts third column ends fifth column  */
-}
-
-/* ====== Big screen ====== */
-
-@media (min-width: 500px) {
-
-  #roundedCorners {
-    max-height: 3.1rem;
-    margin-top: 1.5rem;
-    margin-left: 1.5rem;
-    margin-right: auto;
-    max-width: 21rem;
-  }
-
-  #line {
-    right: 8rem;
-  }
-
-  #currentWaterBG {
-    top: 4rem;
-/*    left: 7.5rem;*/
-/*    margin: 1rem;*/
-/*    margin-left: 1rem;*/
-/*    text-align: left;*/
-    font-size: 25vw;
-    font-weight: 600;
-  }
-  
-  .dark-theme #currentWaterBG {
-    color: oklch(23.5% 0.005 262.67)!important;
-  }
-}
-
-/* ====== Dark theme ====== */
-.dark-theme #currentWaterBG {
-  color: oklch(22% 0.005 262.67);
-}
-
-.dark-theme #line {
-  color: oklch(100% 0 0 /25%);
-  background-color: oklch(100% 0 0 /5%);
-}
-
-#tutorial {
-  background-color: oklch(100% 0 0 / 40%);
-  border-radius: 0.5rem;
-  display: flex;
-  align-items: center;
-  font-size: 0pt;
-  padding: 0.5rem;
-  text-align: left;
-  width: 1rem;
-  bottom: 6rem;
-  right: 1rem;
-  height: 0.5rem;
-  position: fixed;
-  filter: opacity(0%);
-  transition: all 0.5s ease, font-size 0.6s ease;
-}
-
-.tutorial-active {
-  filter: opacity(100%) !important;
-  font-size: 11pt !important;
-  width: 17.5rem !important;
-  height: 2.5rem !important;
-  bottom: 8.5rem !important;
-}
-
-.tutorial-hidden {
-  filter: opacity(0%) !important;
-}
-
-.delContainer {
-  display: grid;
-  gap: 2px;
-  padding: 0rem;
-  width: 73vw;
-  margin-left: 3.15rem;
-  max-width: 17rem;
-  top: 60vh;
-  position: fixed;
-  background-color: oklch(100% 0 0 / 15%);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  border-radius: 1.2rem;
-  overflow: hidden;
-  text-align: center;
-  transition: all 0.4s ease;
-  filter: opacity(0%);
-  z-index: 9999;
-  box-shadow: 0px 0px 20px 0px oklch(0% 0 0 / 15%);
-}
-
-.dark-theme .delContainer {
-  background-color: oklch(30% 0.005 262.67 / 70%);
-  box-shadow: 0px;
-  border: solid 0pt oklch(0% 0 0 / 40%);
-}
-
-.dark-theme .delText {
-  background-color: oklch(26% 0.005 262.67 / 60%);
-  color: oklch(100% 0 0 / 40%);
-}
-
-.dark-theme .delButtons {
-/*  background-color: oklch(23% 0.005 262.67 / 60%);*/
-}
-
-.dark-theme .delButtons button {
-  color: oklch(100% 0 0 / 40%);
-  background-color: oklch(24% 0.005 262.67 / 70%)
-}
-
-.delContainerActive {
-/*  top: 50vh;*/
-  filter: opacity(100%);
-  backdrop-filter: blur(30px)!important;
-  -webkit-backdrop-filter: blur(30px)!important;
-}
-
-.delText {
-  width: 100%;
-  height: 100%;
-  padding: 0.5rem;
-  padding-bottom: 2rem;
-/*  font-size: 13pt;*/
-  padding-top: 2rem;
-  background-color: oklch(100% 0 0 / 25%);
-  display: flex;
-  justify-content: space-evenly;
-  align-content: center;
-}
-
-.delButtons {
-  display: grid;
-  gap: 2px;
-  grid-template-columns: 1fr 1fr;
-  height: 2.8rem;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0;
-}
-
-.delButtons button {
-   background-color: oklch(100% 0 0 / 35%);
-}
-
-.delButtons button:first-child {
-
-}
-
-.delButtons button:last-child {
-  font-weight: bold;
-}
-
-
-.dark-theme #tutorial {
-  background-color: oklch(100% 0 0 / 20%);
-}
-
-.dark-theme {
-  background-color: oklch(25% 0.005 262.67);
-}
-
-.dark-theme .stop-color-top {
-  stop-color: oklch(50% 0.079 255.7 / 10%)
-}
-
-.dark-theme .stop-color-bottom {
-  stop-color: oklch(25% 0.005 262.67 / 10%)
-}
-
-.dark-theme #customInput:focus {
-  background-color: oklch(100% 0 0 / 15%);
-}
-
-.dark-theme thead tr {
-  color: oklch(100% 0 0 / 25%);
-  background-color: oklch(100% 0 0 / 3%);
-}
-
-.dark-theme .tableHeadData {
-  color: oklch(100% 0 0 / 50%);
-  background-color: oklch(100% 0 0 / 5%);
-}
-
-.dark-theme tbody tr:nth-child(odd) {
-  background-color: oklch(100% 0 0 / 3%);
-  color: oklch(100% 0 0 / 30%);
-}
-.dark-theme tbody tr:nth-child(even) {
-  background-color: oklch(100% 0 0 / 5%);
-  color: oklch(100% 0 0 / 30%);
-}
-
-.dark-theme .rowSelected {
-  background-color: oklch(0% 0 0 / 30%);
-}
-
-.dark-theme button, .dark-theme input {
-  background-color: oklch(100% 0 0 / 1%);
-}
-
-.dark-theme #menuButton {
-  color: oklch(100% 0 0 / 30%);
-  background-color: oklch(100% 0 0 / 3%);
-}
-
-.dark-theme #popup {
-  background-color: oklch(0% 0 0 / 20%);
-}
-
-.dark-theme #ifttt-form input, .dark-theme #ifttt-form button {
-  background-color: oklch(100% 0 0 / 6%);
-}
-
-.dark-theme #ifttt-form input {
-  background-color: oklch(100% 0 0 / 4%)
-}
-
-.dark-theme #ifttt-form input:focus {
-  background-color: oklch(100% 0 0 / 15%);
-  color: oklch(0% 0 0 / 75%);
-}
-
-.dark-theme #ifttt-form input::placeholder {
-  color: oklch(100% 0 0 / 20%); 
-}
-
-.dark-theme #waterInput {
-  background-color: oklch(100% 0 0 / 5%);
-  color: oklch(0% 0 0 / 100%);
-}
-
-.dark-theme #keypadContainer {
-  background-color: oklch(100% 0 0 / 5%);
-}
-
-.dark-theme #waterInput button {
-  background-color: oklch(100% 0 0 / 7%)
-}
-
-.dark-theme .keys {
-  background-color: oklch(100% 0 0 / 10%);
-}
-
-.dark-theme .keys-pressed {
-  background-color: oklch(100% 0 0 / 30%);
-}
-
-
-.dark-theme #waterInput input {
-  background-color: oklch(100% 0 0 / 5%)
-}
-
-.dark-theme #waterInput ::placeholder {
-  color: oklch(0% 0 0 / 80%);
-}
-
-.dark-theme #historyButton {
-  background-color: oklch(0% 0 0 / 20%);
-  border: solid 1pt oklch(100% 0 0 / 5%);
-  box-shadow: "";
-}
-
-.dark-theme .show-history {
-  background-color: oklch(0% 0 0 / 0%) !important;
-  border: solid 0.35rem oklch(0% 0 0 / 18%) !important;
-}
-
-.dark-theme #targetAxisText {
-  background-color: oklch(0% 0 0 / 10%);
-  border: solid 0.1pt oklch(100% 0 0 / 10%);
-  color: oklch(100% 0 0 / 35%);
-}
-
-.dark-theme #buttonTitle {
-  color: oklch(100% 0 0 / 35%);
-}
-
-.dark-theme .chart-block {
-  color: oklch(100% 0 0 / 40%);
-  background-color: oklch(58.4% 0.067 257 / 25%);
-}
-
-/* ====== Animation ====== */ 
-.parallax > use {
-  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
-}
-.parallax > use:nth-child(1) {
-  animation-delay: -2s;
-  animation-duration: 7s;
-}
-.parallax > use:nth-child(2) {
-  animation-delay: -3s;
-  animation-duration: 10s;
-}
-.parallax > use:nth-child(3) {
-  animation-delay: -4s;
-  animation-duration: 13s;
-}
-.parallax > use:nth-child(4) {
-  animation-delay: -5s;
-  animation-duration: 20s;
-}
-@keyframes move-forever {
-  0% {
-   transform: translate3d(-90px,0,0);
-  }
-  100% { 
-    transform: translate3d(85px,0,0);
-  }
-}
-.slide-in-blurred-top {
-  animation: slide-in-blurred-top 0.90s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
-  }
-.slide-out-blurred-top {
-  animation: slide-out-blurred-top 0.45s forwards;
-  }
-
-.fade-in {animation: fade-in 1s forwards; 
-}
-.fade-out {animation: fade-out 0.6s forwards; }
-
-@keyframes slide-in-blurred-top {
-  0% {
-    transform: translateY(-100px) scaleY(1.2) scaleX(0.2);
-    transform-origin: 50% 0%;
-    filter: blur(1px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0) scaleY(1) scaleX(1);
-    transform-origin: 50% 50%;
-    filter: blur(0px);
-    opacity: 1;
-  }
-}
-@keyframes slide-out-blurred-top {
-  0% {
-    transform: translateY(0) scaleY(1) scaleX(1);
-    transform-origin: 50% 0%;
-    filter: blur(0px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) scaleY(0.8) scaleX(0.4);
-    transform-origin: 50% 0%;
-    filter: blur(30px);
-    opacity: 0;
-  }
-}
-
-@keyframes fade-in {
-  0% {
-    -webkit-backdrop-filter: blur(0px);
-    backdrop-filter: blur(0px);
-  }
-  100% {
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-  }
-}
-@keyframes fade-out {
-  0% {
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-  }
-  100% {
-    -webkit-backdrop-filter: blur(0px);
-    backdrop-filter: blur(0px);
-  }
-}
-
-/* Animation End */
-</style>
-</head>
-<body>
-
-<div id="line">
-  <div id="currentTarget"></div>
-  <div id="currentMl"></div>
-</div>
-<!-- Menu -->
-<button id="menuButton" onclick="showPopup()">Menu</button>
-
-<div id="popupBackground">
-  <div id="popup">
-    <form id="ifttt-form">
-      <div id="popInpContainer">
-        <input type="text" placeholder="Water Target" name="waterTarget" id="formInput1">
-        <input type="text" placeholder="Enter IFTTT Key" name="iftttKeyInput" id="formInput2">
+      }
+
+      #targetAxis {
+        width: 100%;
+        height: 0.01rem;
+        top: 20%;
+        display: none;
+        border: 0.1rem;
+        border-style: dotted none none none;
+        position: absolute;
+        color: oklch(100% 0 0 / 0%);
+      }
+
+      #targetAxis::after {
+        content: '';
+        position: absolute;
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="5" height="5"><circle cx="2.5" cy="2.5" r="1.3" fill="oklch(100% 0 0 / 20%)" /></svg>');
+        background-repeat: round;
+      }
+
+      #targetAxis::after {
+        top: -3px;
+        left: 0;
+        right: 0;
+        height: 5px;
+      }
+
+      #targetAxisText {
+        text-align: left;
+        font-size: 11pt;
+        margin-left: 0.3rem;
+        margin-top: 0.3rem;
+        margin-bottom: 0;
+        position: absolute;
+        z-index: 999;
+        color: oklch(100% 0 0 / 50%);
+        padding: 0.5rem;
+        padding-left: 0.7rem;
+        background-color: oklch(100% 0 0 / 10%);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border-radius: 19px 4px 4px 4px;
+        border: solid 0.1pt oklch(100% 0 0 / 40%);
+        display: none;
+        opacity: 0;
+        transition: all 0.4s ease;
+      }
+
+      #chartContainer {
+        overflow-y: scroll;
+        overflow-x: scroll;
+        border: solid 0pt;
+        width: 100%;
+        height: 100%;
+        border-radius: 1.4rem;
+        grid-auto-flow: column;
+        gap: 0.5rem;
+        align-items: end;
+        direction: rtl;
+        display: none;
+        padding: 0.3rem;
+        padding-right: 0.35rem;
+      }
+
+      .chart-block {
+        width: 2.2rem;
+        height: 0.5rem;
+        color: oklch(100% 0 0 / 50%);
+        background-color: oklch(100% 0 0 / 25%);
+        transition: all 0.65s ease;
+        border-radius: 3px;
+        font-size: 9pt;
+        text-align: center;
+      }
+
+      .block-date {
+        font-size: 9pt;
+        direction: ltr;
+        color: oklch(100% 0 0 / 50%);
+      }
+
+      .chartContainer-active {
+        display: grid !important;
+      }
+
+      /* ====== Menu Button Popup ====== */
+
+      #menuButton {
+        z-index: 1001;
+        font-size: 11pt;
+        height: 3.5rem;
+        width: 3.5rem;
+        padding: 0;
+        right: 1.5rem;
+        border-radius: 10px;
+        top: 1.5rem;
+        position: fixed;
+        background-color: oklch(100% 0 0 / 4%);
+        box-shadow: 0px 0px 6px -2px #00000010;
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        opacity: 1;
+        transition: filter 2s ease;
+      }
+
+      #popupBackground {
+        background-color: #00000000;
+        display: none;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1002;
+      }
+
+      #popup {
+        position: relative;
+        top: 35vh;
+        width: 84vw;
+        margin: 0 auto;
+        max-width: 22rem;
+        background-color: oklch(100% 0 0 / 15%);
+        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(15px);
+        border: none;
+        padding: 0.4rem;
+        border-radius: 1.5rem;
+        display: none;
+      }
+
+      #ifttt-form input,
+      #ifttt-form button {
+        height: 3.5rem;
+        padding: 0.5rem;
+        border: none;
+        outline: none;
+        font-size: 14pt;
+        border-radius: 4px;
+      }
+
+      #ifttt-form input:first-child {
+        border-radius: 18px 18px 4px 4px;
+      }
+
+      #ifttt-form button:first-child {
+        border-radius: 4px 4px 4px 18px;
+      }
+
+      #ifttt-form button:last-child {
+        border-radius: 4px 4px 18px 4px;
+      }
+
+      #ifttt-form button {
+        width: 31.9%;
+        height: 3rem;
+        background-color: oklch(100% 0 0 / 25%);
+      }
+
+      #ifttt-form input {
+        width: 100%;
+        margin-bottom: 0.4rem;
+        text-align: left;
+        padding-left: 1rem;
+        background-color: oklch(100% 0 0 / 15%);
+        transition: all 0.5s ease;
+      }
+
+      #ifttt-form input:focus {
+        background-color: oklch(100% 0 0 / 55%);
+      }
+
+      ::placeholder {
+        color: #00000090;
+        font-size: 13pt;
+      }
+
+      #popBtnContainer {
+        display: flex;
+        justify-content: space-between;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #popInpContainer {
+        justify-content: space-evenly;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* ====== Keyboard ====== */
+
+      #keypadContainer {
+        display: none;
+        grid-template-columns: 3fr 3fr 3fr 3fr;
+        gap: 0.65rem;
+        border-radius: 1.8rem;
+        padding: 0.7rem;
+        background-color: oklch(100% 0 0 / 15%);
+        -webkit-backdrop-filter: blur(40px);
+        backdrop-filter: blur(40px);
+        position: fixed;
+        width: 94vw;
+        max-width: 24rem;
+        height: 12rem;
+        right: 0.7rem;
+        bottom: -20rem;
+        z-index: 1000;
+        transition: bottom 0.5s ease /*cubic-bezier(0.65,0.05,0.36,1)*/,
+          backdrop-filter 1s ease /*cubic-bezier(0.65,0.05,0.36,1)*/;
+      }
+
+      .activateKeyboard {
+        bottom: 2rem !important;
+        backdrop-filter: blur(3px) !important;
+        -webkit-backdrop-filter: blur(3px) !important;
+        box-shadow: 0px 0px 8px -4px #00000040 !important;
+      }
+
+      .keys {
+        border-radius: 0.3rem;
+        background-color: oklch(100% 0 0 / 25%);
+        font-size: 14pt;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        transition: all 0.1s ease;
+      }
+
+      .keys:first-child {
+        border-radius: 1.2rem 0.3rem 0.3rem 0.3rem;
+      }
+
+      .keys:nth-child(4) {
+        border-radius: 0.3rem 1.2rem 0.3rem 0.3rem;
+      }
+
+      .keys:nth-child(9) {
+        border-radius: 0.3rem 0.3rem 0.3rem 1.2rem;
+      }
+
+      .keys:nth-child(11) {
+        border-radius: 0.3rem 0.3rem 1.2rem 0.3rem;
+      }
+
+      .keys-pressed {
+        background-color: oklch(100% 0 0 / 50%);
+      }
+
+      #kbDelete {
+        grid-column: 3 / 5; /* Starts third column ends fifth column  */
+      }
+
+      /* ====== Big screen ====== */
+
+      @media (min-width: 500px) {
+        #roundedCorners {
+          max-height: 3.1rem;
+          margin-top: 1.5rem;
+          margin-left: 1.5rem;
+          margin-right: auto;
+          max-width: 21rem;
+        }
+
+        #line {
+          right: 8rem;
+        }
+
+        #currentWaterBG {
+          top: 4rem;
+          /*    left: 7.5rem;*/
+          /*    margin: 1rem;*/
+          /*    margin-left: 1rem;*/
+          /*    text-align: left;*/
+          font-size: 25vw;
+          font-weight: 600;
+        }
+
+        .dark-theme #currentWaterBG {
+          color: oklch(23.5% 0.005 262.67) !important;
+        }
+      }
+
+      /* ====== Dark theme ====== */
+      .dark-theme #currentWaterBG {
+        color: oklch(22% 0.005 262.67);
+      }
+
+      .dark-theme #line {
+        color: oklch(100% 0 0 /25%);
+        background-color: oklch(100% 0 0 /5%);
+      }
+
+      #tutorial {
+        background-color: oklch(100% 0 0 / 40%);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        font-size: 0pt;
+        padding: 0.5rem;
+        text-align: left;
+        width: 1rem;
+        bottom: 6rem;
+        right: 1rem;
+        height: 0.5rem;
+        position: fixed;
+        opacity: 0;
+        transition: all 0.5s ease, font-size 0.6s ease;
+      }
+
+      .tutorial-active {
+        opacity: 1 !important;
+        font-size: 11pt !important;
+        width: 17.5rem !important;
+        height: 2.5rem !important;
+        bottom: 8.5rem !important;
+      }
+
+      .tutorial-hidden {
+        opacity: 0 !important;
+      }
+
+      .delContainer {
+        display: grid;
+        gap: 2px;
+        padding: 0rem;
+        width: 73vw;
+        margin-left: 3.15rem;
+        max-width: 17rem;
+        top: 60vh;
+        position: fixed;
+        background-color: oklch(100% 0 0 / 15%);
+        backdrop-filter: blur(0px);
+        -webkit-backdrop-filter: blur(0px);
+        border-radius: 1.2rem;
+        overflow: hidden;
+        text-align: center;
+        transition: all 0.4s ease;
+        opacity: 0;
+        z-index: 9999;
+        box-shadow: 0px 0px 20px 0px oklch(0% 0 0 / 15%);
+      }
+
+      .dark-theme .delContainer {
+        background-color: oklch(30% 0.005 262.67 / 70%);
+        box-shadow: 0px;
+        border: solid 0pt oklch(0% 0 0 / 40%);
+      }
+
+      .dark-theme .delText {
+        background-color: oklch(26% 0.005 262.67 / 60%);
+        color: oklch(100% 0 0 / 40%);
+      }
+
+      /* .dark-theme .delButtons {
+         background-color: oklch(23% 0.005 262.67 / 60%);
+      } */
+
+      .dark-theme .delButtons button {
+        color: oklch(100% 0 0 / 40%);
+        background-color: oklch(24% 0.005 262.67 / 70%);
+      }
+
+      .delContainerActive {
+        /*  top: 50vh;*/
+        opacity: 1;
+        backdrop-filter: blur(30px) !important;
+        -webkit-backdrop-filter: blur(30px) !important;
+      }
+
+      .delText {
+        width: 100%;
+        height: 100%;
+        padding: 0.5rem;
+        padding-bottom: 2rem;
+        /*  font-size: 13pt;*/
+        padding-top: 2rem;
+        background-color: oklch(100% 0 0 / 25%);
+        display: flex;
+        justify-content: space-evenly;
+        align-content: center;
+      }
+
+      .delButtons {
+        display: grid;
+        gap: 2px;
+        grid-template-columns: 1fr 1fr;
+        height: 2.8rem;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+      }
+
+      .delButtons button {
+        background-color: oklch(100% 0 0 / 35%);
+      }
+
+      /* .delButtons button:first-child {
+      } */
+
+      .delButtons button:last-child {
+        font-weight: bold;
+      }
+
+      .dark-theme #tutorial {
+        background-color: oklch(100% 0 0 / 20%);
+      }
+
+      .dark-theme {
+        background-color: oklch(25% 0.005 262.67);
+      }
+
+      .dark-theme .stop-color-top {
+        stop-color: oklch(50% 0.079 255.7 / 10%);
+      }
+
+      .dark-theme .stop-color-bottom {
+        stop-color: oklch(25% 0.005 262.67 / 10%);
+      }
+
+      .dark-theme #customInput:focus {
+        background-color: oklch(100% 0 0 / 15%);
+      }
+
+      .dark-theme thead tr {
+        color: oklch(100% 0 0 / 25%);
+        background-color: oklch(100% 0 0 / 3%);
+      }
+
+      .dark-theme .tableHeadData {
+        color: oklch(100% 0 0 / 50%);
+        background-color: oklch(100% 0 0 / 5%);
+      }
+
+      .dark-theme tbody tr:nth-child(odd) {
+        background-color: oklch(100% 0 0 / 3%);
+        color: oklch(100% 0 0 / 30%);
+      }
+      .dark-theme tbody tr:nth-child(even) {
+        background-color: oklch(100% 0 0 / 5%);
+        color: oklch(100% 0 0 / 30%);
+      }
+
+      .dark-theme .rowSelected {
+        background-color: oklch(0% 0 0 / 30%);
+      }
+
+      .dark-theme button,
+      .dark-theme input {
+        background-color: oklch(100% 0 0 / 1%);
+      }
+
+      .dark-theme #menuButton {
+        color: oklch(100% 0 0 / 30%);
+        background-color: oklch(100% 0 0 / 3%);
+      }
+
+      .dark-theme #popup {
+        background-color: oklch(0% 0 0 / 20%);
+      }
+
+      .dark-theme #ifttt-form input,
+      .dark-theme #ifttt-form button {
+        background-color: oklch(100% 0 0 / 6%);
+      }
+
+      .dark-theme #ifttt-form input {
+        background-color: oklch(100% 0 0 / 4%);
+      }
+
+      .dark-theme #ifttt-form input:focus {
+        background-color: oklch(100% 0 0 / 15%);
+        color: oklch(0% 0 0 / 75%);
+      }
+
+      .dark-theme #ifttt-form input::placeholder {
+        color: oklch(100% 0 0 / 20%);
+      }
+
+      .dark-theme #waterInput {
+        background-color: oklch(100% 0 0 / 5%);
+        color: oklch(0% 0 0 / 100%);
+      }
+
+      .dark-theme #keypadContainer {
+        background-color: oklch(100% 0 0 / 5%);
+      }
+
+      .dark-theme #waterInput button {
+        background-color: oklch(100% 0 0 / 7%);
+      }
+
+      .dark-theme .keys {
+        background-color: oklch(100% 0 0 / 10%);
+      }
+
+      .dark-theme .keys-pressed {
+        background-color: oklch(100% 0 0 / 30%);
+      }
+
+      .dark-theme #waterInput input {
+        background-color: oklch(100% 0 0 / 5%);
+      }
+
+      .dark-theme #waterInput ::placeholder {
+        color: oklch(0% 0 0 / 80%);
+      }
+
+      .dark-theme #historyButton {
+        background-color: oklch(0% 0 0 / 20%);
+        border: solid 1pt oklch(100% 0 0 / 5%);
+        box-shadow: '';
+      }
+
+      .dark-theme .show-history {
+        background-color: oklch(0% 0 0 / 0%) !important;
+        border: solid 0.35rem oklch(0% 0 0 / 18%) !important;
+      }
+
+      .dark-theme #targetAxisText {
+        background-color: oklch(0% 0 0 / 10%);
+        border: solid 0.1pt oklch(100% 0 0 / 10%);
+        color: oklch(100% 0 0 / 35%);
+      }
+
+      .dark-theme #buttonTitle {
+        color: oklch(100% 0 0 / 35%);
+      }
+
+      .dark-theme .chart-block {
+        color: oklch(100% 0 0 / 40%);
+        background-color: oklch(58.4% 0.067 257 / 25%);
+      }
+
+      /* ====== Animation ====== */
+      .parallax > use {
+        animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+      }
+      .parallax > use:nth-child(1) {
+        animation-delay: -2s;
+        animation-duration: 7s;
+      }
+      .parallax > use:nth-child(2) {
+        animation-delay: -3s;
+        animation-duration: 10s;
+      }
+      .parallax > use:nth-child(3) {
+        animation-delay: -4s;
+        animation-duration: 13s;
+      }
+      .parallax > use:nth-child(4) {
+        animation-delay: -5s;
+        animation-duration: 20s;
+      }
+      @keyframes move-forever {
+        0% {
+          transform: translate3d(-90px, 0, 0);
+        }
+        100% {
+          transform: translate3d(85px, 0, 0);
+        }
+      }
+      .slide-in-blurred-top {
+        animation: slide-in-blurred-top 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+      }
+      .slide-out-blurred-top {
+        animation: slide-out-blurred-top 0.45s forwards;
+      }
+
+      .fade-in {
+        animation: fade-in 1s forwards;
+      }
+      .fade-out {
+        animation: fade-out 0.6s forwards;
+      }
+
+      @keyframes slide-in-blurred-top {
+        0% {
+          transform: translateY(-100px) scaleY(1.2) scaleX(0.2);
+          transform-origin: 50% 0%;
+          filter: blur(1px);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0) scaleY(1) scaleX(1);
+          transform-origin: 50% 50%;
+          filter: blur(0px);
+          opacity: 1;
+        }
+      }
+      @keyframes slide-out-blurred-top {
+        0% {
+          transform: translateY(0) scaleY(1) scaleX(1);
+          transform-origin: 50% 0%;
+          filter: blur(0px);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) scaleY(0.8) scaleX(0.4);
+          transform-origin: 50% 0%;
+          filter: blur(30px);
+          opacity: 0;
+        }
+      }
+
+      @keyframes fade-in {
+        0% {
+          -webkit-backdrop-filter: blur(0px);
+          backdrop-filter: blur(0px);
+        }
+        100% {
+          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+        }
+      }
+      @keyframes fade-out {
+        0% {
+          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+        }
+        100% {
+          -webkit-backdrop-filter: blur(0px);
+          backdrop-filter: blur(0px);
+        }
+      }
+
+      /* Animation End */
+    </style>
+  </head>
+  <body>
+    <div id="line">
+      <div id="currentTarget"></div>
+      <div id="currentMl"></div>
+    </div>
+    <!-- Menu -->
+    <button id="menuButton" onclick="showPopup()">Menu</button>
+
+    <div id="popupBackground">
+      <div id="popup">
+        <form id="ifttt-form">
+          <div id="popInpContainer">
+            <input
+              type="text"
+              placeholder="Water Target"
+              name="waterTarget"
+              id="formInput1"
+            />
+            <input
+              type="text"
+              placeholder="Enter IFTTT Key"
+              name="iftttKeyInput"
+              id="formInput2"
+            />
+          </div>
+          <div id="popBtnContainer">
+            <button onclick="clearLocalStorage()">Wipe</button>
+            <button onclick="openCsvOrFont()">Add File</button>
+            <button type="submit" id="saveButton">Save</button>
+          </div>
+        </form>
       </div>
-      <div id=popBtnContainer>
-        <button onclick="clearLocalStorage()">Wipe</button>
-        <button onclick="openCsvOrFont()">Add File</button>
-        <button type="submit" id="saveButton">Save</button>
+
+      <!-- History Chart -->
+      <div id="historyButton" onclick="showChart()">
+        <div id="buttonTitle">History</div>
+        <div id="targetAxisText"></div>
+        <div id="targetAxis"></div>
+        <div id="chartContainer">
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date">23.08.23</div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+          <div>
+            <div class="chart-block"></div>
+            <div class="block-date"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="currentWaterBG"></div>
+
+    <div id="waterIndicator">
+      <div id="niceWaves">
+        <svg
+          class="waves"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 -94 100 2000"
+          preserveAspectRatio="none"
+          shape-rendering="auto"
+        >
+          <defs>
+            <!-- Gradient Definition -->
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" class="stop-color-top" />
+              <stop offset="100%" class="stop-color-bottom" />
+            </linearGradient>
+
+            <path
+              id="gentle-wave"
+              d="M-160 14c30 0 58-99 88-99s 58 99 88 99 58-99 88-99 58 99 88 99 v1900h-352z"
+            />
+          </defs>
+          <g class="parallax">
+            <!-- Use the gradient as fill for waves -->
+            <use
+              xlink:href="#gentle-wave"
+              x="48"
+              y="1"
+              fill="url(#waveGradient)"
+              class="wave1"
+            />
+            <use
+              xlink:href="#gentle-wave"
+              x="48"
+              y="2"
+              fill="url(#waveGradient)"
+              class="wave2"
+            />
+            <use
+              xlink:href="#gentle-wave"
+              x="48"
+              y="3"
+              fill="url(#waveGradient)"
+              class="wave3"
+            />
+            <use
+              xlink:href="#gentle-wave"
+              x="48"
+              y="4"
+              fill="url(#waveGradient)"
+              class="wave4"
+            />
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div id="roundedCorners">
+      <table id="waterLog">
+        <thead class="tableHead" id="tableHead">
+          <tr>
+            <td>Date</td>
+            <td>Time</td>
+            <td>Amount</td>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <form id="waterInput" action="" method="get" onsubmit="return false">
+      <div id="waterInputheader">
+        <div id="logTitle">Log:&nbsp;</div>
+        <div id="currentAmount">0</div>
+        <div id="milliLiter">ml</div>
+      </div>
+
+      <div id="buttonList">
+        <button id="btn-125" value="125">125 ml</button>
+        <button id="btn-200" value="200">200 ml</button>
+        <button id="btn-250" value="250">250 ml</button>
+        <button id="btn-500" value="500">500 ml</button>
+      </div>
+
+      <div id="inputSaveList">
+        <input type="number" placeholder="Enter ml" id="customInput" readonly />
+        <button id="svBt" type="submit">Add</button>
       </div>
     </form>
-  </div>
 
-  <!-- History Chart -->
-    <div id="historyButton" onclick="showChart()">
-      <div id="buttonTitle">History</div>
-      <div id="targetAxisText"></div>
-      <div id="targetAxis"></div>
-      <div id="chartContainer">
-        <div><div class="chart-block"></div><div class="block-date">23.08.23</div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
-        <div><div class="chart-block"></div><div class="block-date"></div></div>
+    <div id="keypadContainer">
+      <div id="key1" class="keys">1</div>
+      <div id="key2" class="keys">2</div>
+      <div id="key3" class="keys">3</div>
+      <div id="key4" class="keys">4</div>
+      <div id="key5" class="keys">5</div>
 
-      </div>
+      <div id="key6" class="keys">6</div>
+      <div id="key7" class="keys">7</div>
+      <div id="key8" class="keys">8</div>
+      <div id="key9" class="keys">9</div>
+      <div id="key0" class="keys">0</div>
+
+      <div id="kbDelete" class="keys">Del</div>
     </div>
 
-</div>
+    <script>
+      // =====
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('/service-worker.js').then(
+            function (registration) {
+              // Registration was successful
+              console.log(
+                'ServiceWorker registration successful with scope: ',
+                registration.scope
+              );
+            },
+            function (err) {
+              // Registration failed
+              console.log('ServiceWorker registration failed: ', err);
+            }
+          );
+        });
+      }
 
-<div id="currentWaterBG"></div>
+      const table = document.getElementById('waterLog');
+      const tbody = table.createTBody();
 
-<div id="waterIndicator">    
-  <div id="niceWaves">
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-    viewBox="0 -94 100 2000" preserveAspectRatio="none" shape-rendering="auto">
-      <defs>
-        <!-- Gradient Definition -->
-        <linearGradient id="waveGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" class="stop-color-top" />
-          <stop offset="100%" class="stop-color-bottom" />
-        </linearGradient>
-
-        <path id="gentle-wave" d="M-160 14c30 0 58-99 88-99s 58 99 88 99 58-99 88-99 58 99 88 99 v1900h-352z" />
-      </defs>
-      <g class="parallax">
-        <!-- Use the gradient as fill for waves -->
-        <use xlink:href="#gentle-wave" x="48" y="1" fill="url(#waveGradient)" class="wave1"/>
-        <use xlink:href="#gentle-wave" x="48" y="2" fill="url(#waveGradient)" class="wave2"/>
-        <use xlink:href="#gentle-wave" x="48" y="3" fill="url(#waveGradient)" class="wave3"/>
-        <use xlink:href="#gentle-wave" x="48" y="4" fill="url(#waveGradient)" class="wave4"/>
-      </g>
-    </svg>
-  </div>
-</div>
-
-  <div id="roundedCorners">
-    <table id="waterLog">
-      <thead class="tableHead" id="tableHead">
-        <tr>
-          <td>Date</td><td>Time</td><td>Amount</td>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </div>
-
-  <form id="waterInput" action="" method="get" onsubmit="return false">
-    <div id="waterInputheader">
-      <div id=logTitle>Log:&nbsp;</div>
-      <div id="currentAmount">0</div>
-      <div id="milliLiter">ml</div>
-    </div>
-    
-    <div id="buttonList">
-      <button id="btn-125" value="125">125 ml</button>
-      <button id="btn-200" value="200">200 ml</button>
-      <button id="btn-250" value="250">250 ml</button>
-      <button id="btn-500" value="500">500 ml</button>
-    </div>
-    
-    <div id="inputSaveList">
-      <input type="number" placeholder="Enter ml" id="customInput" readonly >
-      <button id="svBt" type="submit">Add</button>
-    </div>
-  </form>
-
-<div id="keypadContainer">
-    <div id=key1 class="keys">1</div>
-    <div id=key2 class="keys">2</div>
-    <div id=key3 class="keys">3</div>
-    <div id=key4 class="keys">4</div>
-    <div id=key5 class="keys">5</div>
-
-    <div id=key6 class="keys">6</div>
-    <div id=key7 class="keys">7</div>
-    <div id=key8 class="keys">8</div>
-    <div id=key9 class="keys">9</div>
-    <div id=key0 class="keys">0</div>
-    
-    <div id="kbDelete" class="keys">Del</div>
-</div>
-
-<script>
-// ===== 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, function(err) {
-        // Registration failed
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    });
-  }
-
-const table = document.getElementById("waterLog");
-const tbody = table.createTBody();
-
-function updateCurrentAmount() {
-    const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
-    let updatedAmount = 0;
-    const rows = document.querySelectorAll("tbody tr");
-    rows.forEach((line) => {
-        const cells = line.cells;
-        const rowDate = cells[0].textContent;
-        const rowTime = Number(cells[1].textContent.split(":")[0]);
-        if (rowDate === date && rowTime >= 2) {
+      function updateCurrentAmount() {
+        const date = new Date().toLocaleDateString('de-DE', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+        });
+        let updatedAmount = 0;
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((line) => {
+          const cells = line.cells;
+          const rowDate = cells[0].textContent;
+          const rowTime = Number(cells[1].textContent.split(':')[0]);
+          if (rowDate === date && rowTime >= 2) {
             updatedAmount += Number(cells[2].textContent);
-        }
-    });
-    document.getElementById("currentAmount").textContent = updatedAmount;
-}
+          }
+        });
+        document.getElementById('currentAmount').textContent = updatedAmount;
+      }
 
-function addRow(loggedAmount) {
-const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
-const time = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'});
-  const newRow = [date, time, loggedAmount];
-  const newTableRow = table.tBodies[0].insertRow(0);
+      function addRow(loggedAmount) {
+        const date = new Date().toLocaleDateString('de-DE', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+        });
+        const time = new Date().toLocaleTimeString('de-DE', {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
+        const newRow = [date, time, loggedAmount];
+        const newTableRow = table.tBodies[0].insertRow(0);
 
-  newRow.forEach((cell, cellIndex) => {
-    const td = newTableRow.insertCell(cellIndex);
-    td.textContent = cell;
-    // mark added cells
-    td.classList.add("added-cell");
-  });
-  addRowClickListener(newTableRow);
-  updateCurrentAmount();
-}
-// ===================== loading and unloading ====================
-function loadSelectedFont() {
-  const fontData = localStorage.getItem('selectedFont');
-  if (fontData) {
-    const tableHeaders = document.querySelectorAll('thead tr td');
-    const tableHeaderCell = document.querySelector('thead tr td');
-    if (tableHeaders.length > 0) {
-      tableHeaders[0].textContent = '\u{100249}';
-      tableHeaders[1].textContent = '\u{10042b}';
-      tableHeaders[2].textContent = '\u{101384}';
-    }
+        newRow.forEach((cell, cellIndex) => {
+          const td = newTableRow.insertCell(cellIndex);
+          td.textContent = cell;
+          // mark added cells
+          td.classList.add('added-cell');
+        });
+        addRowClickListener(newTableRow);
+        updateCurrentAmount();
+      }
+      // ===================== loading and unloading ====================
+      function loadSelectedFont() {
+        const fontData = localStorage.getItem('selectedFont');
+        if (fontData) {
+          const tableHeaders = document.querySelectorAll('thead tr td');
+          const tableHeaderCell = document.querySelector('thead tr td');
+          if (tableHeaders.length > 0) {
+            tableHeaders[0].textContent = '\u{100249}';
+            tableHeaders[1].textContent = '\u{10042b}';
+            tableHeaders[2].textContent = '\u{101384}';
+          }
 
-    const backspace = document.getElementById('kbDelete');
-      backspace.textContent = "\u{10019b}";
-      
-    const historyButtonTemp = document.getElementById('buttonTitle');
-        historyButtonTemp.textContent = "\u{1008c9}";
-      historyButtonTemp.style.color = "oklch(100% 0 0 / 50%)";
-      historyButtonTemp.style.fontSize = "24pt";
-    const menuButtonIcon = document.querySelector('#menuButton')
-      menuButtonIcon.style.fontSize = "18pt";
-      menuButtonIcon.textContent = '\u{100306}';
+          const backspace = document.getElementById('kbDelete');
+          backspace.textContent = '\u{10019b}';
+
+          const historyButtonTemp = document.getElementById('buttonTitle');
+          historyButtonTemp.textContent = '\u{1008c9}';
+          historyButtonTemp.style.color = 'oklch(100% 0 0 / 50%)';
+          historyButtonTemp.style.fontSize = '24pt';
+          const menuButtonIcon = document.querySelector('#menuButton');
+          menuButtonIcon.style.fontSize = '18pt';
+          menuButtonIcon.textContent = '\u{100306}';
           const css = `@font-face {
       font-family: 'iconMode';
       src: url('data:font/opentype;charset=utf-8;base64,${fontData}');
       font-display: swap;
     }`;
-    const style = document.createElement('style');
-    style.appendChild(document.createTextNode(css));
-    document.head.appendChild(style);
-  }
-}
-
-window.addEventListener('load', () => {
-  loadSelectedFont()
-  const date = new Date().toLocaleDateString('de-DE', {year: '2-digit', month: '2-digit', day: '2-digit'});
-  const currentTargetWater = localStorage.getItem('waterTarget')
-  if (!localStorage.getItem('waterTarget')){} else {
-      const popupWaterInput = document.getElementById('formInput1')
-      popupWaterInput.setAttribute('placeholder', 'Current Target: ' + currentTargetWater + 'ml')
-  }
-  if (!localStorage.getItem('iftttKey')){} else {
-      const popupIftttInput = document.getElementById('formInput2')
-      popupIftttInput.setAttribute('placeholder', 'IFTTT key found')
-  }
-    
-  window.setTimeout(() => {
-    const data = JSON.parse(localStorage.getItem('waterLog'));
-    if (data) {
-      const tableBody = document.querySelector('table tbody');
-      for (let i = data.length - 1; i >= 0; i--) {
-        const row = data[i];
-        const tableRow = document.createElement('tr');
-        const dateCell = document.createElement('td');
-        dateCell.textContent = row.date;
-        const timeCell = document.createElement('td');
-        timeCell.textContent = row.time;
-        const amountCell = document.createElement('td');
-        amountCell.textContent = row.amount;
-        tableRow.appendChild(dateCell);
-        tableRow.appendChild(timeCell);
-        tableRow.appendChild(amountCell);
-        
-        calculateTarget();
-        addRowClickListener(tableRow);
-        
-        tableBody.insertBefore(tableRow, tableBody.firstChild);
-      }
-    }
-    updateCurrentAmount();
-  }, 00);
-});
-
-function saveDataToLocalStorage() {
-  const rows = document.querySelectorAll("tbody tr");
-  const data = [];
-  rows.forEach((row) => {
-    const cells = row.querySelectorAll('td');
-    const rowData = {
-      date: cells[0].innerHTML,
-      time: cells[1].innerHTML,
-      amount: cells[2].innerHTML
-    };
-    data.push(rowData);
-  });
-  localStorage.setItem('waterLog', JSON.stringify(data));
-}
-
-window.addEventListener('beforeunload', () => {
-    saveDataToLocalStorage();
-});
-
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'hidden') {
-    saveDataToLocalStorage();
-  }
-});
-
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    calculateTarget();
-  }
-});
-
-setTimeout(() => {
-  if (localStorage.getItem('tutorialCompleted') > 2) {
-  } else {
-  showTutorial();
-  }
-}, 800);
-
-
-function showTutorial() {
-  const tutorial = document.createElement('div');
-  tutorial.id = 'tutorial';
-  tutorial.textContent = "Long press to show all logging options";
-  document.querySelector('body').appendChild(tutorial);
-
-  document.addEventListener('mousedown',(event) => {
-    if (document.querySelector('#tutorial').contains(event.target)) {
-      console.log('click on tutorial')
-    } else {
-      tutorial.classList.add('tutorial-hidden');
-      setTimeout(() => {
-        tutorial.style.display = "none";
-        tutorial.classList.remove('tutorial-active');
-
-          if (localStorage.getItem('tutorialCompleted')) {
-              console.log('tut counter present')
-              var tutCounter = localStorage.getItem('tutorialCompleted')
-              localStorage.setItem('tutorialCompleted', parseFloat(tutCounter)+1);
-          } else {
-              localStorage.setItem('tutorialCompleted', "0");
-              // console.log(tutCounter)
-          }
-
-      }, 700);
-    }
-  });
-  setTimeout(() => {
-    tutorial.classList.add('tutorial-active');
-  }, 10);
-}
-
-
-// ===== import font or csv ==========
-function openCsvOrFont() {
-  const fileInput = document.createElement('input');
-  fileInput.type = 'file';
-  fileInput.accept = '.csv,.ttf,.otf';
-  fileInput.onchange = () => {
-    const file = fileInput.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileData = reader.result;
-      if (file.type === 'text/csv') {
-        addCsvToTable(fileData);
-        location.reload();
-      } else if (file.type === 'font/ttf' || file.type === 'font/otf') {
-        try {
-          if ('caches' in window) {
-            caches.open('v1').then(cache => {
-              // Cache the font file
-              cache.put('iconMode.otf', new Response(file));
-            });
-          }
-
-          const dataURLReader = new FileReader();
-          dataURLReader.onload = () => {
-            const fontData = dataURLReader.result.split(',')[1];
-            localStorage.setItem('selectedFont', fontData);
-            alert('Selected font saved to local storage and cached as "iconMode"!');
-            location.reload();
-          };
-          dataURLReader.readAsDataURL(file);
-        } catch (e) {
-          alert('Error saving font to local storage and cache: ' + e.message);
+          const style = document.createElement('style');
+          style.appendChild(document.createTextNode(css));
+          document.head.appendChild(style);
         }
       }
-    };
-    reader.readAsText(file);
-  };
-  fileInput.click();
-}
 
-function addCsvToTable(csvData) {
-  const rows = csvData.split('\n').map(row => row.split(';'));
-  rows.slice(0, 30).forEach((row, rowIndex) => {
-    const tr = tbody.insertRow();
-    row.forEach((cell, cellIndex) => {
-      const td = tr.insertCell();
-      td.textContent = cell;
-    });
-  });
-  updateCurrentAmount();
-}
-// ======= buttons ========
-const saveButton = document.getElementById("svBt");
-var customInput = document.getElementById("customInput");
+      window.addEventListener('load', () => {
+        loadSelectedFont();
+        const date = new Date().toLocaleDateString('de-DE', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+        });
+        const currentTargetWater = localStorage.getItem('waterTarget');
+        if (!localStorage.getItem('waterTarget')) {
+        } else {
+          const popupWaterInput = document.getElementById('formInput1');
+          popupWaterInput.setAttribute(
+            'placeholder',
+            'Current Target: ' + currentTargetWater + 'ml'
+          );
+        }
+        if (!localStorage.getItem('iftttKey')) {
+        } else {
+          const popupIftttInput = document.getElementById('formInput2');
+          popupIftttInput.setAttribute('placeholder', 'IFTTT key found');
+        }
 
-saveButton.addEventListener("click", () => {
-  saveButton.classList.add('buttonPressed');
-  setTimeout(() => {
-    saveButton.classList.remove('buttonPressed');
-    calculateTarget();
-  }, 500)
-  const value = customInput.value;
-  if (value !== "") {
-    addRow(value);
-    customInput.value = "";
-  }
-});
+        window.setTimeout(() => {
+          const data = JSON.parse(localStorage.getItem('waterLog'));
+          if (data) {
+            const tableBody = document.querySelector('table tbody');
+            for (let i = data.length - 1; i >= 0; i--) {
+              const row = data[i];
+              const tableRow = document.createElement('tr');
+              const dateCell = document.createElement('td');
+              dateCell.textContent = row.date;
+              const timeCell = document.createElement('td');
+              timeCell.textContent = row.time;
+              const amountCell = document.createElement('td');
+              amountCell.textContent = row.amount;
+              tableRow.appendChild(dateCell);
+              tableRow.appendChild(timeCell);
+              tableRow.appendChild(amountCell);
 
-const btn125 = document.getElementById("btn-125");
-const btn200 = document.getElementById("btn-200");
-const btn250 = document.getElementById("btn-250");
-const btn500 = document.getElementById("btn-500");
-const waterInputChange = document.getElementById('waterInput');
+              calculateTarget();
+              addRowClickListener(tableRow);
 
-const inputButtonList = document.getElementById('buttonList');
-const inputSaveList = document.getElementById('inputSaveList');
-const waterInputHeader = document.getElementById('waterInputheader');
+              tableBody.insertBefore(tableRow, tableBody.firstChild);
+            }
+          }
+          updateCurrentAmount();
+        }, 10);
+      });
 
+      function saveDataToLocalStorage() {
+        const rows = document.querySelectorAll('tbody tr');
+        const data = [];
+        rows.forEach((row) => {
+          const cells = row.querySelectorAll('td');
+          const rowData = {
+            date: cells[0].innerHTML,
+            time: cells[1].innerHTML,
+            amount: cells[2].innerHTML,
+          };
+          data.push(rowData);
+        });
+        localStorage.setItem('waterLog', JSON.stringify(data));
+      }
 
-btn125.addEventListener("click", function() {
-  btn125.classList.add('buttonPressed');
-  setTimeout(() => {
-    btn125.classList.remove('buttonPressed');
-  }, 500)
-const value = btn125.value;
-addRow(value);
-});
+      window.addEventListener('beforeunload', () => {
+        saveDataToLocalStorage();
+      });
 
-btn200.addEventListener("click", () => {
-  btn200.classList.add('buttonPressed');
-  setTimeout(() => {
-    btn200.classList.remove('buttonPressed');
-    calculateTarget()
-  }, 500)
-  const value = btn200.value;
-  addRow(value);
-});
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') {
+          saveDataToLocalStorage();
+        }
+      });
 
-// =====================
-let timer;
-let timerCompleted = false;
-let touchStartTimestamp;
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          calculateTarget();
+        }
+      });
 
-btn250.addEventListener("touchstart", () => {
-  waterInputChange.classList.add('waterButtonPress');
-  touchStartTimestamp = Date.now();
-  if (waterInputChange.classList.contains('waterInputLarge')){
-  } else {
-    timerCompleted = false;
-  }
+      setTimeout(() => {
+        if (localStorage.getItem('tutorialCompleted') > 2) {
+        } else {
+          showTutorial();
+        }
+      }, 800);
 
-  timer = setTimeout(() => {
-      waterInputChange.classList.add('waterInputLarge');
-      inputButtonList.classList.add('activateButtonList');
-      inputSaveList.classList.add('activateInputSaveList');
-      waterInputHeader.classList.add('activateWaterHeader');
-      btn125.classList.add('activateInputButtons');
-      btn200.classList.add('activateInputButtons');
-      btn500.classList.add('activateInputButtons');
-      timerCompleted = true; // Set flag to true when timer completes
+      function showTutorial() {
+        const tutorial = document.createElement('div');
+        tutorial.id = 'tutorial';
+        tutorial.textContent = 'Long press to show all logging options';
+        document.querySelector('body').appendChild(tutorial);
 
-      function handleMousedown(event) {
-          if (waterInputChange.contains(event.target)) {
+        document.addEventListener('mousedown', (event) => {
+          if (document.querySelector('#tutorial').contains(event.target)) {
+            console.log('click on tutorial');
           } else {
-              console.log('click outside');
+            tutorial.classList.add('tutorial-hidden');
+            setTimeout(() => {
+              tutorial.style.display = 'none';
+              tutorial.classList.remove('tutorial-active');
+
+              if (localStorage.getItem('tutorialCompleted')) {
+                console.log('tut counter present');
+                var tutCounter = localStorage.getItem('tutorialCompleted');
+                localStorage.setItem(
+                  'tutorialCompleted',
+                  parseFloat(tutCounter) + 1
+                );
+              } else {
+                localStorage.setItem('tutorialCompleted', '0');
+                // console.log(tutCounter)
+              }
+            }, 700);
+          }
+        });
+        setTimeout(() => {
+          tutorial.classList.add('tutorial-active');
+        }, 10);
+      }
+
+      // ===== import font or csv ==========
+      function openCsvOrFont() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.csv,.ttf,.otf';
+        fileInput.onchange = () => {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+          reader.onload = () => {
+            const fileData = reader.result;
+            if (file.type === 'text/csv') {
+              addCsvToTable(fileData);
+              location.reload();
+            } else if (file.type === 'font/ttf' || file.type === 'font/otf') {
+              try {
+                if ('caches' in window) {
+                  caches.open('v1').then((cache) => {
+                    // Cache the font file
+                    cache.put('iconMode.otf', new Response(file));
+                  });
+                }
+
+                const dataURLReader = new FileReader();
+                dataURLReader.onload = () => {
+                  const fontData = dataURLReader.result.split(',')[1];
+                  localStorage.setItem('selectedFont', fontData);
+                  alert(
+                    'Selected font saved to local storage and cached as "iconMode"!'
+                  );
+                  location.reload();
+                };
+                dataURLReader.readAsDataURL(file);
+              } catch (e) {
+                alert(
+                  'Error saving font to local storage and cache: ' + e.message
+                );
+              }
+            }
+          };
+          reader.readAsText(file);
+        };
+        fileInput.click();
+      }
+
+      function addCsvToTable(csvData) {
+        const rows = csvData.split('\n').map((row) => row.split(';'));
+        rows.slice(0, 30).forEach((row, rowIndex) => {
+          const tr = tbody.insertRow();
+          row.forEach((cell, cellIndex) => {
+            const td = tr.insertCell();
+            td.textContent = cell;
+          });
+        });
+        updateCurrentAmount();
+      }
+      // ======= buttons ========
+      const saveButton = document.getElementById('svBt');
+      var customInput = document.getElementById('customInput');
+
+      saveButton.addEventListener('click', () => {
+        saveButton.classList.add('buttonPressed');
+        setTimeout(() => {
+          saveButton.classList.remove('buttonPressed');
+          calculateTarget();
+        }, 500);
+        const value = customInput.value;
+        if (value !== '') {
+          addRow(value);
+          customInput.value = '';
+        }
+      });
+
+      const btn125 = document.getElementById('btn-125');
+      const btn200 = document.getElementById('btn-200');
+      const btn250 = document.getElementById('btn-250');
+      const btn500 = document.getElementById('btn-500');
+      const waterInputChange = document.getElementById('waterInput');
+
+      const inputButtonList = document.getElementById('buttonList');
+      const inputSaveList = document.getElementById('inputSaveList');
+      const waterInputHeader = document.getElementById('waterInputheader');
+
+      btn125.addEventListener('click', function () {
+        btn125.classList.add('buttonPressed');
+        setTimeout(() => {
+          btn125.classList.remove('buttonPressed');
+        }, 500);
+        const value = btn125.value;
+        addRow(value);
+      });
+
+      btn200.addEventListener('click', () => {
+        btn200.classList.add('buttonPressed');
+        setTimeout(() => {
+          btn200.classList.remove('buttonPressed');
+          calculateTarget();
+        }, 500);
+        const value = btn200.value;
+        addRow(value);
+      });
+
+      // =====================
+      let timer;
+      let timerCompleted = false;
+      let touchStartTimestamp;
+
+      function handlePressStart() {
+        waterInputChange.classList.add('waterButtonPress');
+        touchStartTimestamp = Date.now();
+        if (!waterInputChange.classList.contains('waterInputLarge')) {
+          timerCompleted = false;
+        }
+
+        timer = setTimeout(() => {
+          waterInputChange.classList.add('waterInputLarge');
+          inputButtonList.classList.add('activateButtonList');
+          inputSaveList.classList.add('activateInputSaveList');
+          waterInputHeader.classList.add('activateWaterHeader');
+          btn125.classList.add('activateInputButtons');
+          btn200.classList.add('activateInputButtons');
+          btn500.classList.add('activateInputButtons');
+          timerCompleted = true; // Set flag to true when timer completes
+
+          function handleMousedown(event) {
+            if (waterInputChange.contains(event.target)) {
+            } else {
+              // console.log('click outside');
               waterInputChange.classList.remove('waterInputLarge');
               waterInputChange.classList.remove('waterButtonPress');
               inputButtonList.classList.remove('activateButtonList');
@@ -1487,536 +1656,662 @@ btn250.addEventListener("touchstart", () => {
               btn200.classList.remove('activateInputButtons');
               btn500.classList.remove('activateInputButtons');
               timerCompleted = false;
-              document.removeEventListener('mousedown', handleMousedown);  // Use the named function here
+              document.removeEventListener('mousedown', handleMousedown); // Use the named function here
+            }
           }
+          document.addEventListener('mousedown', handleMousedown);
+        }, 600);
       }
-      document.addEventListener('mousedown', handleMousedown);
-  }, 600);
-});
 
-btn250.addEventListener("touchend", () => {
-    const touchDuration = Date.now() - touchStartTimestamp; // Calculate how long the touch lasted
+      function handlePressEnd() {
+        const touchDuration = Date.now() - touchStartTimestamp;
 
-    clearTimeout(timer);
+        clearTimeout(timer);
 
-    // Action when touch duration is between 200ms and 599ms
-    if (touchDuration >= 200 && touchDuration <= 599) {
-        setTimeout(() => {
+        // Action when touch/mouse duration is between 200ms and 599ms
+        if (touchDuration >= 200 && touchDuration <= 599) {
+          setTimeout(() => {
             waterInputChange.classList.remove('waterButtonPress');
             waterInputChange.classList.remove('waterInputLarge');
-            showTutorial();
-        }, 200);
-    } 
-
-    else if (touchDuration > 600) {}
-    // Action when waterInputLarge is present or the timer is not completed
-    else if (waterInputChange.classList.contains('waterInputLarge')) {
-        btn250.classList.add('buttonPressed');
-        setTimeout(() => {
-          btn250.classList.remove('buttonPressed');
-          calculateTarget()
-        }, 500);
-        const value = btn250.value;
-        addRow(value);
-    }
-    else if (!timerCompleted && waterInputChange.classList.contains('waterButtonPress') || waterInputChange.classList.contains('waterButtonPress')) {
-        setTimeout(() => {
-             waterInputChange.classList.remove('waterButtonPress');
-        }, 500);
-      
-        btn250.classList.add('buttonPressed');
-        setTimeout(() => {
+            // showTutorial(); // Call showTutorial if needed
+          }, 200);
+        }
+        // Action for longer press duration
+        else if (touchDuration > 600) {
+          // Implement logic for longer press duration if needed
+        }
+        // Action when waterInputLarge is present or the timer is not completed
+        else if (
+          waterInputChange.classList.contains('waterInputLarge') ||
+          !timerCompleted
+        ) {
+          btn250.classList.add('buttonPressed');
+          setTimeout(() => {
             btn250.classList.remove('buttonPressed');
-            calculateTarget()
-        }, 500);
-        const value = btn250.value;
-        addRow(value);
-    }
-});
+            calculateTarget();
+          }, 500);
+          const value = btn250.value;
+          addRow(value);
+        } else if (waterInputChange.classList.contains('waterButtonPress')) {
+          setTimeout(() => {
+            waterInputChange.classList.remove('waterButtonPress');
+          }, 500);
 
-btn500.addEventListener("click", () => {
-  btn500.classList.add('buttonPressed');
-  setTimeout(() => {
-    btn500.classList.remove('buttonPressed');
-    calculateTarget()
-  }, 500)
-  const value = btn500.value;
-  addRow(value);
-});
-
-// ========= popup =====
-const backgroundPopup = document.body.querySelector('#popupBackground')
-const menuSaveButton = document.querySelector('#saveButton');
-const menuButton = document.querySelector('#menuButton')
-const popup = document.body.querySelector('#popup')
-var metaTag = document.querySelector('meta[name="theme-color"]');
-const historyButton = document.getElementById('historyButton');
-const tAxis = document.getElementById('targetAxis');
-const tAxisText = document.getElementById('targetAxisText');
-const buttonTitle = document.getElementById('buttonTitle');
-const chartContainer = document.getElementById('chartContainer');
-
-function closePopup(){
-  backgroundPopup.classList.add('fade-out');
-  historyButton.style.filter = "opacity(0)"
-  popup.classList.add('slide-out-blurred-top');
-  menuButton.style.filter = "opacity(1)"
-  historyButton.classList.remove('show-history');
-  tAxisText.style.filter = "opacity(0%)"
-
-  setTimeout(() => {
-    backgroundPopup.classList.remove('fade-out');
-    popup.classList.remove('slide-out-blurred-top');
-    backgroundPopup.style.display= 'none';
-    popup.style.display= 'none';
-    menuSaveButton.removeEventListener('click', closePopup);
-    buttonTitle.style.display = "block";
-    chartContainer.classList.remove('chartContainer-active');
-    const chartBlock = document.querySelectorAll('.chart-block');
-    chartBlock.forEach((block, index) => {
-      block.style.height = "0.5rem";
-    })
-    tAxis.style.display = "none";
-    tAxisText.style.display = "none";
-  }, 1000);
-}
-
-function showPopup() {
-  backgroundPopup.classList.add('fade-in');
-  //metaTag.setAttribute('content', '#3C6A8B');
-  popup.classList.add('slide-in-blurred-top');
-  backgroundPopup.style.display= 'block';
-  popup.style.display= 'block';
-  menuButton.style.filter = "opacity(0)"
-  setTimeout(() => {
-    historyButton.style.filter = "opacity(100%)"
-  }, 100);
-
-  menuSaveButton.addEventListener('click', () => {
-    closePopup();
-  })
-  backgroundPopup.addEventListener("click", function (event) {
-    if (event.target === backgroundPopup) { // Check if the click happened on the background
-      closePopup();
-    }
-  });
-  
-  const form = document.getElementById('ifttt-form');
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    const inputWater = document.querySelector('[name="waterTarget"]');
-    if (inputWater.value!==""){
-      localStorage.setItem('waterTarget', inputWater.value);
-      inputWater.value="";
-      const currentTargetWater = localStorage.getItem('waterTarget')
-      if (!localStorage.getItem('waterTarget')) {} else {
-        inputWater.setAttribute('placeholder', 'Current Target: ' + currentTargetWater + 'ml')
-      }
-      increaseWaterLevel();
-    }
-    
-    const inputKey = document.querySelector('[name="iftttKeyInput"]');
-    if (inputKey.value!==""){
-    localStorage.setItem('iftttKey', inputKey.value);
-    inputKey.value = "";
-    }
-  });
-}
-
-function checkWaterTarget() {
-  if (!localStorage.getItem('waterTarget')) {
-    setTimeout(() => {
-      showPopup();
-      }, 250);
-  }
-}
-
-function sendPostRequest(value, apiKey) {
-  const script = document.createElement('script');
-  const url = 'https://maker.ifttt.com/trigger/currentWater/with/key/' + apiKey;
-  script.src = `${url}?value1=${encodeURIComponent(value)}`;
-  document.body.appendChild(script);
-}
-
-const currentAmount = document.getElementById('currentAmount');
-const observer = new MutationObserver((mutationsList, observer) => {
-  for (let mutation of mutationsList) {
-    if (mutation.type === 'childList' && mutation.target === currentAmount) {
-      if (localStorage.getItem('iftttKey')){
-        const value = document.getElementById('currentAmount').textContent
-        const key = localStorage.getItem('iftttKey')
-        sendPostRequest(value, key);
-      }
-      // update water level ==========
-      const currentWaterBG = document.getElementById('currentWaterBG');
-      currentWaterBG.textContent = currentAmount.textContent;
-      increaseWaterLevel();
-      saveDataToLocalStorage();
-    }
-  }
-});
-// configure the observer to watch for changes to the contents of the "currentAmount" div
-observer.observe(currentAmount, { childList: true });
-
-function clearLocalStorage() {
-  localStorage.clear();
-  const tbody = document.querySelector('tbody');
-  tbody.innerHTML = '';
-  document.querySelector('#currentAmount').textContent = '0'
-}
-
-// ============= water level functions ====
-function increaseWaterLevel() {
-  const indicator = document.querySelector('#waterIndicator');
-  const storedWaterTarget = localStorage.getItem('waterTarget');
-  var currentAmount = parseFloat(document.getElementById("currentAmount").textContent);
-  if (currentAmount > storedWaterTarget) {currentAmount = storedWaterTarget}
-  
-  
-  const waterIndicatorTop = 90-(85/storedWaterTarget)*currentAmount;
-  
-  indicator.style.top = waterIndicatorTop+"vh";
-  calculateTarget();
-}
-
-checkWaterTarget()
-
-// ============== water level functions END ===========
-const tableHead = document.querySelector('thead tr');
-tableHead.addEventListener("click", toggleTBody);
-
-function toggleTBody() {
-  const roundedCorners = document.querySelector("#roundedCorners");
-  const tableBody = document.querySelector('tbody');
-  console.log(roundedCorners.style.maxHeight)
-  if (roundedCorners.style.maxHeight < "60vh" || roundedCorners.style.maxHeight === "3.1rem") {
-    console.log("roundedCorners smaller")
-    tableBody.style.display = "table-row-group";
-    roundedCorners.style.zIndex = "1000";
-    // setTimeout(() => {
-      roundedCorners.style.maxHeight = "61vh";
-      tableHead.classList.add('tableHeadData');
-    // }, 20);
-  } else {
-    roundedCorners.style.maxHeight = "3.1rem";
-    // roundedCorners.style.zIndex = "1";
-    tableHead.classList.remove('tableHeadData');
-    setTimeout(() => {
-      tableBody.style.display = "none";
-      roundedCorners.style.zIndex = "";
-    }, 800)
-  }
-}
-
-// ==============================================
-// ================ dark mode ===================
-// ==============================================
-let bodyDarkMode = document.querySelector('body');
-
-// Function to adjust theme based on preference
-function adjustThemeBasedOnPreference(event) {
-  if (event.matches) {
-    console.log('dark')
-    bodyDarkMode.classList.add('dark-theme');
-    metaTag.setAttribute('content', '#202224');
-  } else {
-    console.log(mediaQuery)
-    metaTag.setAttribute('content', '#3a688e');
-    bodyDarkMode.classList.remove('dark-theme');
-  }
-}
-// Initial check
-let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-adjustThemeBasedOnPreference(mediaQuery);
-// Listen to changes
-mediaQuery.addListener(adjustThemeBasedOnPreference);
-
-//mediaQuery.addEventListener('change', adjustThemeBasedOnPreference);
-// ==============================================
-// ==============================================
-// ==============================================
-function calculateTarget() {
-  let currentWaterAmount = parseFloat(document.querySelector('#currentAmount').textContent);
-  const line = document.querySelector('#line');
-  const waterTarget = localStorage.getItem("waterTarget");
-  const targetTime = new Date();
-  targetTime.setHours(23, 0, 0, 0);
-  const currentTime = new Date();
-  const timeDiffMinutes = Math.ceil((targetTime - currentTime) / (1000 * 60));
-  const textCurrent = document.getElementById('currentMl');
-  const textTarget = document.getElementById('currentTarget');
-
-  console.log("diffMin: " + timeDiffMinutes);
-
-  var currentTarget = (waterTarget / 15) * (15 - timeDiffMinutes/60);
-  console.log("currentTarget ml: " + currentTarget);
-  if (currentTarget >= waterTarget) {
-    currentTarget = waterTarget
-  }
-
-  var currentTargetTop = 90 - (currentTarget * (85 / waterTarget));
-  const bgText = document.getElementById('currentWaterBG');
-  console.log("currentTarget: " + currentTargetTop + " vh")
-
-  textCurrent.textContent = "Aktuell: " + Math.round(currentWaterAmount) + "ml";
-  textTarget.textContent = "Soll: " + Math.round(currentTarget) + 'ml';
-
-  if(currentWaterAmount < currentTarget) {
-    line.classList.add('line-higher');
-    line.style.top = currentTargetTop + "vh";
-    console.log('not enough water' + currentWaterAmount+"ml")
-    bgText.style.filter = "opacity(0)";
-  } else {
-    line.classList.remove('line-higher');
-    line.style.top = currentTargetTop + "vh";
-    console.log("currentWater high enough")
-    //const bgText = document.getElementById('currentWaterBG');
-    bgText.style.filter = "opacity(1)";
-  }
-}
-
-const waterInput = document.getElementById('waterInput');
-const keyboard = document.getElementById('keypadContainer')
-
-customInput.addEventListener('pointerdown', function() {
-  waterInput.classList.add('changeHeight');
-  customInput.focus();
-  keyboard.style.display= "grid";
-  setTimeout(() => {
-    keyboard.classList.add('activateKeyboard');
-  }, 10);
-});
-
-document.addEventListener('pointerdown', function(event) {
-  if (!customInput.contains(event.target) && !keyboard.contains(event.target)) {
-      waterInput.classList.remove('changeHeight');
-      keyboard.classList.remove('activateKeyboard');
-      customInput.blur();
-      setTimeout(() => {
-        keyboard.style.display= "none";;
-      }, 550);
-  }
-});
-
-function setInputValueOnClick() {
-  const keyboardButtons = document.querySelectorAll('#keypadContainer div');
-  keyboardButtons.forEach(keyboardButton => {
-    keyboardButton.addEventListener('pointerdown', (event) => {
-    keyboardButton.classList.add('keys-pressed');
-      setTimeout(() => {
-        keyboardButton.classList.remove('keys-pressed');
-      }, 250);
-      event.preventDefault();
-
-      var input = document.activeElement;
-      if (input.tagName === 'INPUT' && input.type === "number") {
-
-        if (keyboardButton.textContent === "Del" || keyboardButton.textContent === "\u{10019b}") {
-          input.value = input.value.slice(0, -1);
-
-        } else if (keyboardButton.textContent === "\u{10107a}") {
-          input.value += "\u00A0";
-
-        } else {
-          input.value += keyboardButton.textContent;
-
+          btn250.classList.add('buttonPressed');
+          setTimeout(() => {
+            btn250.classList.remove('buttonPressed');
+            calculateTarget();
+          }, 500);
+          const value = btn250.value;
+          addRow(value);
         }
       }
-    });
-  });
-}
 
-function showChart() {
-  buttonTitle.style.display = "none";
-  tAxisText.textContent = localStorage.getItem('waterTarget') + " ml";
-  tAxis.style.display ="block";
-  historyButton.classList.add('show-history');
-  chartContainer.classList.add('chartContainer-active');
-  tAxis.style.display = "block";
-  tAxisText.style.display = "block";
-  tAxisText.style.filter = "opacity(100%)"
+      btn250.addEventListener('touchstart', handlePressStart);
+      btn250.addEventListener('mousedown', handlePressStart);
+      btn250.addEventListener('touchend', handlePressEnd);
+      btn250.addEventListener('mouseup', handlePressEnd);
 
-  adjustScroll();
-  setTimeout(() => {
-    updateChart();
-  }, 150);
-}
+      // btn250.addEventListener('touchstart', () => {
+      //   waterInputChange.classList.add('waterButtonPress');
+      //   touchStartTimestamp = Date.now();
+      //   if (waterInputChange.classList.contains('waterInputLarge')) {
+      //   } else {
+      //     timerCompleted = false;
+      //   }
 
-function getDailyWaterIntakes(waterLog) {
-  const dailyWaterIntakes = {};
-  for (const entry of waterLog) {
-    const date = entry["date"];
-    if (!dailyWaterIntakes[date]) {
-      dailyWaterIntakes[date] = 0;
-    }
-    dailyWaterIntakes[date] += parseInt(entry["amount"]);
-  }
-  return dailyWaterIntakes; // Return the object instead of its values
-}
+      //   timer = setTimeout(() => {
+      //     waterInputChange.classList.add('waterInputLarge');
+      //     inputButtonList.classList.add('activateButtonList');
+      //     inputSaveList.classList.add('activateInputSaveList');
+      //     waterInputHeader.classList.add('activateWaterHeader');
+      //     btn125.classList.add('activateInputButtons');
+      //     btn200.classList.add('activateInputButtons');
+      //     btn500.classList.add('activateInputButtons');
+      //     timerCompleted = true; // Set flag to true when timer completes
 
-function updateChart() {
-    const chartBlock = document.querySelectorAll('.chart-block');
-    const blockDates = document.querySelectorAll('.block-date');
-    var waterLogString = localStorage.getItem('waterLog');
-    var waterLogtemp = JSON.parse(waterLogString);
-    const dailyIntakes = getDailyWaterIntakes(waterLogtemp);
-    const dateOptions = {day: '2-digit', month: '2-digit'};
-    const keysArray = Object.keys(dailyIntakes);
+      //     function handleMousedown(event) {
+      //       if (waterInputChange.contains(event.target)) {
+      //       } else {
+      //         console.log('click outside');
+      //         waterInputChange.classList.remove('waterInputLarge');
+      //         waterInputChange.classList.remove('waterButtonPress');
+      //         inputButtonList.classList.remove('activateButtonList');
+      //         inputSaveList.classList.remove('activateInputSaveList');
+      //         waterInputHeader.classList.remove('activateWaterHeader');
+      //         btn125.classList.remove('activateInputButtons');
+      //         btn200.classList.remove('activateInputButtons');
+      //         btn500.classList.remove('activateInputButtons');
+      //         timerCompleted = false;
+      //         document.removeEventListener('mousedown', handleMousedown); // Use the named function here
+      //       }
+      //     }
+      //     document.addEventListener('mousedown', handleMousedown);
+      //   }, 600);
+      // });
 
-    chartBlock.forEach((block, index) => {
+      // btn250.addEventListener('touchend', () => {
+      //   const touchDuration = Date.now() - touchStartTimestamp; // Calculate how long the touch lasted
+
+      //   clearTimeout(timer);
+
+      //   // Action when touch duration is between 200ms and 599ms
+      //   if (touchDuration >= 200 && touchDuration <= 599) {
+      //     setTimeout(() => {
+      //       waterInputChange.classList.remove('waterButtonPress');
+      //       waterInputChange.classList.remove('waterInputLarge');
+      //       showTutorial();
+      //     }, 200);
+      //   } else if (touchDuration > 600) {
+      //   }
+      //   // Action when waterInputLarge is present or the timer is not completed
+      //   else if (waterInputChange.classList.contains('waterInputLarge')) {
+      //     btn250.classList.add('buttonPressed');
+      //     setTimeout(() => {
+      //       btn250.classList.remove('buttonPressed');
+      //       calculateTarget();
+      //     }, 500);
+      //     const value = btn250.value;
+      //     addRow(value);
+      //   } else if (
+      //     (!timerCompleted &&
+      //       waterInputChange.classList.contains('waterButtonPress')) ||
+      //     waterInputChange.classList.contains('waterButtonPress')
+      //   ) {
+      //     setTimeout(() => {
+      //       waterInputChange.classList.remove('waterButtonPress');
+      //     }, 500);
+
+      //     btn250.classList.add('buttonPressed');
+      //     setTimeout(() => {
+      //       btn250.classList.remove('buttonPressed');
+      //       calculateTarget();
+      //     }, 500);
+      //     const value = btn250.value;
+      //     addRow(value);
+      //   }
+      // });
+
+      btn500.addEventListener('click', () => {
+        btn500.classList.add('buttonPressed');
         setTimeout(() => {
+          btn500.classList.remove('buttonPressed');
+          calculateTarget();
+        }, 500);
+        const value = btn500.value;
+        addRow(value);
+      });
+
+      // ========= popup =====
+      const backgroundPopup = document.body.querySelector('#popupBackground');
+      const menuSaveButton = document.querySelector('#saveButton');
+      const menuButton = document.querySelector('#menuButton');
+      const popup = document.body.querySelector('#popup');
+      var metaTag = document.querySelector('meta[name="theme-color"]');
+      const historyButton = document.getElementById('historyButton');
+      const tAxis = document.getElementById('targetAxis');
+      const tAxisText = document.getElementById('targetAxisText');
+      const buttonTitle = document.getElementById('buttonTitle');
+      const chartContainer = document.getElementById('chartContainer');
+
+      function closePopup() {
+        backgroundPopup.classList.add('fade-out');
+        historyButton.style.opacity = '0';
+        popup.classList.add('slide-out-blurred-top');
+        menuButton.style.opacity = '1';
+        historyButton.classList.remove('show-history');
+        tAxisText.style.opacity = '0';
+
+        setTimeout(() => {
+          backgroundPopup.classList.remove('fade-out');
+          popup.classList.remove('slide-out-blurred-top');
+          backgroundPopup.style.display = 'none';
+          popup.style.display = 'none';
+          menuSaveButton.removeEventListener('click', closePopup);
+          buttonTitle.style.display = 'block';
+          chartContainer.classList.remove('chartContainer-active');
+          const chartBlock = document.querySelectorAll('.chart-block');
+          chartBlock.forEach((block, index) => {
+            block.style.height = '0.5rem';
+          });
+          tAxis.style.display = 'none';
+          tAxisText.style.display = 'none';
+        }, 1000);
+      }
+
+      function showPopup() {
+        backgroundPopup.classList.add('fade-in');
+        //metaTag.setAttribute('content', '#3C6A8B');
+        popup.classList.add('slide-in-blurred-top');
+        backgroundPopup.style.display = 'block';
+        popup.style.display = 'block';
+        menuButton.style.opacity = '0';
+        setTimeout(() => {
+          historyButton.style.opacity = '1';
+        }, 100);
+
+        menuSaveButton.addEventListener('click', () => {
+          closePopup();
+        });
+        backgroundPopup.addEventListener('click', function (event) {
+          if (event.target === backgroundPopup) {
+            // Check if the click happened on the background
+            closePopup();
+          }
+        });
+
+        const form = document.getElementById('ifttt-form');
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          const inputWater = document.querySelector('[name="waterTarget"]');
+          if (inputWater.value !== '') {
+            localStorage.setItem('waterTarget', inputWater.value);
+            inputWater.value = '';
+            const currentTargetWater = localStorage.getItem('waterTarget');
+            if (!localStorage.getItem('waterTarget')) {
+            } else {
+              inputWater.setAttribute(
+                'placeholder',
+                'Current Target: ' + currentTargetWater + 'ml'
+              );
+            }
+            increaseWaterLevel();
+          }
+
+          const inputKey = document.querySelector('[name="iftttKeyInput"]');
+          if (inputKey.value !== '') {
+            localStorage.setItem('iftttKey', inputKey.value);
+            inputKey.value = '';
+          }
+        });
+      }
+
+      function checkWaterTarget() {
+        if (!localStorage.getItem('waterTarget')) {
+          setTimeout(() => {
+            showPopup();
+          }, 250);
+        }
+      }
+
+      function sendPostRequest(value, apiKey) {
+        const script = document.createElement('script');
+        const url =
+          'https://maker.ifttt.com/trigger/currentWater/with/key/' + apiKey;
+        script.src = `${url}?value1=${encodeURIComponent(value)}`;
+        document.body.appendChild(script);
+      }
+
+      const currentAmount = document.getElementById('currentAmount');
+      const observer = new MutationObserver((mutationsList, observer) => {
+        for (let mutation of mutationsList) {
+          if (
+            mutation.type === 'childList' &&
+            mutation.target === currentAmount
+          ) {
+            if (localStorage.getItem('iftttKey')) {
+              const value =
+                document.getElementById('currentAmount').textContent;
+              const key = localStorage.getItem('iftttKey');
+              sendPostRequest(value, key);
+            }
+            // update water level ==========
+            const currentWaterBG = document.getElementById('currentWaterBG');
+            currentWaterBG.textContent = currentAmount.textContent;
+            increaseWaterLevel();
+            saveDataToLocalStorage();
+          }
+        }
+      });
+      // configure the observer to watch for changes to the contents of the "currentAmount" div
+      observer.observe(currentAmount, { childList: true });
+
+      function clearLocalStorage() {
+        localStorage.clear();
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+        document.querySelector('#currentAmount').textContent = '0';
+      }
+
+      // ============= water level functions ====
+      function increaseWaterLevel() {
+        const indicator = document.querySelector('#waterIndicator');
+        const storedWaterTarget = localStorage.getItem('waterTarget');
+        var currentAmount = parseFloat(
+          document.getElementById('currentAmount').textContent
+        );
+        if (currentAmount > storedWaterTarget) {
+          currentAmount = storedWaterTarget;
+        }
+
+        const waterIndicatorTop = 90 - (85 / storedWaterTarget) * currentAmount;
+
+        indicator.style.top = waterIndicatorTop + 'vh';
+        calculateTarget();
+      }
+
+      checkWaterTarget();
+
+      // ============== water level functions END ===========
+      const tableHead = document.querySelector('thead tr');
+      tableHead.addEventListener('click', toggleTBody);
+
+      function toggleTBody() {
+        const roundedCorners = document.querySelector('#roundedCorners');
+        const tableBody = document.querySelector('tbody');
+        // console.log(roundedCorners.style.maxHeight);
+        if (
+          roundedCorners.style.maxHeight < '60vh' ||
+          roundedCorners.style.maxHeight === '3.1rem'
+        ) {
+          // console.log('roundedCorners smaller');
+          tableBody.style.display = 'table-row-group';
+          roundedCorners.style.zIndex = '1000';
+          // setTimeout(() => {
+          roundedCorners.style.maxHeight = '61vh';
+          tableHead.classList.add('tableHeadData');
+          // }, 20);
+        } else {
+          roundedCorners.style.maxHeight = '3.1rem';
+          // roundedCorners.style.zIndex = "1";
+          tableHead.classList.remove('tableHeadData');
+          setTimeout(() => {
+            tableBody.style.display = 'none';
+            roundedCorners.style.zIndex = '';
+          }, 800);
+        }
+      }
+
+      // ==============================================
+      // ================ dark mode ===================
+      // ==============================================
+      let bodyDarkMode = document.querySelector('body');
+
+      // Function to adjust theme based on preference
+      function adjustThemeBasedOnPreference(event) {
+        if (event.matches) {
+          // console.log('dark');
+          bodyDarkMode.classList.add('dark-theme');
+          metaTag.setAttribute('content', '#202224');
+        } else {
+          // console.log(mediaQuery);
+          metaTag.setAttribute('content', '#3a688e');
+          bodyDarkMode.classList.remove('dark-theme');
+        }
+      }
+      // Initial check
+      let mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      adjustThemeBasedOnPreference(mediaQuery);
+      // Listen to changes
+      mediaQuery.addListener(adjustThemeBasedOnPreference);
+
+      //mediaQuery.addEventListener('change', adjustThemeBasedOnPreference);
+      // ==============================================
+      // ==============================================
+      // ==============================================
+      function calculateTarget() {
+        let currentWaterAmount = parseFloat(
+          document.querySelector('#currentAmount').textContent
+        );
+        const line = document.querySelector('#line');
+        const waterTarget = localStorage.getItem('waterTarget');
+        const targetTime = new Date();
+        targetTime.setHours(23, 0, 0, 0);
+        const currentTime = new Date();
+        const timeDiffMinutes = Math.ceil(
+          (targetTime - currentTime) / (1000 * 60)
+        );
+        const textCurrent = document.getElementById('currentMl');
+        const textTarget = document.getElementById('currentTarget');
+
+        // console.log('diffMin: ' + timeDiffMinutes);
+
+        var currentTarget = (waterTarget / 15) * (15 - timeDiffMinutes / 60);
+        // console.log('currentTarget ml: ' + currentTarget);
+        if (currentTarget >= waterTarget) {
+          currentTarget = waterTarget;
+        }
+
+        var currentTargetTop = 90 - currentTarget * (85 / waterTarget);
+        const bgText = document.getElementById('currentWaterBG');
+        // console.log('currentTarget: ' + currentTargetTop + ' vh');
+
+        textCurrent.textContent =
+          'Aktuell: ' + Math.round(currentWaterAmount) + 'ml';
+        textTarget.textContent = 'Soll: ' + Math.round(currentTarget) + 'ml';
+
+        if (currentWaterAmount < currentTarget) {
+          line.classList.add('line-higher');
+          line.style.top = currentTargetTop + 'vh';
+          // console.log('not enough water' + currentWaterAmount + 'ml');
+          bgText.style.opacity = '1';
+        } else {
+          line.classList.remove('line-higher');
+          line.style.top = currentTargetTop + 'vh';
+          // console.log('currentWater high enough');
+          //const bgText = document.getElementById('currentWaterBG');
+          bgText.style.opacity = '0';
+        }
+      }
+
+      const waterInput = document.getElementById('waterInput');
+      const keyboard = document.getElementById('keypadContainer');
+
+      customInput.addEventListener('pointerdown', function () {
+        waterInput.classList.add('changeHeight');
+        customInput.focus();
+        keyboard.style.display = 'grid';
+        setTimeout(() => {
+          keyboard.classList.add('activateKeyboard');
+        }, 10);
+      });
+
+      document.addEventListener('pointerdown', function (event) {
+        if (
+          !customInput.contains(event.target) &&
+          !keyboard.contains(event.target)
+        ) {
+          waterInput.classList.remove('changeHeight');
+          keyboard.classList.remove('activateKeyboard');
+          customInput.blur();
+          setTimeout(() => {
+            keyboard.style.display = 'none';
+          }, 550);
+        }
+      });
+
+      function setInputValueOnClick() {
+        const keyboardButtons = document.querySelectorAll(
+          '#keypadContainer div'
+        );
+        keyboardButtons.forEach((keyboardButton) => {
+          keyboardButton.addEventListener('pointerdown', (event) => {
+            keyboardButton.classList.add('keys-pressed');
+            setTimeout(() => {
+              keyboardButton.classList.remove('keys-pressed');
+            }, 250);
+            event.preventDefault();
+
+            var input = document.activeElement;
+            if (input.tagName === 'INPUT' && input.type === 'number') {
+              if (
+                keyboardButton.textContent === 'Del' ||
+                keyboardButton.textContent === '\u{10019b}'
+              ) {
+                input.value = input.value.slice(0, -1);
+              } else if (keyboardButton.textContent === '\u{10107a}') {
+                input.value += '\u00A0';
+              } else {
+                input.value += keyboardButton.textContent;
+              }
+            }
+          });
+        });
+      }
+
+      function showChart() {
+        buttonTitle.style.display = 'none';
+        tAxisText.textContent = localStorage.getItem('waterTarget') + ' ml';
+        tAxis.style.display = 'block';
+        historyButton.classList.add('show-history');
+        chartContainer.classList.add('chartContainer-active');
+        tAxis.style.display = 'block';
+        tAxisText.style.display = 'block';
+        tAxisText.style.opacity = '1';
+
+        adjustScroll();
+        setTimeout(() => {
+          updateChart();
+        }, 150);
+      }
+
+      function getDailyWaterIntakes(waterLog) {
+        const dailyWaterIntakes = {};
+        for (const entry of waterLog) {
+          const date = entry['date'];
+          if (!dailyWaterIntakes[date]) {
+            dailyWaterIntakes[date] = 0;
+          }
+          dailyWaterIntakes[date] += parseInt(entry['amount']);
+        }
+        return dailyWaterIntakes; // Return the object instead of its values
+      }
+
+      function updateChart() {
+        const chartBlock = document.querySelectorAll('.chart-block');
+        const blockDates = document.querySelectorAll('.block-date');
+        var waterLogString = localStorage.getItem('waterLog');
+        var waterLogtemp = JSON.parse(waterLogString);
+        const dailyIntakes = getDailyWaterIntakes(waterLogtemp);
+        const dateOptions = { day: '2-digit', month: '2-digit' };
+        const keysArray = Object.keys(dailyIntakes);
+
+        chartBlock.forEach((block, index) => {
+          setTimeout(() => {
             const currentKey = keysArray[index];
             const dailyIntake = dailyIntakes[currentKey];
 
-            const waterTarget = localStorage.getItem('waterTarget'); 
-            const blockHeight = (9.8 / waterTarget) * dailyIntake + "rem";
-            
-            if (dailyIntake > 0){
+            const waterTarget = localStorage.getItem('waterTarget');
+            const blockHeight = (9.8 / waterTarget) * dailyIntake + 'rem';
+
+            if (dailyIntake > 0) {
               block.style.height = blockHeight;
               block.textContent = dailyIntake;
               if (dailyIntake > 800 && dailyIntake < 3400) {
-                block.style.paddingTop= "1rem";
-              } else if (dailyIntake<350) {
-                block.textContent = "";
+                block.style.paddingTop = '1rem';
+              } else if (dailyIntake < 350) {
+                block.textContent = '';
               } else if (dailyIntake > 3400) {
-                block.style.paddingTop = "8rem";
+                block.style.paddingTop = '8rem';
               } else {
-                block.style.paddingTop = "0.25rem";
+                block.style.paddingTop = '0.25rem';
               }
-              block.style.borderRadius = "7px 7px 3px 3px";
+              block.style.borderRadius = '7px 7px 3px 3px';
             } else {
-              block.style.height = "0rem"
+              block.style.height = '0rem';
             }
-            
+
             var date = currentKey.slice(0, -3);
             blockDates[index].textContent = date;
+          }, index * 80); // Delay each iteration by 100ms * index
+        });
+      }
 
-        }, index * 80); // Delay each iteration by 100ms * index
-    });
-}
+      function adjustScroll() {
+        chartContainer.scrollTop = chartContainer.scrollHeight;
+      }
+      const observerChart = new MutationObserver(adjustScroll);
+      observerChart.observe(chartContainer, {
+        attributes: true, // observe changes in attributes
+        childList: true, // observe changes in the child elements
+        subtree: true, // observe changes in the descendants
+        attributeFilter: ['style'], // observe only style attribute changes
+      });
 
-  function adjustScroll() {
-    chartContainer.scrollTop = chartContainer.scrollHeight;
-  }
-  const observerChart = new MutationObserver(adjustScroll);
-  observerChart.observe(chartContainer, {
-    attributes: true, // observe changes in attributes 
-    childList: true, // observe changes in the child elements
-    subtree: true, // observe changes in the descendants
-    attributeFilter: ['style'] // observe only style attribute changes
-  });
+      setInputValueOnClick();
 
-setInputValueOnClick()
+      function deleteConfirm(onConfirm, onCancel, rowElement) {
+        const deleteContainer = document.createElement('div');
+        const delButtons = document.createElement('div');
+        const delText = document.createElement('div');
+        const deleteOk = document.createElement('button');
+        const deleteNo = document.createElement('button');
 
-function deleteConfirm(onConfirm, onCancel, rowElement) {
-    const deleteContainer = document.createElement("div");
-    const delButtons = document.createElement('div');
-    const delText = document.createElement('div');
-    const deleteOk = document.createElement('button');
-    const deleteNo = document.createElement('button');
+        deleteContainer.classList.add('delContainer');
+        deleteContainer.setAttribute('id', 'deleteConfirmationPopup');
+        delButtons.classList.add('delButtons');
+        delText.classList.add('delText');
 
-    deleteContainer.classList.add('delContainer');
-    deleteContainer.setAttribute('id', 'deleteConfirmationPopup');
-    delButtons.classList.add('delButtons');
-    delText.classList.add('delText');
+        deleteOk.textContent = 'Yes';
+        deleteNo.textContent = 'Cancel';
+        delText.textContent = 'Do you want to delete this entry?';
 
-    deleteOk.textContent = "Yes";
-    deleteNo.textContent = "Cancel";
-    delText.textContent = "Do you want to delete this entry?";
+        delButtons.appendChild(deleteOk);
+        delButtons.appendChild(deleteNo);
+        deleteContainer.appendChild(delText);
+        deleteContainer.appendChild(delButtons);
+        document.body.appendChild(deleteContainer);
 
-    delButtons.appendChild(deleteOk);
-    delButtons.appendChild(deleteNo);
-    deleteContainer.appendChild(delText);
-    deleteContainer.appendChild(delButtons);
-    document.body.appendChild(deleteContainer);
-
-    setTimeout(() => {
-        deleteContainer.classList.add('delContainerActive');
-        deleteContainer.style.top = rowElement.getBoundingClientRect().bottom+40+"px"; 
-    }, 20);
-
-    // Listen for the 'Yes' button click
-    deleteOk.addEventListener('click', () => {
-        onConfirm(rowElement);
-        deleteContainer.style.filter = "opacity(0%)";
-        deleteContainer.style.top = "60vh";
-        deleteContainer.classList.remove('delContainerActive');
         setTimeout(() => {
-          deleteContainer.remove();
-        }, 550);
-    });
+          deleteContainer.classList.add('delContainerActive');
+          deleteContainer.style.top =
+            rowElement.getBoundingClientRect().bottom + 40 + 'px';
+        }, 20);
 
-    // Listen for the 'Cancel' button click
-    deleteNo.addEventListener('click', () => {
-        onCancel();
-        deleteContainer.classList.remove('delContainerActive');
-        deleteContainer.style.top = "60vh";
-        setTimeout(() => {
-          deleteContainer.remove();
-        }, 550);
-    });
-}
+        // Listen for the 'Yes' button click
+        deleteOk.addEventListener('click', () => {
+          onConfirm(rowElement);
+          deleteContainer.style.opacity = '0';
+          deleteContainer.style.top = '60vh';
+          deleteContainer.classList.remove('delContainerActive');
+          setTimeout(() => {
+            deleteContainer.remove();
+          }, 550);
+        });
 
-function addRowClickListener(newTableRow) {
-    newTableRow.addEventListener('click', function(event) {
-        const clickedRow = event.target.parentNode; // This is the clicked row
-        const existingPopup = document.getElementById('deleteConfirmationPopup');
-        let selectedRows = document.querySelectorAll('.rowSelected');
+        // Listen for the 'Cancel' button click
+        deleteNo.addEventListener('click', () => {
+          onCancel();
+          deleteContainer.classList.remove('delContainerActive');
+          deleteContainer.style.top = '60vh';
+          setTimeout(() => {
+            deleteContainer.remove();
+          }, 550);
+        });
+      }
 
-        // If the row is already selected, unselect it
-        if (clickedRow.firstChild.classList.contains('rowSelected')) {
-            Array.from(clickedRow.children).forEach(child => {
-                child.classList.remove('rowSelected');
+      function addRowClickListener(newTableRow) {
+        newTableRow.addEventListener('click', function (event) {
+          const clickedRow = event.target.parentNode; // This is the clicked row
+          const existingPopup = document.getElementById(
+            'deleteConfirmationPopup'
+          );
+          let selectedRows = document.querySelectorAll('.rowSelected');
+
+          // If the row is already selected, unselect it
+          if (clickedRow.firstChild.classList.contains('rowSelected')) {
+            Array.from(clickedRow.children).forEach((child) => {
+              child.classList.remove('rowSelected');
             });
 
             // If after deselecting the current row, no other rows remain selected, remove the popup
             selectedRows = document.querySelectorAll('.rowSelected'); // Update selected rows after deselecting
-            existingPopup.querySelector('.delText').textContent = `Do you want to delete ${Math.floor(selectedRows.length / 3)} rows?`;
+            existingPopup.querySelector(
+              '.delText'
+            ).textContent = `Do you want to delete ${Math.floor(
+              selectedRows.length / 3
+            )} rows?`;
             if (!selectedRows.length && existingPopup) {
-                existingPopup.style.filter = "opacity(0%)";
-                existingPopup.style.top = "60vh";
-                existingPopup.classList.remove('delContainerActive');
-                setTimeout(() => {
-                  existingPopup.remove();
-                }, 550);
+              existingPopup.style.opacity = '0';
+              existingPopup.style.top = '60vh';
+              existingPopup.classList.remove('delContainerActive');
+              setTimeout(() => {
+                existingPopup.remove();
+              }, 550);
             }
 
             return; // Exit
-        }
+          }
 
-        // If the row isn't selected, then select it
-        Array.from(clickedRow.children).forEach(child => {
+          // If the row isn't selected, then select it
+          Array.from(clickedRow.children).forEach((child) => {
             child.classList.add('rowSelected');
-        });
+          });
 
-        if (existingPopup && selectedRows.length > 0) { // Check if popup exists and there are other rows selected
-            existingPopup.style.top = "75vh"; // Move to bottom
-            existingPopup.querySelector('.delText').textContent = `Do you want to delete ${Math.floor(selectedRows.length / 3) + 1} rows?`; // Update text
+          if (existingPopup && selectedRows.length > 0) {
+            // Check if popup exists and there are other rows selected
+            existingPopup.style.top = '75vh'; // Move to bottom
+            existingPopup.querySelector(
+              '.delText'
+            ).textContent = `Do you want to delete ${
+              Math.floor(selectedRows.length / 3) + 1
+            } rows?`; // Update text
             return; // Exit and don't show a new popup
-        }
+          }
 
-        deleteConfirm(
-            () => {  // On confirm action
-                selectedRows = document.querySelectorAll('.rowSelected');
-                selectedRows.forEach(row => {
-                    row.parentNode.remove();
-                });
-                updateCurrentAmount();
+          deleteConfirm(
+            () => {
+              // On confirm action
+              selectedRows = document.querySelectorAll('.rowSelected');
+              selectedRows.forEach((row) => {
+                row.parentNode.remove();
+              });
+              updateCurrentAmount();
             },
-            () => {  // On cancel action
-                selectedRows = document.querySelectorAll('.rowSelected');
-                selectedRows.forEach(row => {
-                    row.classList.remove('rowSelected');
-                });
+            () => {
+              // On cancel action
+              selectedRows = document.querySelectorAll('.rowSelected');
+              selectedRows.forEach((row) => {
+                row.classList.remove('rowSelected');
+              });
             },
             clickedRow
-        );
-    });
-}
+          );
+        });
+      }
 
-// deleteConfirm();
-
-</script>
-</body>
+      // deleteConfirm();
+    </script>
+  </body>
 </html>
